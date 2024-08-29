@@ -19,6 +19,7 @@ test("Verify and Going to admin Portal with correct ID and Password 01",async({p
       homePage.clickOnOpenAccountMenu();
       await expect(await page.getByText('Log Out')).toHaveText("Log Out");
       await page.locator('#account-menu > .MuiBackdrop-root').click();
+      await page.waitForSelector("//p[@class='MuiTypography-root MuiTypography-body1 MuiTypography-noWrap MuiListItemText-primary css-gnfns7']")
     })
 
     //Go to Admin Potal Customer tab
