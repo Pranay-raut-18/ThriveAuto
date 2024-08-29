@@ -4,7 +4,7 @@ import { UserPage } from '../../Pages/UserPage';
 import {HomePage} from "../../Pages/HomePage";
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
-test("verify login of a user",async({page})=>{
+test("Verify and Going to admin Portal with correct ID and Password 01",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
