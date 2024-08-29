@@ -1,13 +1,11 @@
 import {test, expect} from '@playwright/test';
 import {LoginPage} from "../../Pages/LoginPage";
-import {CustomerPage} from "../../Pages/CustomerPage";
 import { UserPage } from '../../Pages/UserPage';
 import {HomePage} from "../../Pages/HomePage";
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
 test("verify login of a user",async({page})=>{
-    const loginPage = new LoginPage(page);       
-    const customerPage = new CustomerPage(page);       
+    const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
 
@@ -30,7 +28,6 @@ test("verify login of a user",async({page})=>{
 
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-        await customerPage.ClickOnCustomerTab();
         await userPage.ClickOnCustomerTab();
       })
     
