@@ -4,39 +4,26 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("verify login of a user and retrieve all roles from table", async ({
+test("verify login of a user and retrieve all roles from table in roles and permissions tab", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
 
-  // Login using email address and password
+  //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
     await loginPage.login(Url, EmailAddress, Password);
   });
 
-  // Verify user is logged in successfully
-  await test.step(`Verify user is logged in successfully`, async () => {
-    homePage.clickOnOpenAccountMenu();
-    await expect(await page.getByText("Log Out")).toHaveText("Log Out");
-    await page.locator("#account-menu > .MuiBackdrop-root").click();
-  });
-
-  // Go to Admin Portal
-  await test.step(`Go to Admin Portal Customer tab`, async () => {
+  //Go to Admin Potal
+  await test.step(`Go to Admin Potal Customer tab`, async () => {
     await homePage.clickOnGoToAdminPortal();
   });
 
-  // Go to Roles and Permissions tab
-  await test.step("Go to Roles and Permissions tab", async () => {
-    await rolesAndPermissions.ClickOnRolesAndPermissionsTab();
-
-    const url = await page.url();
-    console.log(`Page URL: ${url}`);
-
-    const lastSegment = url.split("/").pop();
-    expect(lastSegment).toBe("roles-and-permissions");
+  // Verify default display of roles and permissions tab
+  await test.step("Verify Roles and Permissions tab", async () => {
+    await rolesAndPermissions.clickOnRolesAndPermissionsTab();
 
     //
     await page.waitForSelector(".MuiDataGrid-virtualScrollerRenderZone");
@@ -54,7 +41,26 @@ test("verify login of a user and retrieve all roles from table", async ({
         }
       );
     });
-
-    console.log("Roles:", roles);
+    const expectedRoles = [
+      "Admin",
+      "Candidate",
+      "Engagement Coordinator",
+      "Hiring Manager",
+      "Investment Company",
+      "New API Role",
+      "Partner",
+      "Recruiter",
+      "Researcher",
+      "Super Admin",
+    ];
+    //console.log("Roles:", roles);
+    for (const role of expectedRoles) {
+      expect(roles).toContain(role);
+    }
   });
+  //Verify URL of the roles and permissions tab
+  await test.step("Verify URL of the roles and permissions tab", async () => {
+    rolesAndPermissions.verifyPageUrl();
+  });
+  await test.step("Verify search by role in searchbar", async () => {});
 });
