@@ -4,7 +4,9 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("verify login of a user", async ({ page }) => {
+test("verify login of a user and retrieve all roles from table in roles and permissions tab", async ({
+  page,
+}) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
@@ -26,12 +28,48 @@ test("verify login of a user", async ({ page }) => {
     await homePage.clickOnGoToAdminPortal();
   });
 
-  // Go to Roles and Permissions tab
-  await test.step("Verify title of Roles and Permissions Tab ", async () => {
+  // Verify default display of roles and permissions tab
+  await test.step("Verify Roles and Permissions tab", async () => {
     await rolesAndPermissions.ClickOnRolesAndPermissionsTab();
+
+    await page.waitForSelector(".MuiDataGrid-virtualScrollerRenderZone");
+
+    const roles = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll(".MuiDataGrid-row")).map(
+        (row) => {
+          const roleName =
+            row
+              .querySelector(
+                '.MuiDataGrid-cell[data-field="name"] .MuiDataGrid-cellContent'
+              )
+              ?.textContent?.trim() || "";
+          return roleName;
+        }
+      );
+    });
+    const expectedRoles = [
+      "Admin",
+      "Candidate",
+      "Engagement Coordinator",
+      "Hiring Manager",
+      "Investment Company",
+      "New API Role",
+      "Partner",
+      "Recruiter",
+      "Researcher",
+      "Super Admin",
+    ];
+    console.log("Roles:", roles);
+    for (const role of expectedRoles) {
+      expect(roles).toContain(role);
+    }
+  });
+  //Verify URL of the roles and permissions tab
+  await test.step("Verify URL of the roles and permissions tab", async () => {
     const url = await page.url();
+    console.log(`Page URL: ${url}`);
+
     const lastSegment = url.split("/").pop();
     expect(lastSegment).toBe("roles-and-permissions");
   });
-  await test.step("Got to Roles ", async () => {});
 });
