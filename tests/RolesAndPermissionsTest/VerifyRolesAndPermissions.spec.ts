@@ -4,7 +4,9 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("verify login of a user", async ({ page }) => {
+test("verify login of a user and retrieve all roles from table", async ({
+  page,
+}) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
@@ -27,11 +29,31 @@ test("verify login of a user", async ({ page }) => {
   });
 
   // Go to Roles and Permissions tab
-  await test.step("Verify title of Roles and Permissions Tab ", async () => {
+  await test.step("Go to Roles and Permissions tab", async () => {
     await rolesAndPermissions.ClickOnRolesAndPermissionsTab();
+
     const url = await page.url();
+    console.log(`Page URL: ${url}`);
+
     const lastSegment = url.split("/").pop();
     expect(lastSegment).toBe("roles-and-permissions");
+
+    await page.waitForSelector(".MuiDataGrid-virtualScrollerRenderZone");
+
+    const roles = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll(".MuiDataGrid-row")).map(
+        (row) => {
+          const roleName =
+            row
+              .querySelector(
+                '.MuiDataGrid-cell[data-field="name"] .MuiDataGrid-cellContent'
+              )
+              ?.textContent?.trim() || "";
+          return roleName;
+        }
+      );
+    });
+
+    console.log("Roles:", roles);
   });
-  await test.step("Got to Roles ", async () => {});
 });
