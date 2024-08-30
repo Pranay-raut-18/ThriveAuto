@@ -38,6 +38,7 @@ test("verify login of a user and retrieve all roles from table", async ({
     const lastSegment = url.split("/").pop();
     expect(lastSegment).toBe("roles-and-permissions");
 
+    //
     await page.waitForSelector(".MuiDataGrid-virtualScrollerRenderZone");
 
     const roles = await page.evaluate(() => {
