@@ -20,7 +20,7 @@ export class UserPage {
     private emailFeild:Locator;
     private roleFeild:Locator;
     private roleDropdownOptions:Locator;
-    private addButton:Locator;
+    private addandSendInviteButton:Locator;
     private successmessage:Locator;
     private userlisting:Locator;
     
@@ -41,7 +41,7 @@ export class UserPage {
         this.emailFeild=page.locator("[name='email']");
         this.roleFeild=page.locator("[role='combobox']");
         this.roleDropdownOptions=page.getByRole('listbox' ,{name:'Role'});
-        this.addButton=page.locator("text='Add and Send Invite'");
+        this.addandSendInviteButton=page.locator("text='Add and Send Invite'");
         this.successmessage=page.locator("//div[@class='MuiAlert-message css-1xsto0d']");
         this.userlisting=page.locator("div.MuiDataGrid-main");
     }
@@ -121,7 +121,7 @@ export class UserPage {
      * Click on Add and Send Invite
      */  
     async clickAddbutton(){
-        await this.addButton.click();
+        await this.addandSendInviteButton.click();
         await this.page.waitForTimeout(2000);
     }  
 
@@ -141,4 +141,12 @@ export class UserPage {
         const emailLocator = userlist.locator(`text="${email}"`);
         return emailLocator;
     }
+    /**
+     * check AddandSendInvite Button is disabled
+     */    
+    async checkAddandSendInviteButtonIsDisabled(): Promise<boolean> {
+        return await this.addandSendInviteButton.isDisabled();
+    }
+     
+
 }
