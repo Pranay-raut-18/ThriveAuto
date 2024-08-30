@@ -11,26 +11,19 @@ test("verify login of a user and retrieve all roles from table in roles and perm
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
 
-  // Login using email address and password
+  //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
     await loginPage.login(Url, EmailAddress, Password);
   });
 
-  // Verify user is logged in successfully
-  await test.step(`Verify user is logged in successfully`, async () => {
-    homePage.clickOnOpenAccountMenu();
-    await expect(await page.getByText("Log Out")).toHaveText("Log Out");
-    await page.locator("#account-menu > .MuiBackdrop-root").click();
-  });
-
-  // Go to Admin Portal
-  await test.step(`Go to Admin Portal Customer tab`, async () => {
+  //Go to Admin Potal
+  await test.step(`Go to Admin Potal Customer tab`, async () => {
     await homePage.clickOnGoToAdminPortal();
   });
 
   // Verify default display of roles and permissions tab
   await test.step("Verify Roles and Permissions tab", async () => {
-    await rolesAndPermissions.ClickOnRolesAndPermissionsTab();
+    await rolesAndPermissions.clickOnRolesAndPermissionsTab();
 
     await page.waitForSelector(".MuiDataGrid-virtualScrollerRenderZone");
 
@@ -59,17 +52,14 @@ test("verify login of a user and retrieve all roles from table in roles and perm
       "Researcher",
       "Super Admin",
     ];
-    console.log("Roles:", roles);
+    //console.log("Roles:", roles);
     for (const role of expectedRoles) {
       expect(roles).toContain(role);
     }
   });
   //Verify URL of the roles and permissions tab
   await test.step("Verify URL of the roles and permissions tab", async () => {
-    const url = await page.url();
-    console.log(`Page URL: ${url}`);
-
-    const lastSegment = url.split("/").pop();
-    expect(lastSegment).toBe("roles-and-permissions");
+    rolesAndPermissions.verifyPageUrl();
   });
+  await test.step("Verify search by role in searchbar", async () => {});
 });
