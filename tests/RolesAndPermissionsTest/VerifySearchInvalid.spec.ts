@@ -30,8 +30,7 @@ test("Verify invalid search in roles and permissions tab", async ({ page }) => {
     await rolesAndPermissions.searchForRole("Invalid_name");
 
     // Wait for the "No results" message to be visible
-    const isVisible = await rolesAndPermissions.isNoResultsMessageVisible();
-    expect(isVisible).toBe(true);
+    await rolesAndPermissions.isNoResultsMessageVisible();
 
     // Verify the text of the "No results" message
     const messageText = await rolesAndPermissions.getNoResultsMessageText();

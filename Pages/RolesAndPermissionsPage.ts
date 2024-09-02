@@ -65,6 +65,8 @@ export class RolesAndPermissionsPage {
     return await this.noResultsMessage.isVisible();
   }
   async getNoResultsMessageText(): Promise<string> {
-    return (await this.noResultsMessage.textContent()) || "";
+    const message = (await this.noResultsMessage.textContent()) || "";
+    //console.log(message);
+    return message;
   }
 }
