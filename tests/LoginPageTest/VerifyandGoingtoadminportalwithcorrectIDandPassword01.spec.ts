@@ -33,7 +33,6 @@ test("Verify and Going to admin Portal with correct ID and Password TC-01",async
     await test.step(`Click Customer tab`, async () => {
       await userPage.ClickOnCustomerTab();
       await expect(page).toHaveURL("https://thrive.thrive-dev.com/admin/customers");
-      await page.pause();
       })
     
   
