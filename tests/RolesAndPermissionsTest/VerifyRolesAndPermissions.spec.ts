@@ -19,27 +19,42 @@ test("Roles and Permissions Tab functionality", async ({ page }) => {
     await homePage.clickOnGoToAdminPortal();
   });
 
-  // Verify default display of roles and permissions tab
+  // Verify roles in Roles and Permissions tab
   await test.step("Verify roles in Roles and Permissions tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
-
     const roles = await rolesAndPermissions.getAllRoles();
     expect(roles).toBeTruthy();
   });
 
   // Verify URL of the roles and permissions tab
   await test.step("Verify URL of the roles and permissions tab", async () => {
-    await rolesAndPermissions.verifyPageUrl();
+    const currentUrl = await rolesAndPermissions.getPageUrl();
+    const expectedUrlSegment = "roles-and-permissions";
+    const actualUrlSegment = currentUrl.split("/").pop();
+    expect(actualUrlSegment).toEqual(expectedUrlSegment);
   });
 
   // Verify search by role in search bar
-  await test.step("Verify search by role in searchbar", async () => {
+  await test.step("Verify search by role in search bar", async () => {
     await rolesAndPermissions.clickOnSearchBar();
-    await rolesAndPermissions.isRoleDisplayed("admin");
+    await rolesAndPermissions.searchForRole("admin");
+    const isVisible = await rolesAndPermissions.isRoleVisible("admin");
+    expect(isVisible).toBe(true);
   });
-  //Verify search by partial role in search bar
-  await test.step("Verify search by Partial role in search bar ", async () => {
+
+  // Verify search by partial role in search bar
+  await test.step("Verify search by partial role in search bar", async () => {
     await rolesAndPermissions.clickOnSearchBar();
-    await rolesAndPermissions.isRoleDisplayed("Admi");
+    await rolesAndPermissions.searchForRole("Admi");
+
+    // Fetch all roles after searching for the partial term "Admi"
+    const rolesAfterSearch = await rolesAndPermissions.getAllRoles();
+
+    // Check that at least one role contains "Admi"
+    const hasPartialMatch = rolesAfterSearch.some((role) =>
+      role.toLowerCase().includes("admi")
+    );
+    // Ensure that there is at least one role that matches the partial search term
+    expect(hasPartialMatch).toBe(true);
   });
 });

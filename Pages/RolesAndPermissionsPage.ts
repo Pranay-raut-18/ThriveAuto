@@ -1,8 +1,5 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 
-/**
- * Roles and Permissions Page
- */
 export class RolesAndPermissionsPage {
   readonly page: Page;
   private rolesTabButton: Locator;
@@ -19,50 +16,37 @@ export class RolesAndPermissionsPage {
       'input[placeholder="Search by name or description"]'
     );
     this.roleNameCell = page.locator('.MuiDataGrid-cell[data-field="name"]');
-    this.rolesTable = page.locator(".MuiDataGrid-virtualScrollerRenderZone"); // New locator for the roles table
+    this.rolesTable = page.locator(".MuiDataGrid-virtualScrollerRenderZone");
   }
 
-  /**
-   * Click on Roles and Permissions Tab
-   */
   async clickOnRolesAndPermissionsTab() {
     await this.rolesTabButton.click();
   }
 
-  /**
-   * Verify the URL of the page
-   */
-  async verifyPageUrl() {
-    const url = await this.page.url();
-    const expectedUrlSegment = "roles-and-permissions";
-    const actualUrlSegment = url.split("/").pop();
-    await expect(actualUrlSegment).toEqual(expectedUrlSegment);
+  async getPageUrl(): Promise<string> {
+    return this.page.url();
   }
 
-  /**
-   * Click on the search bar
-   */
   async clickOnSearchBar() {
     await this.searchBar.click();
   }
 
-  /**
-   * Retrieve all roles from the table
-   */
   async getAllRoles(): Promise<string[]> {
-    await this.rolesTable.waitFor(); // Wait for the roles table to be visible
+    await this.rolesTable.waitFor();
     return this.roleNameCell.allTextContents();
   }
 
-  /**
-   * Verify if a specific role is displayed in the table
-   */
-  async isRoleDisplayed(roleName: string) {
+  async searchForRole(roleName: string) {
+    await this.searchBar.fill(""); // Clear the search bar
+    await this.searchBar.fill(roleName); // Enter the search term
+  }
+
+  async isRoleVisible(roleName: string): Promise<boolean> {
     const roleLocator = this.roleNameCell
       .filter({
         hasText: roleName,
       })
       .first();
-    await expect(roleLocator).toBeVisible();
+    return roleLocator.isVisible();
   }
 }
