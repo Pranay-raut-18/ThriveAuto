@@ -7,6 +7,7 @@ export class RolesAndPermissionsPage {
   private searchBar: Locator;
   private roleNameCell: Locator;
   private rolesTable: Locator;
+  private noResultsMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -17,6 +18,9 @@ export class RolesAndPermissionsPage {
     );
     this.roleNameCell = page.locator('.MuiDataGrid-cell[data-field="name"]');
     this.rolesTable = page.locator(".MuiDataGrid-virtualScrollerRenderZone");
+    this.noResultsMessage = page.locator(
+      "p.MuiTypography-root.MuiTypography-body2.css-1a75746"
+    );
   }
 
   async clickOnRolesAndPermissionsTab() {
@@ -56,5 +60,11 @@ export class RolesAndPermissionsPage {
       })
       .first();
     return roleLocator.isVisible();
+  }
+  async isNoResultsMessageVisible(): Promise<boolean> {
+    return await this.noResultsMessage.isVisible();
+  }
+  async getNoResultsMessageText(): Promise<string> {
+    return (await this.noResultsMessage.textContent()) || "";
   }
 }
