@@ -28,7 +28,15 @@ export class RolesAndPermissionsPage {
   }
 
   async clickOnSearchBar() {
-    await this.searchBar.click();
+    try {
+      // Wait for the search bar to be visible and enabled
+      await this.searchBar.waitFor({ state: "visible", timeout: 3000 });
+      await this.searchBar.waitFor({ state: "attached", timeout: 3000 });
+      await this.searchBar.click();
+    } catch (error) {
+      console.error("Failed to click on the search bar:", error);
+      throw error;
+    }
   }
 
   async getAllRoles(): Promise<string[]> {
