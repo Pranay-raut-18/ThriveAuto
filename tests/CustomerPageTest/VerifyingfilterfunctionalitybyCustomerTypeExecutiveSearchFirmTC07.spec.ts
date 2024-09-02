@@ -4,8 +4,9 @@ import { UserPage } from '../../Pages/UserPage';
 import {HomePage} from "../../Pages/HomePage";
 import { CustomerPage } from '../../Pages/CustomerPage';
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
+import exp from 'constants';
 
-test("Verifying search functionality by Primary Contact TC-06",async({page})=>{
+test("verifying filter functionality by Customer Type Executive Search Firm TC-07 ",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
@@ -29,20 +30,29 @@ test("Verifying search functionality by Primary Contact TC-06",async({page})=>{
         await userPage.ClickOnCustomerTab();
     })
 
-    //Click on Search field.
-    await test.step(`Click on Search field.`, async () => {
-        await customerPage.clickOnSearchFeild();
+    //Remove the Filter "Status Active" by clicking (X) button
+    await test.step(`Remove the Filter "Status Active" by clicking (X) button`, async () => {
+        await customerPage.removepreFilterStatus();
     })
 
-    //Enter Primary Contact
-    await test.step(`Enter Primary Contact`, async () => {
-        await customerPage.enterName(primaryContact);
-        await page.waitForSelector(".css-opb0c2");
+    //Click on Filter Option (Symbol). 
+    await test.step(`Click on Filter Option (Symbol). `, async () => {
+        await customerPage.clickonFilterOption();
     })
-
-    //verifying that Primary Contact is visible in the table
-    await test.step(`verifying that Primary Contact is visible in the table`, async () => {
-        await expect(await customerPage.verifyPrimaryContactisVisible(primaryContact)).toBeVisible();
+    
+    //Select the Customer type to "Executive Search Firm" 
+    await test.step(`Select the Customer type to "Executive Search Firm"`, async () => {
+        await customerPage.selectCustomertypeEexcutiveSearchFirm();
+    })
+    
+    //Click On "Apply" Button
+    await test.step(`Click On "Apply" Button`, async () => {
+        await customerPage.clickOnApplyButton();
+    })
+    
+    //Verify all the records of Customer Type
+    await test.step(`Verify all the records of Customer Type`, async () => {
+       await expect(await customerPage.VerifyrecordsofCustomerType()).toBe("Executive Search Firm")
     })
     
   })

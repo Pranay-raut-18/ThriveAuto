@@ -4,7 +4,7 @@ import { UserPage } from '../../Pages/UserPage';
 import {HomePage} from "../../Pages/HomePage";
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
-test("Verify and Going to admin Portal with correct ID and Password 01",async({page})=>{
+test("Verify and Going to admin Portal with correct ID and Password TC-01",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
@@ -18,6 +18,7 @@ test("Verify and Going to admin Portal with correct ID and Password 01",async({p
     await test.step(`Verify user is logged in successfully`, async () => {
       homePage.clickOnOpenAccountMenu();
       await expect(await page.getByText('Log Out')).toHaveText("Log Out");
+      //change
       await page.locator('#account-menu > .MuiBackdrop-root').click();
       await page.waitForSelector("//p[@class='MuiTypography-root MuiTypography-body1 MuiTypography-noWrap MuiListItemText-primary css-gnfns7']")
     })
@@ -25,11 +26,14 @@ test("Verify and Going to admin Portal with correct ID and Password 01",async({p
     //Go to Admin Potal Customer tab
     await test.step(`Go to Admin Potal Customer tab`, async () => {
       await homePage.clickOnGoToAdminPortal();
+      await expect(page).toHaveURL("https://thrive.thrive-dev.com/admin/users")
     })
-
+    
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-        await userPage.ClickOnCustomerTab();
+      await userPage.ClickOnCustomerTab();
+      await expect(page).toHaveURL("https://thrive.thrive-dev.com/admin/customers");
+      await page.pause();
       })
     
   

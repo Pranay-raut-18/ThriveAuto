@@ -2,7 +2,7 @@ import {test, expect} from '@playwright/test';
 import {Url,EmailAddress} from "../../utils/config-utils"
 
 
-test("Verify 'Continue With Email' button is not visible when only email is entered 40",async({page})=>{
+test("Verify 'Continue With Email' button is not visible when only email is entered TC-40",async({page})=>{
             
       //Go to url and enter only email address
       await test.step(`Go to url and enter only email address`, async () => {
