@@ -1,78 +1,72 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 
-/**
- * Roles and Permissions Page
- */
 export class RolesAndPermissionsPage {
   readonly page: Page;
-  private RolesTabButton: Locator;
-  private RolesTableRow: Locator;
-  private SearchBar: Locator;
-  private RoleLocator: Locator;
+  private rolesTabButton: Locator;
+  private rolesTableRow: Locator;
+  private searchBar: Locator;
+  private roleNameCell: Locator;
+  private rolesTable: Locator;
+  private noResultsMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.RolesTabButton = page.locator("p", { hasText: "Roles & Permissions" });
-    this.RolesTableRow = page.locator(".MuiDataGrid-row");
-    this.SearchBar = page.locator(
+    this.rolesTabButton = page.locator("p", { hasText: "Roles & Permissions" });
+    this.rolesTableRow = page.locator(".MuiDataGrid-row");
+    this.searchBar = page.locator(
       'input[placeholder="Search by name or description"]'
     );
-    this.RoleLocator = this.page.locator(
-      '.MuiDataGrid-cell[data-field="name"]'
+    this.roleNameCell = page.locator('.MuiDataGrid-cell[data-field="name"]');
+    this.rolesTable = page.locator(".MuiDataGrid-virtualScrollerRenderZone");
+    this.noResultsMessage = page.locator(
+      "p.MuiTypography-root.MuiTypography-body2.css-1a75746"
     );
   }
 
-  /**
-   * Click on Roles and Permissions Tab
-   */
   async clickOnRolesAndPermissionsTab() {
-    await this.RolesTabButton.click();
+    await this.rolesTabButton.click();
   }
 
-  /**
-   * Verify the URL of the page
-   */
-  async verifyPageUrl() {
-    const url = await this.page.url();
-    const expURL = "roles-and-permissions";
-    const acturl = url.split("/").pop();
-    await expect(acturl).toEqual(expURL);
+  async getPageUrl(): Promise<string> {
+    return this.page.url();
   }
 
-  /**
-   * Click on the search bar
-   */
   async clickOnSearchBar() {
-    await this.SearchBar.click();
+    try {
+      // Wait for the search bar to be visible and enabled
+      await this.searchBar.waitFor({ state: "visible", timeout: 3000 });
+      await this.searchBar.waitFor({ state: "attached", timeout: 3000 });
+      await this.searchBar.click();
+    } catch (error) {
+      console.error("Failed to click on the search bar:", error);
+      throw error;
+    }
   }
 
-  /**
-   * Retrieve all roles from the table
-   */
   async getAllRoles(): Promise<string[]> {
-    await this.page.waitForSelector(".MuiDataGrid-virtualScrollerRenderZone");
-    return this.page.evaluate(() => {
-      return Array.from(document.querySelectorAll(".MuiDataGrid-row")).map(
-        (row) => {
-          const roleName =
-            row
-              .querySelector(
-                '.MuiDataGrid-cell[data-field="name"] .MuiDataGrid-cellContent'
-              )
-              ?.textContent?.trim() || "";
-          return roleName;
-        }
-      );
-    });
+    await this.rolesTable.waitFor();
+    return this.roleNameCell.allTextContents();
   }
 
-  /**
-   * Verify if a specific role is displayed in the table
-   */
-  async isRoleDisplayed(roleName: string) {
-    const roleLocator = this.RoleLocator.filter({
-      hasText: roleName,
-    }).first();
-    await expect(roleLocator).toBeVisible();
+  async searchForRole(roleName: string) {
+    await this.searchBar.fill(""); // Clear the search bar
+    await this.searchBar.fill(roleName); // Enter the search term
+  }
+
+  async isRoleVisible(roleName: string): Promise<boolean> {
+    const roleLocator = this.roleNameCell
+      .filter({
+        hasText: roleName,
+      })
+      .first();
+    return roleLocator.isVisible();
+  }
+  async isNoResultsMessageVisible(): Promise<boolean> {
+    return await this.noResultsMessage.isVisible();
+  }
+  async getNoResultsMessageText(): Promise<string> {
+    const message = (await this.noResultsMessage.textContent()) || "";
+    //console.log(message);
+    return message;
   }
 }
