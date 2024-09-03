@@ -5,7 +5,7 @@ import {HomePage} from "../../Pages/HomePage";
 import { CustomerPage } from '../../Pages/CustomerPage';
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
-test("verifying filter functionality by Customer Type Executive Search Firm TC-07 ",async({page})=>{
+test("verifying filter functionality by Status 'Active' TC-12",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
@@ -38,9 +38,9 @@ test("verifying filter functionality by Customer Type Executive Search Firm TC-0
         await customerPage.clickonFilterOption();
     })
     
-    //Select the Customer type to "Executive Search Firm" 
-    await test.step(`Select the Customer type to "Executive Search Firm"`, async () => {
-        await customerPage.selectCustomertypeEexcutiveSearchFirm();
+    //Select the Status to "Active" 
+    await test.step(`Select the Status to "Active"`, async () => {
+        await customerPage.selectStatusActive();
     })
     
     //Click On "Apply" Button
@@ -48,9 +48,9 @@ test("verifying filter functionality by Customer Type Executive Search Firm TC-0
         await customerPage.clickOnApplyButton();
     })
     
-    //Verify all the records of Customer Type
-    await test.step(`Verify all the records of Customer Type`, async () => {
-       await expect(await customerPage.VerifyrecordsofCustomerType()).toBe("Executive Search Firm")
+    //Verify all the records of Status.
+    await test.step(`Verify all the records of Status`, async () => {
+       await expect(await customerPage.VerifyrecordsofStatus()).toBe("Active");
     })
     
   })

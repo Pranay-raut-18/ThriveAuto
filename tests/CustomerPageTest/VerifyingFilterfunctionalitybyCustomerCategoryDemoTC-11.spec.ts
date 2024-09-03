@@ -5,7 +5,7 @@ import {HomePage} from "../../Pages/HomePage";
 import { CustomerPage } from '../../Pages/CustomerPage';
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
-test("verifying filter functionality by Customer Type Executive Search Firm TC-07 ",async({page})=>{
+test("verifying filter functionality by Customer Category 'Demo' TC-11 ",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
@@ -38,9 +38,9 @@ test("verifying filter functionality by Customer Type Executive Search Firm TC-0
         await customerPage.clickonFilterOption();
     })
     
-    //Select the Customer type to "Executive Search Firm" 
-    await test.step(`Select the Customer type to "Executive Search Firm"`, async () => {
-        await customerPage.selectCustomertypeEexcutiveSearchFirm();
+    //Select the Customer Category to "Demo" 
+    await test.step(`Select the Customer Category to "Demo"`, async () => {
+        await customerPage.selectCustomerCategoryDemo();
     })
     
     //Click On "Apply" Button
@@ -48,9 +48,9 @@ test("verifying filter functionality by Customer Type Executive Search Firm TC-0
         await customerPage.clickOnApplyButton();
     })
     
-    //Verify all the records of Customer Type
-    await test.step(`Verify all the records of Customer Type`, async () => {
-       await expect(await customerPage.VerifyrecordsofCustomerType()).toBe("Executive Search Firm")
+    //Verify all the records of Customer Category
+    await test.step(`Verify all the records of Customer Category`, async () => {
+       await expect(await customerPage.VerifyrecordsofCustomerCategory()).toBe("Private Equity");
     })
     
   })
