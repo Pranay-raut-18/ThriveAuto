@@ -35,8 +35,5 @@ test("Verify invalid search in roles and permissions tab", async ({ page }) => {
     // Verify the text of the "No results" message
     const messageText = await rolesAndPermissions.getNoResultsMessageText();
     expect(messageText).toBe("No results");
-
-    // Optionally log the result for debugging
-    console.log("No results message is displayed as expected.");
   });
 });
