@@ -225,7 +225,7 @@ export class UserPage {
     }
 
     /**
-     * Is searched name displayed in user list
+     * Is searched attribute(name and email) displayed in user list
      */
     async isSearchedAttributeDisplayedInUserList(name: string) {
         let oldCount: any = 0;
