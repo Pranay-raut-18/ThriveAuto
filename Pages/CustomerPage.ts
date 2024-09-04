@@ -12,15 +12,11 @@ export class CustomerPage {
   private customerType: Locator;
   private customerCategory: Locator;
   private status: Locator;
-  private selectCustomerTypeOptionESF: Locator;
-  private selectCustomerTypeOptionEnterprise: Locator;
-  private selectCustomerTypeOptionVentureCapital: Locator;
-  private selectCustomerTypeOptionPrivateEquity: Locator;
-  private selectCustomerCategoryOptionDemo: Locator;
-  private selectStatusOptionActive: Locator;
   private applyButton: Locator;
-  private removePreFilterStatus: Locator;
-  private tRows: Locator;
+  private removeFilterStatus: Locator;
+  private customerTypeDropdown: Locator;
+  private customerStatusDropdown: Locator;
+  private customerCategoryDropdown: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -30,23 +26,18 @@ export class CustomerPage {
     this.customerType= page.getByLabel('Customer type', { exact: true });
     this.customerCategory= page.getByLabel('Customer category');
     this.status= page.getByPlaceholder('Select Status');
-    this.selectCustomerTypeOptionESF= page.getByRole('option', { name: "Executive Search Firm" });
-    this.selectCustomerTypeOptionEnterprise= page.getByRole('option', { name: 'Enterprise' })
-    this.selectCustomerTypeOptionVentureCapital= page.getByRole('option', { name: 'Venture Capital' })
-    this.selectCustomerTypeOptionPrivateEquity= page.getByRole('option', { name: 'Private Equity' })
-    this.selectCustomerCategoryOptionDemo= page.getByRole('option', { name: 'Demo' });
-    this.selectStatusOptionActive= page.getByRole('option', { name: 'Active' });
     this.applyButton= page.getByRole('button', { name: 'Apply' });
-    this.removePreFilterStatus= page.locator(".MuiChip-deleteIconFilledColorDefault");
-    this.tRows= page.locator('.MuiDataGrid-row');
-
+    this.removeFilterStatus= page.locator(".MuiChip-deleteIconFilledColorDefault");
+    this.customerTypeDropdown= page.getByRole('listbox',{name: 'Customer type'});
+    this.customerStatusDropdown= page.getByRole('listbox',{name: 'Status'});
+    this.customerCategoryDropdown= page.getByRole('listbox',{name: 'Customer category'});
   }
  
   /**
    * Remove the Filter "Status Active" by clicking (X) button 
    */
-  async removepreFilterStatus() {
-    await this.removePreFilterStatus.click()
+  async removePreFilterStatus() {
+    await this.removeFilterStatus.click()
   }
 
   /**
@@ -64,27 +55,27 @@ export class CustomerPage {
   }
 
   /**
-   * verifying that Name is visible in the table
+   *  is Name visible in the table
    */
-  async verifyNameisVisible(Customername) {
+  async isNameVisible(Customername) {
     const customerList = this.customerTable;
     const cusnameLocator= customerList.getByText(Customername, { exact: true });
     return cusnameLocator;
   }
 
   /**
-   * verifying that URL is visible in the table
+   *  is URL visible in the table
    */
-  async verifyURLisVisible(url) {
+  async isURLVisible(url) {
     const customerList = this.customerTable;
     const cusnameLocator= customerList.getByText(url);
     return cusnameLocator;
   }
 
   /**
-   * verifying that Primary Contact is visible in the table
+   *  is Primary Contact visible in the table
    */
-  async verifyPrimaryContactisVisible(primaryContact) {
+  async isPrimaryContactVisible(primaryContact) {
     const customerList = this.customerTable;
     const cusnameLocator= customerList.getByText(primaryContact);
     return cusnameLocator;
@@ -93,56 +84,39 @@ export class CustomerPage {
   /**
    * Click on Filter Option (Symbol). 
    */
-  async clickonFilterOption() {
+  async clickOnFilterOption() {
     await this.filterOption.click();
   }
-
+  
   /**
-   * Select the Customer type to "Executive Search Firm" 
-   */
-  async selectCustomertypeEexcutiveSearchFirm() {
+   *  select Customer Type From Dropdown
+  */
+ async selectCustomerTypeFromDropdown(reqCT:string){
     await this.customerType.click();
-    await this.selectCustomerTypeOptionESF.click();
+    await this.customerTypeDropdown.waitFor();    
+    const desiredOption = await this.customerTypeDropdown.getByRole('option', { name:reqCT, exact: true });
+    await desiredOption.click();
   }
   
   /**
-   * Select the Customer type to "Enterprise" 
+   * Select the Customer Category From Dropdown
   */
- async selectCustomertypeEnterprise() {
-   await this.customerType.click();
-    await this.selectCustomerTypeOptionEnterprise.click();
-  }
-
-  /**
-   * Select the Customer type to "Venture Capital" 
-  */
- async selectCustomertypeVentureCapital() {
-   await this.customerType.click();
-    await this.selectCustomerTypeOptionVentureCapital.click();
-  }
-  
-  /**
-   * Select the Customer type to "Private Equity" 
-  */
- async selectCustomertypePrivateEquity() {
-   await this.customerType.click();
-    await this.selectCustomerTypeOptionPrivateEquity.click();
-  }
-  
-  /**
-   * Select the Customer type to "Private Equity" 
-  */
- async selectCustomerCategoryDemo() {
+ async selectCustomerCategoryFromDropdown(reqCC) {
     await this.customerCategory.click();
-    await this.selectCustomerCategoryOptionDemo.click();
+    await this.customerCategoryDropdown.waitFor();    
+    const desiredOption = await this.customerCategoryDropdown.getByRole('option', { name:reqCC, exact: true });
+    await desiredOption.click();
   }
 
   /**
-   * Select the Customer type to "Private Equity" 
+   * Select the Status From Dropdown
   */
- async selectStatusActive() {
+  async selectStatusFromDropdown(reqST) {
     await this.status.click();
-    await this.selectStatusOptionActive.click();
+    // await this.page.pause();
+    await this.customerStatusDropdown.waitFor();    
+    const desiredOption = await this.customerStatusDropdown.getByRole('option', { name:reqST, exact: true });
+    await desiredOption.click();
   }
 
   /**
@@ -154,104 +128,31 @@ export class CustomerPage {
   }
 
   /**
-   * Verify all the records of Customer Type
-   */
-  async VerifyrecordsofCustomerType() {
-        let loadMore = true;
-        let customerType;
- 
-        while (loadMore) {
-          const rows = this.tRows;
+  *  is Customer Type visible in the table
+  */
+  async isCustomerTypeVisible(customerType) {
+    const customerList = this.customerTable;
+    const cusType= customerList.getByText(customerType).first();
+    return cusType;
+  }
 
-          await rows.first().waitFor();
+  /**
+  *  is Customer Category visible in the table
+  */
+  async isCustomerCategoryVisible(customerCategory) {
+    const customerList = this.customerTable;
+    const cusType= customerList.getByText(customerCategory).first();
+    return cusType;
+  }
 
-          for (let i = 0; i < await rows.count(); i++) {
-            const row = rows.nth(i);
-
-            customerType = await row.locator('[data-field="customerType"] p').textContent();
-          }
-          
-          const lastRow = rows.last();
-          await lastRow.scrollIntoViewIfNeeded();
-          const initialRowCount = await rows.count();
-
-          await this.page.waitForLoadState('networkidle');
-
-          const newRowCount = await rows.count();
-          
-          if (newRowCount <= initialRowCount) {
-            loadMore = false;
-          }
-        }
-        return customerType;
-    }
+  /**
+  *  is Status visible in the table
+  */
+  async isStatusVisible(status) {
+    const customerList = this.customerTable;
+    const cusType= customerList.getByText(status).first();
+    return cusType;
+  }
+        
     
-    /**
-     * Verify all the records of Customer Category
-     */
-    async VerifyrecordsofCustomerCategory() {
-          let loadMore = true;
-          let customerCategory;
-   
-          while (loadMore) {
-            const rows = this.tRows;
-  
-            await rows.first().waitFor();
-  
-            for (let i = 0; i < await rows.count(); i++) {
-              const row = rows.nth(i);
-  
-              customerCategory = await row.locator('[data-field="customerCategory"] p').textContent();
-            }
-            
-            const lastRow = rows.last();
-            await lastRow.scrollIntoViewIfNeeded();
-            const initialRowCount = await rows.count();
-  
-            await this.page.waitForLoadState('networkidle');
-  
-            const newRowCount = await rows.count();
-            
-            if (newRowCount <= initialRowCount) {
-              loadMore = false;
-            }
-          }
-          return customerCategory;
-      }
-    /**
-     * Verify all the records of Status
-     */
-    async VerifyrecordsofStatus() {
-          let loadMore = true;
-          let status;
-   
-          while (loadMore) {
-            const rows = this.tRows;
-  
-            await rows.first().waitFor();
-  
-            for (let i = 0; i < await rows.count(); i++) {
-              const row = rows.nth(i);
-  
-              status = await row.locator('[data-field="customerStatus"] p').textContent();
-            }
-            
-            const lastRow = rows.last();
-            await lastRow.scrollIntoViewIfNeeded();
-            const initialRowCount = await rows.count();
-  
-            await this.page.waitForLoadState('networkidle');
-  
-            const newRowCount = await rows.count();
-            
-            if (newRowCount <= initialRowCount) {
-              loadMore = false;
-            }
-          }
-          return status;
-      }
-
-
-
-
 }

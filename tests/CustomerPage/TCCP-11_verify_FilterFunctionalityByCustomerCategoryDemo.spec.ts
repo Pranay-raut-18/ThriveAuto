@@ -5,11 +5,13 @@ import {HomePage} from "../../Pages/HomePage";
 import { CustomerPage } from '../../Pages/CustomerPage';
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
-test("verifying filter functionality by Customer Type 'Venture Capital' TC-09 ",async({page})=>{
+test("TCCP_11:CustomerPage | verify filter functionality by Customer Category 'Demo'",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
-    const customerPage = new CustomerPage(page);  
+    const customerPage = new CustomerPage(page); 
+    const customerCategory = "Demo"; 
+
 
     //Login using email address and password
     await test.step(`Login using email address and password`, async () => {
@@ -17,8 +19,8 @@ test("verifying filter functionality by Customer Type 'Venture Capital' TC-09 ",
        
     });
 
-    //Go to Admin Portal Customer tab
-    await test.step(`Go to Admin Potal Customer tab`, async () => {
+    //Go to Admin Portal
+    await test.step(`Go to Admin Portal`, async () => {
         await page.waitForURL;
         await homePage.clickOnGoToAdminPortal();
     })
@@ -30,17 +32,17 @@ test("verifying filter functionality by Customer Type 'Venture Capital' TC-09 ",
 
     //Remove the Filter "Status Active" by clicking (X) button
     await test.step(`Remove the Filter "Status Active" by clicking (X) button`, async () => {
-        await customerPage.removepreFilterStatus();
+        await customerPage.removePreFilterStatus();
     })
 
     //Click on Filter Option (Symbol). 
     await test.step(`Click on Filter Option (Symbol). `, async () => {
-        await customerPage.clickonFilterOption();
+        await customerPage.clickOnFilterOption();
     })
     
-    //Select the Customer type to "Venture Capital" 
-    await test.step(`Select the Customer type to "Venture Capital"`, async () => {
-        await customerPage.selectCustomertypeVentureCapital();
+    //Select the Customer Category to "Demo" 
+    await test.step(`Select the Customer Category to "Demo"`, async () => {
+        await customerPage.selectCustomerCategoryFromDropdown(customerCategory);
     })
     
     //Click On "Apply" Button
@@ -48,9 +50,9 @@ test("verifying filter functionality by Customer Type 'Venture Capital' TC-09 ",
         await customerPage.clickOnApplyButton();
     })
     
-    //Verify all the records of Customer Type
-    await test.step(`Verify all the records of Customer Type`, async () => {
-       await expect(await customerPage.VerifyrecordsofCustomerType()).toBe("Venture Capital")
+    //Verify all the records of Customer Category
+    await test.step(`Verify all the records of Customer Category`, async () => {
+       await expect(await customerPage.isCustomerCategoryVisible(customerCategory)).toBeVisible();
     })
     
   })

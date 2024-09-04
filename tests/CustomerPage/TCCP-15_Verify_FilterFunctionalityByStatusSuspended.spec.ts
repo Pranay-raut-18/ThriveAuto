@@ -5,20 +5,21 @@ import {HomePage} from "../../Pages/HomePage";
 import { CustomerPage } from '../../Pages/CustomerPage';
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
-test("verifying filter functionality by Customer Type Executive Search Firm TC-07 ",async({page})=>{
+test("TCCP_15:CustomerPage | Verify filter functionality by Status 'Suspended' ",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
     const customerPage = new CustomerPage(page);  
+    const status = "Suspended";  
 
     //Login using email address and password
     await test.step(`Login using email address and password`, async () => {
-      await loginPage.login(Url, EmailAddress, Password); 
+        await loginPage.login(Url, EmailAddress, Password); 
        
     });
 
-    //Go to Admin Portal Customer tab
-    await test.step(`Go to Admin Potal Customer tab`, async () => {
+    //Go to Admin Portal
+    await test.step(`Go to Admin Portal`, async () => {
         await page.waitForURL;
         await homePage.clickOnGoToAdminPortal();
     })
@@ -30,17 +31,17 @@ test("verifying filter functionality by Customer Type Executive Search Firm TC-0
 
     //Remove the Filter "Status Active" by clicking (X) button
     await test.step(`Remove the Filter "Status Active" by clicking (X) button`, async () => {
-        await customerPage.removepreFilterStatus();
+        await customerPage.removePreFilterStatus();
     })
 
     //Click on Filter Option (Symbol). 
     await test.step(`Click on Filter Option (Symbol). `, async () => {
-        await customerPage.clickonFilterOption();
+        await customerPage.clickOnFilterOption();
     })
     
-    //Select the Customer type to "Executive Search Firm" 
-    await test.step(`Select the Customer type to "Executive Search Firm"`, async () => {
-        await customerPage.selectCustomertypeEexcutiveSearchFirm();
+    //Select the Status to "Suspended" 
+    await test.step(`Select the Status to "Suspended"`, async () => {
+        await customerPage.selectStatusFromDropdown(status);
     })
     
     //Click On "Apply" Button
@@ -48,9 +49,9 @@ test("verifying filter functionality by Customer Type Executive Search Firm TC-0
         await customerPage.clickOnApplyButton();
     })
     
-    //Verify all the records of Customer Type
-    await test.step(`Verify all the records of Customer Type`, async () => {
-       await expect(await customerPage.VerifyrecordsofCustomerType()).toBe("Executive Search Firm")
+    //Verify all the records of Status.
+    await test.step(`Verify all the records of Status`, async () => {
+       await expect(await customerPage.isStatusVisible(status)).toBeVisible();
     })
     
   })

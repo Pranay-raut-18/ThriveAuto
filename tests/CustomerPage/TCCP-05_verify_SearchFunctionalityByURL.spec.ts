@@ -5,7 +5,7 @@ import {HomePage} from "../../Pages/HomePage";
 import { CustomerPage } from '../../Pages/CustomerPage';
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
-test("Verifying search functionality by URL TC-05",async({page})=>{
+test("TCCP_05:CustomerPage | Verify search functionality by URL",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
@@ -17,8 +17,8 @@ test("Verifying search functionality by URL TC-05",async({page})=>{
       await loginPage.login(Url, EmailAddress, Password);    
     });
 
-    //Go to Admin Potal Customer tab
-    await test.step(`Go to Admin Potal Customer tab`, async () => {
+    //Go to Admin Portal
+    await test.step(`Go to Admin Portal`, async () => {
         await page.waitForURL;
         await homePage.clickOnGoToAdminPortal();
     })
@@ -41,7 +41,7 @@ test("Verifying search functionality by URL TC-05",async({page})=>{
 
     //verifying that URL is visible in the table
     await test.step(`verifying that URL is visible in the table`, async () => {
-        await expect(await customerPage.verifyURLisVisible(url)).toBeVisible();
+        await expect(await customerPage.isURLVisible(url)).toBeVisible();
     })
     
   })

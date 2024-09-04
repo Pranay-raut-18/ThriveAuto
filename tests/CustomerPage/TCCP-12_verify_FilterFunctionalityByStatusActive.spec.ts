@@ -5,11 +5,12 @@ import {HomePage} from "../../Pages/HomePage";
 import { CustomerPage } from '../../Pages/CustomerPage';
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
-test("verifying filter functionality by Customer Type 'Private Equity' TC-10 ",async({page})=>{
+test("TCCP_12:CustomerPage | verify filter functionality by Status 'Active'",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
     const customerPage = new CustomerPage(page);  
+    const status = "Active";  
 
     //Login using email address and password
     await test.step(`Login using email address and password`, async () => {
@@ -17,8 +18,8 @@ test("verifying filter functionality by Customer Type 'Private Equity' TC-10 ",a
        
     });
 
-    //Go to Admin Portal Customer tab
-    await test.step(`Go to Admin Potal Customer tab`, async () => {
+    //Go to Admin Portal
+    await test.step(`Go to Admin Portal`, async () => {
         await page.waitForURL;
         await homePage.clickOnGoToAdminPortal();
     })
@@ -30,17 +31,17 @@ test("verifying filter functionality by Customer Type 'Private Equity' TC-10 ",a
 
     //Remove the Filter "Status Active" by clicking (X) button
     await test.step(`Remove the Filter "Status Active" by clicking (X) button`, async () => {
-        await customerPage.removepreFilterStatus();
+        await customerPage.removePreFilterStatus();
     })
 
     //Click on Filter Option (Symbol). 
     await test.step(`Click on Filter Option (Symbol). `, async () => {
-        await customerPage.clickonFilterOption();
+        await customerPage.clickOnFilterOption();
     })
     
-    //Select the Customer type to "Private Euity" 
-    await test.step(`Select the Customer type to "Private Euity"`, async () => {
-        await customerPage.selectCustomertypePrivateEquity();
+    //Select the Status to "Active" 
+    await test.step(`Select the Status to "Active"`, async () => {
+        await customerPage.selectStatusFromDropdown(status);
     })
     
     //Click On "Apply" Button
@@ -48,9 +49,9 @@ test("verifying filter functionality by Customer Type 'Private Equity' TC-10 ",a
         await customerPage.clickOnApplyButton();
     })
     
-    //Verify all the records of Customer Type
-    await test.step(`Verify all the records of Customer Type`, async () => {
-       await expect(await customerPage.VerifyrecordsofCustomerType()).toBe("Private Equity");
+    //Verify all the records of Status.
+    await test.step(`Verify all the records of Status`, async () => {
+       await expect(await customerPage.isStatusVisible(status)).toBeVisible();
     })
     
   })

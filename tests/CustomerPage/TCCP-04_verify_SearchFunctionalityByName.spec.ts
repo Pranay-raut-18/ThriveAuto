@@ -5,28 +5,30 @@ import {HomePage} from "../../Pages/HomePage";
 import { CustomerPage } from '../../Pages/CustomerPage';
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
-test("Verifying search functionality by Primary Contact TC-06",async({page})=>{
+test("TCCP_04:CustomerPage | Verify search functionality by Name",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
     const customerPage = new CustomerPage(page);  
-    const primaryContact= "Jill Hughes";     
+    const customerName= "alanis";     
 
     //Login using email address and password
     await test.step(`Login using email address and password`, async () => {
-      await loginPage.login(Url, EmailAddress, Password); 
-       
+      await page.waitForURL;
+      await loginPage.login(Url, EmailAddress, Password);    
     });
 
-    //Go to Admin Portal Customer tab
-    await test.step(`Go to Admin Potal Customer tab`, async () => {
-        await page.waitForURL;
-        await homePage.clickOnGoToAdminPortal();
+    //Go to Admin Portal
+    await test.step(`Go to Admin Portal`, async () => {
+      await homePage.clickOnGoToAdminPortal();
+      await expect(page).toHaveURL("https://thrive.thrive-dev.com/admin/users");
+
     })
 
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
         await userPage.ClickOnCustomerTab();
+        await expect(page).toHaveURL("https://thrive.thrive-dev.com/admin/customers");
     })
 
     //Click on Search field.
@@ -34,15 +36,16 @@ test("Verifying search functionality by Primary Contact TC-06",async({page})=>{
         await customerPage.clickOnSearchFeild();
     })
 
-    //Enter Primary Contact
-    await test.step(`Enter Primary Contact`, async () => {
-        await customerPage.enterName(primaryContact);
+    //Enter Name
+    await test.step(`Enter Name`, async () => {
+        await customerPage.enterName(customerName);
         await page.waitForSelector(".css-opb0c2");
+
     })
 
-    //verifying that Primary Contact is visible in the table
-    await test.step(`verifying that Primary Contact is visible in the table`, async () => {
-        await expect(await customerPage.verifyPrimaryContactisVisible(primaryContact)).toBeVisible();
+    //verifying that Name is visible in the table
+    await test.step(`verifying that Name is visible in the table`, async () => {
+        await expect(await customerPage.isNameVisible(customerName)).toBeVisible();
     })
-    
+
   })

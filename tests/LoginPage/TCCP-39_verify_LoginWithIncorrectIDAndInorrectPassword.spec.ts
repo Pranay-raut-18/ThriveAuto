@@ -1,9 +1,10 @@
 import {test, expect} from '@playwright/test';
 import {LoginPage} from "../../Pages/LoginPage";
-import {Url,EmailAddress} from "../../utils/config-utils"
+import {Url} from "../../utils/config-utils"
 
-test("Verify Login with Correct ID and Incorrect Password TC-03",async({page})=>{
+test("TCCP_39:LoginPage | Verify Login with Incorrect ID and Incorrect Password",async({page})=>{
     const Password="King2$";
+    const EmailAddress="qatesting+rayansh1@thrivetrm.com";
     const loginPage = new LoginPage(page);    
 
     //Login with ID and Password
@@ -13,6 +14,6 @@ test("Verify Login with Correct ID and Incorrect Password TC-03",async({page})=>
       
       //Verify an Error message appeared on the sceen
       await test.step(`Verify an Error message appeared on the sceen`, async () => {
-        await expect(page.locator(".css-vsox4b")).toBeVisible();  
+        await expect(page.locator(".css-vsox4b")).toBeVisible();     
       })
 })
