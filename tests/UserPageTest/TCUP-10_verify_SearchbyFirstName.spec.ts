@@ -15,8 +15,8 @@ test('TCUP_10:UserPage|Verify searching by only First name ', async ({ page }) =
     await loginPage.login(Url, EmailAddress, Password);
   });
 
-  //Go to Admin Potal 
-  await test.step(`Go to Admin Potal Customer tab`, async () => {
+  //Go to Admin Portal 
+  await test.step(`Go to Admin Portal Customer tab`, async () => {
     await homePage.clickOnGoToAdminPortal();
   });
 
