@@ -26,7 +26,7 @@ test("TCCP_15:CustomerPage | Verify filter functionality by Status 'Suspended' "
 
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-        await userPage.ClickOnCustomerTab();
+        await userPage.clickOnCustomerTab();
     })
 
     //Remove the Filter "Status Active" by clicking (X) button

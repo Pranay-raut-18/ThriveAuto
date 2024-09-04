@@ -26,7 +26,7 @@ test("TCCP_06:CustomerPage | Verify search functionality by Primary Contact",asy
 
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-        await userPage.ClickOnCustomerTab();
+        await userPage.clickOnCustomerTab();
     })
 
     //Click on Search field.

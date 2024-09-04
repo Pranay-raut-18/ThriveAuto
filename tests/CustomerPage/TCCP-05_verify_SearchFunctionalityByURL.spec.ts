@@ -25,7 +25,7 @@ test("TCCP_05:CustomerPage | Verify search functionality by URL",async({page})=>
 
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-        await userPage.ClickOnCustomerTab();
+        await userPage.clickOnCustomerTab();
     })
 
     //Click on Search field.

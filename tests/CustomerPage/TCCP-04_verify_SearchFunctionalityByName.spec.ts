@@ -27,7 +27,7 @@ test("TCCP_04:CustomerPage | Verify search functionality by Name",async({page})=
 
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-        await userPage.ClickOnCustomerTab();
+        await userPage.clickOnCustomerTab();
         await expect(page).toHaveURL("https://thrive.thrive-dev.com/admin/customers");
     })
 

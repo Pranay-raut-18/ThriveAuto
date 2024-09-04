@@ -26,7 +26,7 @@ test("TCCP_42:CustomerPage | Verify Status Filter is 'Active' by default on Cust
 
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-        await userPage.ClickOnCustomerTab();
+        await userPage.clickOnCustomerTab();
     })
 
     //Verify all the records of Status.

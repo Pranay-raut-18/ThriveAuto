@@ -29,7 +29,7 @@ test("TCCP_01:LoginPage | Verify and Going to admin Portal with correct ID and P
     
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-      await userPage.ClickOnCustomerTab();
+      await userPage.clickOnCustomerTab();
       })
     
   

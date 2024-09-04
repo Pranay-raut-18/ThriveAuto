@@ -26,7 +26,7 @@ test("TCCP_09:CustomerPage | verify filter functionality by Customer Type 'Ventu
 
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-        await userPage.ClickOnCustomerTab();
+        await userPage.clickOnCustomerTab();
     })
 
     //Remove the Filter "Status Active" by clicking (X) button

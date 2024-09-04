@@ -26,7 +26,7 @@ test("TCCP_14:CustomerPage | Verify filter functionality by Status 'Disabaled' "
 
     //Click on Customer tab
     await test.step(`Click Customer tab`, async () => {
-        await userPage.ClickOnCustomerTab();
+        await userPage.clickOnCustomerTab();
     })
 
     //Remove the Filter "Status Active" by clicking (X) button
