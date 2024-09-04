@@ -68,8 +68,8 @@ export class CustomerPage {
    */
   async isURLVisible(url) {
     const customerList = this.customerTable;
-    const cusnameLocator= customerList.getByText(url);
-    return cusnameLocator;
+    const cusNameLocator= customerList.getByText(url);
+    return cusNameLocator;
   }
 
   /**
@@ -77,8 +77,8 @@ export class CustomerPage {
    */
   async isPrimaryContactVisible(primaryContact) {
     const customerList = this.customerTable;
-    const cusnameLocator= customerList.getByText(primaryContact);
-    return cusnameLocator;
+    const cusNameLocator= customerList.getByText(primaryContact);
+    return cusNameLocator;
   }
 
   /**

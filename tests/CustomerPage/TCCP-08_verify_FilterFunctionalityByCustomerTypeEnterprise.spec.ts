@@ -7,8 +7,8 @@ import {Url, EmailAddress, Password } from "../../utils/config-utils"
 
 test("TCCP_08:CustomerPage | verify filter functionality by Customer Type 'Enterprise'",async({page})=>{
     const loginPage = new LoginPage(page);             
-    const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
+    const userPage = new UserPage(page);       
     const customerPage = new CustomerPage(page);  
     const customerType = "Enterprise";  
 
@@ -20,7 +20,7 @@ test("TCCP_08:CustomerPage | verify filter functionality by Customer Type 'Enter
 
     //Go to Admin Portal
     await test.step(`Go to Admin Portal`, async () => {
-        await page.waitForURL;
+        page.waitForURL;
         await homePage.clickOnGoToAdminPortal();
     })
 
