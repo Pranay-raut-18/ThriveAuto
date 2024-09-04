@@ -10,13 +10,17 @@ export class CustomerPage {
   private customerTable: Locator;
   private filterOption: Locator;
   private customerType: Locator;
+  private customerCategory: Locator;
+  private status: Locator;
   private selectCustomerTypeOptionESF: Locator;
+  private selectCustomerTypeOptionEnterprise: Locator;
+  private selectCustomerTypeOptionVentureCapital: Locator;
+  private selectCustomerTypeOptionPrivateEquity: Locator;
+  private selectCustomerCategoryOptionDemo: Locator;
+  private selectStatusOptionActive: Locator;
   private applyButton: Locator;
   private removePreFilterStatus: Locator;
-
-
-
-  private customerTypeOptionESF="Executive Search Firm";
+  private tRows: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -24,9 +28,17 @@ export class CustomerPage {
     this.customerTable= page.locator(".css-opb0c2");
     this.filterOption= page.getByLabel('Edit Filters')
     this.customerType= page.getByLabel('Customer type', { exact: true });
-    this.selectCustomerTypeOptionESF= page.getByRole('option', { name: this.customerTypeOptionESF });
+    this.customerCategory= page.getByLabel('Customer category');
+    this.status= page.getByPlaceholder('Select Status');
+    this.selectCustomerTypeOptionESF= page.getByRole('option', { name: "Executive Search Firm" });
+    this.selectCustomerTypeOptionEnterprise= page.getByRole('option', { name: 'Enterprise' })
+    this.selectCustomerTypeOptionVentureCapital= page.getByRole('option', { name: 'Venture Capital' })
+    this.selectCustomerTypeOptionPrivateEquity= page.getByRole('option', { name: 'Private Equity' })
+    this.selectCustomerCategoryOptionDemo= page.getByRole('option', { name: 'Demo' });
+    this.selectStatusOptionActive= page.getByRole('option', { name: 'Active' });
     this.applyButton= page.getByRole('button', { name: 'Apply' });
     this.removePreFilterStatus= page.locator(".MuiChip-deleteIconFilledColorDefault");
+    this.tRows= page.locator('.MuiDataGrid-row');
 
   }
  
@@ -94,6 +106,46 @@ export class CustomerPage {
   }
   
   /**
+   * Select the Customer type to "Enterprise" 
+  */
+ async selectCustomertypeEnterprise() {
+   await this.customerType.click();
+    await this.selectCustomerTypeOptionEnterprise.click();
+  }
+
+  /**
+   * Select the Customer type to "Venture Capital" 
+  */
+ async selectCustomertypeVentureCapital() {
+   await this.customerType.click();
+    await this.selectCustomerTypeOptionVentureCapital.click();
+  }
+  
+  /**
+   * Select the Customer type to "Private Equity" 
+  */
+ async selectCustomertypePrivateEquity() {
+   await this.customerType.click();
+    await this.selectCustomerTypeOptionPrivateEquity.click();
+  }
+  
+  /**
+   * Select the Customer type to "Private Equity" 
+  */
+ async selectCustomerCategoryDemo() {
+    await this.customerCategory.click();
+    await this.selectCustomerCategoryOptionDemo.click();
+  }
+
+  /**
+   * Select the Customer type to "Private Equity" 
+  */
+ async selectStatusActive() {
+    await this.status.click();
+    await this.selectStatusOptionActive.click();
+  }
+
+  /**
    * Click On "Apply" Button
    */
   async clickOnApplyButton() {
@@ -109,7 +161,7 @@ export class CustomerPage {
         let customerType;
  
         while (loadMore) {
-          const rows = this.page.locator('.MuiDataGrid-row');
+          const rows = this.tRows;
 
           await rows.first().waitFor();
 
@@ -117,7 +169,6 @@ export class CustomerPage {
             const row = rows.nth(i);
 
             customerType = await row.locator('[data-field="customerType"] p').textContent();
-            // console.log(`Customer Type: ${customerType}`);
           }
           
           const lastRow = rows.last();
@@ -134,6 +185,73 @@ export class CustomerPage {
         }
         return customerType;
     }
+    
+    /**
+     * Verify all the records of Customer Category
+     */
+    async VerifyrecordsofCustomerCategory() {
+          let loadMore = true;
+          let customerCategory;
+   
+          while (loadMore) {
+            const rows = this.tRows;
+  
+            await rows.first().waitFor();
+  
+            for (let i = 0; i < await rows.count(); i++) {
+              const row = rows.nth(i);
+  
+              customerCategory = await row.locator('[data-field="customerCategory"] p').textContent();
+            }
+            
+            const lastRow = rows.last();
+            await lastRow.scrollIntoViewIfNeeded();
+            const initialRowCount = await rows.count();
+  
+            await this.page.waitForLoadState('networkidle');
+  
+            const newRowCount = await rows.count();
+            
+            if (newRowCount <= initialRowCount) {
+              loadMore = false;
+            }
+          }
+          return customerCategory;
+      }
+    /**
+     * Verify all the records of Status
+     */
+    async VerifyrecordsofStatus() {
+          let loadMore = true;
+          let status;
+   
+          while (loadMore) {
+            const rows = this.tRows;
+  
+            await rows.first().waitFor();
+  
+            for (let i = 0; i < await rows.count(); i++) {
+              const row = rows.nth(i);
+  
+              status = await row.locator('[data-field="customerStatus"] p').textContent();
+            }
+            
+            const lastRow = rows.last();
+            await lastRow.scrollIntoViewIfNeeded();
+            const initialRowCount = await rows.count();
+  
+            await this.page.waitForLoadState('networkidle');
+  
+            const newRowCount = await rows.count();
+            
+            if (newRowCount <= initialRowCount) {
+              loadMore = false;
+            }
+          }
+          return status;
+      }
+
+
 
 
 }

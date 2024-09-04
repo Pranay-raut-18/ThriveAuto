@@ -4,14 +4,12 @@ import { UserPage } from '../../Pages/UserPage';
 import {HomePage} from "../../Pages/HomePage";
 import { CustomerPage } from '../../Pages/CustomerPage';
 import {Url, EmailAddress, Password } from "../../utils/config-utils"
-import exp from 'constants';
 
 test("verifying filter functionality by Customer Type Executive Search Firm TC-07 ",async({page})=>{
     const loginPage = new LoginPage(page);             
     const userPage = new UserPage(page);       
     const homePage = new HomePage(page);       
     const customerPage = new CustomerPage(page);  
-    const primaryContact= "Jill Hughes";     
 
     //Login using email address and password
     await test.step(`Login using email address and password`, async () => {
