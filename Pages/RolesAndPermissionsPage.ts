@@ -6,12 +6,16 @@ export class RolesAndPermissionsPage {
   private rolesTableRow: Locator;
   private searchBar: Locator;
   private roleNameCell: Locator;
-  private roleDescriptionCell: Locator; // New locator for the description field
+  private roleDescriptionCell: Locator;
   private rolesTable: Locator;
   private noResultsMessage: Locator;
+  private roleTypeCell: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.roleTypeCell = page.locator(
+      '.MuiDataGrid-cell[data-field="roleType"]'
+    );
     this.rolesTabButton = page.locator("p", { hasText: "Roles & Permissions" });
     this.rolesTableRow = page.locator(".MuiDataGrid-row");
     this.searchBar = page.locator(
@@ -20,7 +24,7 @@ export class RolesAndPermissionsPage {
     this.roleNameCell = page.locator('.MuiDataGrid-cell[data-field="name"]');
     this.roleDescriptionCell = page.locator(
       '.MuiDataGrid-cell[data-field="description"]'
-    ); // Added for description search
+    );
     this.rolesTable = page.locator(".MuiDataGrid-virtualScrollerRenderZone");
     this.noResultsMessage = page.locator(
       "p.MuiTypography-root.MuiTypography-body2.css-1a75746"
@@ -89,5 +93,23 @@ export class RolesAndPermissionsPage {
 
   async getNoResultsMessageText(): Promise<string> {
     return (await this.noResultsMessage.textContent()) || "";
+  }
+  async clickOnRoleActionMenu(roleName: string) {
+    await this.page
+      .getByRole("row", {
+        name: `${roleName} System Open roles action menu`,
+        exact: true,
+      })
+      .getByLabel("Open roles action menu")
+      .click();
+  }
+
+  async clickOnMenuItem(menuItemName: string) {
+    await this.page.getByRole("menuitem", { name: menuItemName }).click();
+  }
+
+  async closeButtonofDuplicateTab() {
+    const closeButton = this.page.getByLabel("Close Drawer");
+    return closeButton.isVisible();
   }
 }
