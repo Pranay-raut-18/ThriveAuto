@@ -1,13 +1,13 @@
 import {test, expect} from '@playwright/test';
-import {Url,Password} from "../../utils/config-utils"
+import {Url,EmailAddress} from "../../utils/config-utils"
 
 
-test("Verify 'Continue With Email' button is Disabled  when only password is entered 41",async({page})=>{
+test("TCCP_40:LoginPage | Verify 'Continue With Email' button is not visible when only email is entered",async({page})=>{
             
       //Go to url and enter only email address
       await test.step(`Go to url and enter only email address`, async () => {
             await page.goto(Url);
-            await page.locator("#username").fill(Password);
+            await page.locator("#username").fill(EmailAddress);
       });
 
       //Verify 'Continue With Email' is Disabled on the sceen

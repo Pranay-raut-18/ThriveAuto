@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("Roles and Permissions Tab default functionality", async ({ page }) => {
+test("Verify url of the roles and permissions tab", async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
@@ -18,11 +18,12 @@ test("Roles and Permissions Tab default functionality", async ({ page }) => {
   await test.step("Go to Admin Portal Customer tab", async () => {
     await homePage.clickOnGoToAdminPortal();
   });
-
-  // Verify roles in Roles and Permissions tab
-  await test.step("Verify roles in Roles and Permissions tab", async () => {
+  // Verify URL of the roles and permissions tab
+  await test.step("Verify URL of the roles and permissions tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
-    const roles = await rolesAndPermissions.getAllRoles();
-    expect(roles).toBeTruthy();
+    const currentUrl = await rolesAndPermissions.getPageUrl();
+    const expectedUrlSegment = "roles-and-permissions";
+    const actualUrlSegment = currentUrl.split("/").pop();
+    expect(actualUrlSegment).toEqual(expectedUrlSegment);
   });
 });

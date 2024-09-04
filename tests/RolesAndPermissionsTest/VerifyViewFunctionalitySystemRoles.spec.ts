@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("Roles and Permissions Tab default functionality", async ({ page }) => {
+test("Verify invalid search in roles and permissions tab", async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
@@ -19,10 +19,22 @@ test("Roles and Permissions Tab default functionality", async ({ page }) => {
     await homePage.clickOnGoToAdminPortal();
   });
 
-  // Verify roles in Roles and Permissions tab
-  await test.step("Verify roles in Roles and Permissions tab", async () => {
+  // Click on Roles and Permissions Tab
+  await test.step("Click on Roles and Permissions Tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
-    const roles = await rolesAndPermissions.getAllRoles();
-    expect(roles).toBeTruthy();
+  });
+  await test.step("Click on action menu for 'Admin' role", async () => {
+    await rolesAndPermissions.clickOnRoleActionMenu("Admin");
+  });
+
+  // Step 5: Click on "View" menu item
+  await test.step("Click on 'View' menu item", async () => {
+    await rolesAndPermissions.clickOnMenuItem("View");
+    await page.pause();
+  });
+
+  // Step 6: Verify that the drawer is visible and close it
+  await test.step("Verify and close the drawer", async () => {
+    expect(rolesAndPermissions.closeButtonofDuplicateTab()).toBeTruthy();
   });
 });

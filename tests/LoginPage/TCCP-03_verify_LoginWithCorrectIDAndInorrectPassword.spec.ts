@@ -2,7 +2,7 @@ import {test, expect} from '@playwright/test';
 import {LoginPage} from "../../Pages/LoginPage";
 import {Url,EmailAddress} from "../../utils/config-utils"
 
-test("Verify Login with Correct ID and Incorrect Password 03",async({page})=>{
+test("TCCP_03:LoginPage | Verify Login with Correct ID and Incorrect Password",async({page})=>{
     const Password="King2$";
     const loginPage = new LoginPage(page);    
 
