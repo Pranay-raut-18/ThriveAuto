@@ -59,8 +59,8 @@ export class CustomerPage {
    */
   async isNameVisible(Customername) {
     const customerList = this.customerTable;
-    const cusnameLocator= customerList.getByText(Customername, { exact: true });
-    return cusnameLocator;
+    const cusNameLocator= customerList.getByText(Customername, { exact: true });
+    return cusNameLocator;
   }
 
   /**
@@ -94,7 +94,7 @@ export class CustomerPage {
  async selectCustomerTypeFromDropdown(reqCT:string){
     await this.customerType.click();
     await this.customerTypeDropdown.waitFor();    
-    const desiredOption = await this.customerTypeDropdown.getByRole('option', { name:reqCT, exact: true });
+    const desiredOption = this.customerTypeDropdown.getByRole('option', { name:reqCT, exact: true });
     await desiredOption.click();
   }
   
@@ -104,7 +104,7 @@ export class CustomerPage {
  async selectCustomerCategoryFromDropdown(reqCC) {
     await this.customerCategory.click();
     await this.customerCategoryDropdown.waitFor();    
-    const desiredOption = await this.customerCategoryDropdown.getByRole('option', { name:reqCC, exact: true });
+    const desiredOption = this.customerCategoryDropdown.getByRole('option', { name:reqCC, exact: true });
     await desiredOption.click();
   }
 
@@ -115,7 +115,7 @@ export class CustomerPage {
     await this.status.click();
     // await this.page.pause();
     await this.customerStatusDropdown.waitFor();    
-    const desiredOption = await this.customerStatusDropdown.getByRole('option', { name:reqST, exact: true });
+    const desiredOption = this.customerStatusDropdown.getByRole('option', { name:reqST, exact: true });
     await desiredOption.click();
   }
 
