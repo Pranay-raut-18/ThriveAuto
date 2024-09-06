@@ -13,6 +13,7 @@ test("TCCP_11:CustomerPage | verify filter functionality by Customer Category 'D
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
   const customerCategory = "Demo";
+  const dataField = "customerCategory";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -42,7 +43,7 @@ test("TCCP_11:CustomerPage | verify filter functionality by Customer Category 'D
 
   //Select the Customer Category to "Demo"
   await test.step(`Select the Customer Category to "Demo"`, async () => {
-    await customerPage.selectCustomerCategoryFromDropdown(customerCategory);
+    await customerPage.selectFromDropdowns(1,customerCategory);
   });
 
   //Click On "Apply" Button
@@ -50,10 +51,11 @@ test("TCCP_11:CustomerPage | verify filter functionality by Customer Category 'D
     await customerPage.clickOnApplyButton();
   });
 
-  //Verify all the records of Customer Category
-  await test.step(`Verify all the records of Customer Category`, async () => {
-    await expect(
-      await customerPage.isCustomerCategoryVisible(customerCategory)
-    ).toBeVisible();
+  //Verify all the records of Customer Filtered by customer Category "Demo"
+  await test.step(`Verify all the records of Customer Filtered by customer Category ${customerCategory}`, async () => {
+    const records = await customerPage.getAllRecordofaParticularColoum(
+      dataField
+    );
+    await expect(records).toContain(customerCategory); 
   });
 });

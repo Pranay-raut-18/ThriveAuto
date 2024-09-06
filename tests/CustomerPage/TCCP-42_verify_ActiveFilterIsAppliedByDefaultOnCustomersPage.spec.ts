@@ -13,6 +13,7 @@ test("TCCP_42:CustomerPage | Verify Status Filter is 'Active' by default on Cust
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
   const status = "Active";
+  const dataField = "customerStatus";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -30,8 +31,11 @@ test("TCCP_42:CustomerPage | Verify Status Filter is 'Active' by default on Cust
     await userPage.clickOnCustomerTab();
   });
 
-  //Verify all the records of Status.
-  await test.step(`Verify all the records of Status`, async () => {
-    await expect(await customerPage.isStatusVisible(status)).toBeVisible();
+  //Verify all the records of Customer by-default Status is "Active"
+  await test.step(`Verify all the records of Customer by-default Status is ${status}`, async () => {
+    const records = await customerPage.getAllRecordofaParticularColoum(
+      dataField
+    );
+    await expect(records).toContain(status);
   });
 });

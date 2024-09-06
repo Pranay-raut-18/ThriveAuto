@@ -13,6 +13,7 @@ test("TCCP_06:CustomerPage | Verify search functionality by Primary Contact", as
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
   const primaryContact = "Jill Hughes";
+  const dataField = "primaryUser";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -37,14 +38,15 @@ test("TCCP_06:CustomerPage | Verify search functionality by Primary Contact", as
 
   //Enter Primary Contact
   await test.step(`Enter Primary Contact`, async () => {
-    await customerPage.enterName(primaryContact);
+    await customerPage.enterCustomerNameinSearchFeild(primaryContact);
     await page.waitForSelector(".css-opb0c2");
   });
 
-  //verify Primary Contact is visible in the table
-  await test.step(`verify Primary Contact is visible in the table`, async () => {
-    await expect(
-      await customerPage.isPrimaryContactVisible(primaryContact)
-    ).toBeVisible();
+  //Verify all the records of Customer Searched by Primary Contact
+  await test.step(`Verify all the records of Customer Searched by name `, async () => {
+    const records = await customerPage.getAllRecordofaParticularColoum(
+      dataField
+    );
+    await expect(records).toContain(primaryContact); 
   });
 });

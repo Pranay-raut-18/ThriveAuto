@@ -37,7 +37,7 @@ test("TCCP_05:CustomerPage | Verify search functionality by URL", async ({
 
   //Enter URL
   await test.step(`Enter URL`, async () => {
-    await customerPage.enterName(url);
+    await customerPage.enterCustomerNameinSearchFeild(url);
     await page.waitForSelector(".css-opb0c2");
   });
 

@@ -13,6 +13,7 @@ test("TCCP_09:CustomerPage | verify filter functionality by Customer Type 'Ventu
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
   const customerType = "Venture Capital";
+  const dataField = "customerType";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -42,7 +43,7 @@ test("TCCP_09:CustomerPage | verify filter functionality by Customer Type 'Ventu
 
   //Select the Customer type to "Venture Capital"
   await test.step(`Select the Customer type to "Venture Capital"`, async () => {
-    await customerPage.selectCustomerTypeFromDropdown(customerType);
+    await customerPage.selectFromDropdowns(0,customerType);
   });
 
   //Click On "Apply" Button
@@ -50,10 +51,11 @@ test("TCCP_09:CustomerPage | verify filter functionality by Customer Type 'Ventu
     await customerPage.clickOnApplyButton();
   });
 
-  //Verify all the records of Customer Type
-  await test.step(`Verify all the records of Customer Type`, async () => {
-    await expect(
-      await customerPage.isCustomerTypeVisible(customerType)
-    ).toBeVisible();
+  //Verify all the records of Customer Filtered by customer Type "Venture Capital"
+  await test.step(`Verify all the records of Customer Filtered by customer Type ${customerType}`, async () => {
+    const records = await customerPage.getAllRecordofaParticularColoum(
+      dataField
+    );
+    await expect(records).toContain(customerType); 
   });
 });

@@ -13,6 +13,7 @@ test("TCCP_14:CustomerPage | Verify filter functionality by Status 'Disabaled' "
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
   const status = "Disabled";
+  const dataField = "customerStatus";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -42,7 +43,7 @@ test("TCCP_14:CustomerPage | Verify filter functionality by Status 'Disabaled' "
 
   //Select the Status to "Disabled"
   await test.step(`Select the Status to "Disabled"`, async () => {
-    await customerPage.selectStatusFromDropdown(status);
+    await customerPage.selectFromDropdowns(2,status);
   });
 
   //Click On "Apply" Button
@@ -50,8 +51,11 @@ test("TCCP_14:CustomerPage | Verify filter functionality by Status 'Disabaled' "
     await customerPage.clickOnApplyButton();
   });
 
-  //Verify all the records of Status.
-  await test.step(`Verify all the records of Status`, async () => {
-    await expect(await customerPage.isStatusVisible(status)).toBeVisible();
+  //Verify all the records of Customer Filtered by Status is "Disabled"
+  await test.step(`Verify all the records of Customer Filtered by Status is ${status}`, async () => {
+    const records = await customerPage.getAllRecordofaParticularColoum(
+      dataField
+    );
+    await expect(records).toContain(status); 
   });
 });

@@ -13,6 +13,7 @@ test("TCCP_04:CustomerPage | Verify search functionality by Name", async ({
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
   const customerName = "alanis";
+  const dataField = "name";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -41,12 +42,15 @@ test("TCCP_04:CustomerPage | Verify search functionality by Name", async ({
 
   //Enter Name
   await test.step(`Enter Name`, async () => {
-    await customerPage.enterName(customerName);
+    await customerPage.enterCustomerNameinSearchFeild(customerName);
     await page.waitForSelector(".css-opb0c2");
   });
 
-  //verify Name is visible in the table
-  await test.step(`verify Name is visible in the table`, async () => {
-    await expect(await customerPage.isNameVisible(customerName)).toBeVisible();
+  //Verify all the records of Customer Searched by name
+  await test.step(`Verify all the records of Customer Searched by name `, async () => {
+    const records = await customerPage.getAllRecordofaParticularColoum(
+      dataField
+    );
+    await expect(records).toContain(customerName);
   });
 });

@@ -1,4 +1,4 @@
-import { Locator, Page, expect } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 
 /**
  * Customer page
@@ -9,36 +9,24 @@ export class CustomerPage {
   private searchFeild: Locator;
   private customerTable: Locator;
   private filterOption: Locator;
-  private customerType: Locator;
-  private customerCategory: Locator;
-  private status: Locator;
+  private clickDropDown: Locator;
   private applyButton: Locator;
   private removeFilterStatus: Locator;
-  private customerTypeDropdown: Locator;
-  private customerStatusDropdown: Locator;
-  private customerCategoryDropdown: Locator;
+  private addCustomerButton: Locator;
+  private nameFeild: Locator;
+  private dropDownboxAppear: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.searchFeild = page.getByPlaceholder(
-      "Search by name, URL, or primary contact"
-    );
+    this.searchFeild = page.getByPlaceholder("Search by name, URL, or primary contact");
     this.customerTable = page.locator(".css-opb0c2");
     this.filterOption = page.getByLabel("Edit Filters");
-    this.customerType = page.getByLabel("Customer type", { exact: true });
-    this.customerCategory = page.getByLabel("Customer category");
-    this.status = page.getByPlaceholder("Select Status");
+    this.clickDropDown=page.locator(".MuiInputBase-inputAdornedEnd")
     this.applyButton = page.getByRole("button", { name: "Apply" });
-    this.removeFilterStatus = page.locator(
-      ".MuiChip-deleteIconFilledColorDefault"
-    );
-    this.customerTypeDropdown = page.getByRole("listbox", {
-      name: "Customer type",
-    });
-    this.customerStatusDropdown = page.getByRole("listbox", { name: "Status" });
-    this.customerCategoryDropdown = page.getByRole("listbox", {
-      name: "Customer category",
-    });
+    this.removeFilterStatus = page.locator(".MuiChip-deleteIconFilledColorDefault");
+    this.addCustomerButton = page.getByRole('button', { name: 'Customer', exact: true });
+    this.nameFeild = page.getByLabel('Name *', { exact: true });
+    this.dropDownboxAppear = page.locator('ul[role="listbox"]');
   }
 
   /**
@@ -49,45 +37,28 @@ export class CustomerPage {
   }
 
   /**
-   * Click on Search field.
+   * Click on Search Feild.
    */
   async clickOnSearchFeild() {
     await this.searchFeild.click();
   }
 
   /**
-   * Enter the customer name
+   * Enter the customer name in  the search Feild
+   * @param customername The name of the customer to be searched.
    */
-  async enterName(customername) {
+  async enterCustomerNameinSearchFeild(customername: string) {
     await this.searchFeild.fill(customername);
   }
 
   /**
-   *  is Name visible in the table
-   */
-  async isNameVisible(Customername) {
-    const customerList = this.customerTable;
-    const cusNameLocator = customerList.getByText(Customername, {
-      exact: true,
-    });
-    return cusNameLocator;
-  }
-
-  /**
    *  is URL visible in the table
+   * @param url The URL of the customer to be searched.
+   * @returns A string representing customer URL.
    */
-  async isURLVisible(url) {
+  async isURLVisible(url: string) {
     const customerList = this.customerTable;
     const cusNameLocator = customerList.getByText(url);
-    return cusNameLocator;
-  }
-
-  /**
-   *  is Primary Contact visible in the table
-   */
-  async isPrimaryContactVisible(primaryContact) {
-    const customerList = this.customerTable;
-    const cusNameLocator = customerList.getByText(primaryContact);
     return cusNameLocator;
   }
 
@@ -99,40 +70,15 @@ export class CustomerPage {
   }
 
   /**
-   *  select Customer Type From Dropdown
+   * Select From Dropdowns
+   * @param reqOption The Option that is selected from the dropdown.
+   * @param dropDownNumber the DropDown Number 0-Customer_Type, 1- Customer_Category, 2-Status  
    */
-  async selectCustomerTypeFromDropdown(reqCT: string) {
-    await this.customerType.click();
-    await this.customerTypeDropdown.waitFor();
-    const desiredOption = this.customerTypeDropdown.getByRole("option", {
-      name: reqCT,
-      exact: true,
-    });
-    await desiredOption.click();
-  }
-
-  /**
-   * Select the Customer Category From Dropdown
-   */
-  async selectCustomerCategoryFromDropdown(reqCC) {
-    await this.customerCategory.click();
-    await this.customerCategoryDropdown.waitFor();
-    const desiredOption = this.customerCategoryDropdown.getByRole("option", {
-      name: reqCC,
-      exact: true,
-    });
-    await desiredOption.click();
-  }
-
-  /**
-   * Select the Status From Dropdown
-   */
-  async selectStatusFromDropdown(reqST) {
-    await this.status.click();
-    // await this.page.pause();
-    await this.customerStatusDropdown.waitFor();
-    const desiredOption = this.customerStatusDropdown.getByRole("option", {
-      name: reqST,
+  async selectFromDropdowns(dropDownNumber:number,reqOption: string) {
+    await this.clickDropDown.nth(dropDownNumber).click();
+    await this.dropDownboxAppear.waitFor();
+    const desiredOption = this.dropDownboxAppear.getByRole("option", {
+      name: reqOption,
       exact: true,
     });
     await desiredOption.click();
@@ -146,29 +92,49 @@ export class CustomerPage {
   }
 
   /**
-   *  is Customer Type visible in the table
+   * Click On "+ Customer" Button
    */
-  async isCustomerTypeVisible(customerType) {
-    const customerList = this.customerTable;
-    const cusType = customerList.getByText(customerType).first();
-    return cusType;
+  async clickOnAddCustomerButton() {
+    await this.addCustomerButton.click();
+  }
+  
+  /**
+   * Enter the customer name in  the Name Feild
+   * @param nameFeild The name of the customer to be Entered.
+  */
+ async enterCustomerNameinNameFeild(nameFeild: string) {
+    await this.nameFeild.click();
+    await this.nameFeild.fill(nameFeild);
   }
 
   /**
-   *  is Customer Category visible in the table
+   * Get All the Record of a Particular Coloum using Coloum Name
+   * @param ColName the coloum name that needs to be verified
+   * @returns A string represting customer coloum text.
    */
-  async isCustomerCategoryVisible(customerCategory) {
-    const customerList = this.customerTable;
-    const cusType = customerList.getByText(customerCategory).first();
-    return cusType;
-  }
+  async getAllRecordofaParticularColoum(ColName: string) {
+    let loadMore = true;
+    let customerColText;
+    while (loadMore) {
+      const rows = this.page.locator(".MuiDataGrid-row");
+      await rows.first().waitFor();
 
-  /**
-   *  is Status visible in the table
-   */
-  async isStatusVisible(status) {
-    const customerList = this.customerTable;
-    const cusType = customerList.getByText(status).first();
-    return cusType;
+      for (let i = 0; i < (await rows.count()); i++) {
+        const row = rows.nth(i);
+        customerColText = await row.locator(`[data-field=${ColName}] p`).textContent();
+      }
+
+      const lastRow = rows.last();
+      await lastRow.scrollIntoViewIfNeeded();
+      const initialRowCount = await rows.count();
+
+      await this.page.waitForLoadState("networkidle");
+
+      const newRowCount = await rows.count();
+      if (newRowCount <= initialRowCount) {
+        loadMore = false;
+      }
+    }
+    return customerColText;
   }
 }
