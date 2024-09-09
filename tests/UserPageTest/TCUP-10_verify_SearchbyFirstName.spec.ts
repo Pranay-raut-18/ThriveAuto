@@ -8,7 +8,7 @@ test('TCUP_10:UserPage|Verify searching by only First name ', async ({ page }) =
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const Firstname = "Jhon"
+  const Firstname = "AutoFname"
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
