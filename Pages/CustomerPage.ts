@@ -1,4 +1,5 @@
 import { Locator, Page } from "@playwright/test";
+import { spawn } from "child_process";
 
 /**
  * Customer page
@@ -15,6 +16,16 @@ export class CustomerPage {
   private addCustomerButton: Locator;
   private nameFeild: Locator;
   private dropDownboxAppear: Locator;
+  private createCustomerButton: Locator;
+  private editDetailsOption: Locator;
+  private editPrimaryContactDetailsOption: Locator 
+  private acceptAlertButton: Locator 
+  private saveButton: Locator;
+  private rows: Locator 
+  private firstName: Locator 
+  private lastName: Locator 
+  private eMail: Locator 
+  private invitePrimaryContactButton: Locator 
 
   constructor(page: Page) {
     this.page = page;
@@ -27,6 +38,16 @@ export class CustomerPage {
     this.addCustomerButton = page.getByRole('button', { name: 'Customer', exact: true });
     this.nameFeild = page.getByLabel('Name *', { exact: true });
     this.dropDownboxAppear = page.locator('ul[role="listbox"]');
+    this.createCustomerButton = page.getByRole('button', { name: 'Create Customer', exact: true });
+    this.editDetailsOption = page.getByText("Edit Details");
+    this.editPrimaryContactDetailsOption = page.getByText("Edit Primary Contact");
+    this.acceptAlertButton = page.locator(".MuiButton-contained")
+    this.saveButton = page.getByRole('button', { name: 'Save', exact: true });
+    this.rows = page.locator(".MuiDataGrid-row");
+    this.firstName = page.locator("[name='firstName']");
+    this.lastName = page.locator("[name='lastName']");
+    this.eMail = page.locator("[name='username']");
+    this.invitePrimaryContactButton = page.getByRole("button",{name: "Invite Primary Contact"});
   }
 
   /**
@@ -54,7 +75,7 @@ export class CustomerPage {
   /**
    *  is URL visible in the table
    * @param url The URL of the customer to be searched.
-   * @returns A string representing customer URL.
+   * @returns @cusNameLocator A string representing customer URL.
    */
   async isURLVisible(url: string) {
     const customerList = this.customerTable;
@@ -108,33 +129,121 @@ export class CustomerPage {
   }
 
   /**
+   * Click on "Create customer button".
+  */
+ async clickOnCreateCustomerButton() {
+    await this.createCustomerButton.click();
+  }
+
+  /**
    * Get All the Record of a Particular Coloum using Coloum Name
    * @param ColName the coloum name that needs to be verified
-   * @returns A string represting customer coloum text.
+   * @returns @customerColText A string representing customer coloum text.
    */
   async getAllRecordofaParticularColoum(ColName: string) {
     let loadMore = true;
     let customerColText;
     while (loadMore) {
-      const rows = this.page.locator(".MuiDataGrid-row");
-      await rows.first().waitFor();
+      
+      await this.rows.first().waitFor();
 
-      for (let i = 0; i < (await rows.count()); i++) {
-        const row = rows.nth(i);
-        customerColText = await row.locator(`[data-field=${ColName}] p`).textContent();
+      for (let i = 0; i < (await this.rows.count()); i++) {
+        const row = this.rows.nth(i);
+        customerColText = row.locator(`[data-field=${ColName}] p`).textContent();
       }
 
-      const lastRow = rows.last();
+      const lastRow = this.rows.last();
       await lastRow.scrollIntoViewIfNeeded();
-      const initialRowCount = await rows.count();
+      const initialRowCount = await this.rows.count();
 
       await this.page.waitForLoadState("networkidle");
 
-      const newRowCount = await rows.count();
+      const newRowCount = await this.rows.count();
       if (newRowCount <= initialRowCount) {
         loadMore = false;
       }
     }
     return customerColText;
   }
+
+  /**
+   * Click on the option button (:) to Edit details, Edit Primary Contact and Disable the customer
+   */
+  async clickOnOptionButton(){
+    this.rows.first();
+    await this.rows.first().waitFor();
+    const colonButton=this.rows.locator(".css-1n12chd").first();
+    colonButton.click(); 
+  }
+  
+  /**
+   * Click on the Edit details
+   */
+  async clickOnEditDetailsOption(){
+    await this.editDetailsOption.click();
+  }
+
+  /**
+   * Click on the Edit Primary Contact details
+   */
+  async clickOnEditPrimaryContactOption(){
+    await this.editPrimaryContactDetailsOption.click();
+  }
+
+  /**
+   * Click on Desired Option
+   */
+  async clickOnDesiredOption(option){
+    await this.page.getByText(option).click();
+  }
+  /**
+   * Click on Alert button
+   */
+  async clickOnAcceptAlertButton(){
+    await this.acceptAlertButton.nth(1).click();
+  }
+
+  /**
+   * Click on the Save Button
+   */
+  async clickOnSaveButton(){
+    await this.saveButton.click();
+  }
+
+  /**
+   * Enter Primary Contact First Name in  the first Name Feild
+   * @param fName The First name of the Primary contact to be Entered.
+  */
+  async enterPrimaryContactFirstName(fName: string) {
+    await this.firstName.click();
+    await this.firstName.fill(fName);
+  }
+  
+  /**
+   * Enter Primary Contact Last Name in the Last Name Feild
+   * @param lName The Last name of the Primary contact to be Entered.
+  */
+  async enterPrimaryContactLastName(lName: string) {
+    await this.lastName.click();
+    await this.lastName.fill(lName);
+  }
+  
+  /**
+   * Enter Primary Contact Email in the Email Feild
+   * @param eMail The Email of the Primary contact to be Entered.
+  */
+  async enterPrimaryContactEmail(eMail: string) {
+    await this.eMail.click();
+    await this.eMail.fill(eMail);
+  }
+
+  /**
+   * Click on "Invite Primary Contact Button" 
+  */
+  async clickOnInvitePrimaryContact() {
+    await this.invitePrimaryContactButton.click();
+  }
+
 }
+
+    
