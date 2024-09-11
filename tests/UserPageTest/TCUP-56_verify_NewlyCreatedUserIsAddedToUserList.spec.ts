@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 import { getCompleteTimestamp } from "../../utils/common-utils"
 
-test('TCUP_55:UserPage|Verify newly created user is added to user List', async ({ page }) => {
+test('TCUP_56:UserPage|Verify newly created user is added to user List', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
@@ -57,7 +57,7 @@ test('TCUP_55:UserPage|Verify newly created user is added to user List', async (
 
   //verify the username in the user list
   await test.step('Verify the user name in the user list', async () => {
-    await expect(await userPage.getNewlyAddedUserEmail(email)).toBeVisible({
+    await expect.soft(await userPage.getNewlyAddedUserEmail(email)).toBeVisible({
       timeout: 5000
     });
   });

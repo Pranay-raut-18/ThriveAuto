@@ -4,7 +4,9 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("Verify invalid search in roles and permissions tab", async ({ page }) => {
+test("TCRP_04: RolesAndPermissions | Verify Search by role name", async ({
+  page,
+}) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
@@ -24,16 +26,19 @@ test("Verify invalid search in roles and permissions tab", async ({ page }) => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
 
-  // Verify search by invalid role in search bar
-  await test.step("Verify search by invalid role in search bar", async () => {
+  // Verify search by role in search bar
+  await test.step("Verify search by role in search bar", async () => {
     await rolesAndPermissions.clickOnSearchBar();
-    await rolesAndPermissions.searchForRole("Invalid_name");
+    await rolesAndPermissions.searchForRole("admin");
 
-    // Wait for the "No results" message to be visible
-    await rolesAndPermissions.isNoResultsMessageVisible();
+    await page.waitForTimeout(2000);
 
-    // Verify the text of the "No results" message
-    const messageText = await rolesAndPermissions.getNoResultsMessageText();
-    expect(messageText).toBe("No results");
+    // Fetch all roles after searching
+    const rolesAfterSearch = await rolesAndPermissions.getAllRoles();
+    console.log("Roles after search:", rolesAfterSearch);
+
+    // Check if "admin" is among the visible roles
+    const isVisible = await rolesAndPermissions.isRoleVisible("admin");
+    expect(isVisible).toBe(true);
   });
 });

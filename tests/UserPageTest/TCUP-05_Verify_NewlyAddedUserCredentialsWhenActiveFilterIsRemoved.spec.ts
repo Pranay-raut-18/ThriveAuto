@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 import { getCompleteTimestamp } from "../../utils/common-utils"
 
-test('TCUP_05:UserPage|Verify Newly Added User Credentials', async ({ page }) => {
+test('TCUP_05:UserPage|Verify Newly Added User Credentials is visible in the user list when active filter is removed', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);

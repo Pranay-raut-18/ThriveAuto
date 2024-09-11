@@ -11,10 +11,10 @@ export class UserPage {
     readonly page: Page;
     private customerTabButton: Locator;
     private addUserIcon: Locator;
-    private addUserForm: Locator;
+    public addUserForm: Locator;
     private statusDisableButton: Locator;
-    private filterIcon: Locator;
     private searchBox: Locator;
+    private filterIcon: Locator;
     private filterResetButton: Locator;
     private filterApplyButton: Locator;
     private firstNameField: Locator;
@@ -36,6 +36,8 @@ export class UserPage {
     private userFirstRowRole: Locator;
     private cancelButton: Locator;
     private noResultsText: Locator;
+    private linkedInUrlDescription: Locator
+    private statusActiveChip: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -66,17 +68,20 @@ export class UserPage {
         this.userFirstRowRole = page.locator('[data-rowindex="0"] div [title="Admin"]');
         this.cancelButton = page.locator("text='Cancel'");
         this.noResultsText = page.locator("text='No results'");
+        this.linkedInUrlDescription = page.getByText('Entering a LinkedIn URL');
+        this.statusActiveChip=page.locator(" text='Status: Active'");
+
     }
 
     /**
-     * Click On Customer Tab
+     * Clicks On Customer Tab
      */
     async clickOnCustomerTab() {
         await this.customerTabButton.click();
     }
 
     /**
-     * Clear pre-applied filter
+     * Clears pre-applied filter
      */
     async clearFilter() {
         await this.statusDisableButton.click();
@@ -84,7 +89,7 @@ export class UserPage {
     }
 
     /**
-     * Click on Add User Icon
+     * Clicks on Add User Icon
      */
     async clickOnAddUserIcon() {
         await this.addUserIcon.waitFor();
@@ -93,41 +98,46 @@ export class UserPage {
 
     /**
      * Is Add User Form Visible
+     * @returns A boolean indicating whether the AddUser form is visible
      */
     async isAddUserFormVisible(): Promise<boolean> {
         return await this.addUserForm.isVisible();
     }
 
     /**
-     * Enter First Name
+     * Enters First Name
+     * @param firstName The first name of the user to be entered into the form 
      */
     async enterFirstName(firstName: string) {
         await this.firstNameField.fill(firstName);
     }
 
     /**
-     * Enter Last Name
+     * Enters Last Name
+     * @param lastName The last name of the user to be entered into the form
      */
     async enterLastName(lastName: string) {
         await this.lastNameField.fill(lastName);
     }
 
     /**
-     * Enter email
+     * Enters email
+     * @param email The email id of the user to be entered into the form
      */
     async enterEmail(email: string) {
         await this.emailField.fill(email);
     }
 
     /**
-     * Click on Role button
+     * Clicks on Role button
      */
     async clickOnRoleButton() {
         await this.roleField.click();
     }
 
     /**
-     * Select Role from Dropdown
+     * Selects Role from Dropdown
+     * @param role The specific role to be selected from the dropdown options.
      */
     async selectRoleFromDropdown(role: string) {
         await this.roleDropdownOptions.waitFor();
@@ -136,7 +146,21 @@ export class UserPage {
     }
 
     /**
-     * Enter all the fields of Add User form
+     * Gets all the Roles from Dropdown
+     * @returns An array containg all the roles displayed in roles drop-down.
+     */
+    async getRolesFromDropdown() {
+        await this.roleDropdownOptions.waitFor();
+        const arr = await this.roleDropdownOptions.allInnerTexts();
+        return arr;
+    }
+
+    /**
+     * Enters all the fields of Add User form
+     * @param firstName The first name of the user to be entered into the form
+     * @param lastName The last name of the user to be entered into the form
+     * @param email The email id of the user to be entered into the form
+     * @param role The specific role to be selected from the dropdown options.
      */
     async enterAllFields(firstName: string, lastName: string, email: string, role: string) {
         await this.firstNameField.fill(firstName);
@@ -149,60 +173,68 @@ export class UserPage {
     }
 
     /**
-     * Click on Add and Send Invite
+     * Clicks on Add and Send Invite
      */
     async clickAddButton() {
         await this.addAndSendInviteButton.click();
     }
 
     /**
-     * Get Success Message
+     * Gets the Success Message
+     * @returns A string representing the success message displayed upon successfully adding a new user.
      */
-    async getSuccessMessage() {
+    async getSuccessMessage(): Promise<string | null> {
         await this.successMessage.waitFor();
         return await this.successMessage.textContent();
     }
 
     /**
-     * Get newly added user's email
+     * Gets the newly added user's email
+     * @param email The email address of the user to find in the list.
+     * @returns The locator pointing to the email of the newly added user.
      */
-    async getNewlyAddedUserEmail(email: string) {
+    async getNewlyAddedUserEmail(email: string): Promise<Locator> {
         const emailLocator = this.userListing.locator(`text="${email}"`);
         return emailLocator;
     }
 
     /**
      * Is Add and Send Invite Button disabled
+     * @returns A boolean indicating whether the Add and Send Invite button is disabled or not.
      */
     async isAddAndSendInviteButtonDisabled(): Promise<boolean> {
         return await this.addAndSendInviteButton.isDisabled();
     }
 
     /**
-     * Get Invalid Email Format message
+     * Gets the Invalid Email Format error message
+     * @returns A string representing the error message displayed when the email format is invalid.
      */
-    async getInvalidEmailMessage() {
+    async getInvalidEmailMessage(): Promise<string | null> {
         return await this.invalidEmailMessage.textContent();
     }
 
     /**
-     * Get existing email from user list
+     * Gets an existing email from user list
+     * @returns A string containing the email address of a user that already exists in the list.
      */
-    async getExistingEmail() {
+    async getExistingEmail(): Promise<string | null> {
         return await this.duplicateEmail.textContent();
     }
 
     /**
-     * Get Unique Email message
+     * Gets the  Unique Email error message
+     * @returns A string representing the error message displayed when the email id entered is not unique.
      */
-    async getUniqueEmailMessage() {
+    async getUniqueEmailMessage(): Promise<string | null> {
         return await this.uniqueEmailMessage.textContent();
     }
 
     /**
-     * Get Newly Added user Credentials from user list
+     * Gets the Newly Added user Credentials from user list
+     * @returns An Array of strings containing the email address,name and role of the newly added user.
      */
-    async getNewUserCredentialsFromUserList() {
+    async getNewUserCredentialsFromUserList(): Promise<Array<string | null>> {
         const name = await this.userFirstRowName.textContent();
         const email = await this.userFirstRowEmail.textContent();
         const role = await this.userFirstRowRole.textContent();
@@ -210,14 +242,15 @@ export class UserPage {
     }
 
     /**
-     * Click on Cancel Button
+     * Clicks on Cancel Button
      */
     async clickOnCancelButton() {
         await this.cancelButton.click();
     }
 
     /**
-     * Enter Name in the search field
+     * Enters Name in the search field
+     * @param name The name to be entered in the search field
      */
     async enterNameInSearchField(name: string) {
         await this.searchBox.fill(name);
@@ -226,25 +259,25 @@ export class UserPage {
 
     /**
      * Is searched attribute(name and email) displayed in user list
+     * @param value The name or email being searched for in the user list
+     * @returns A boolean value indicating whether the searched attribute is displayed in user list or not.
      */
-    async isSearchedAttributeDisplayedInUserList(name: string) {
+    async isSearchedAttributeDisplayedInUserList(value: string): Promise<boolean> {
         let oldCount: any = 0;
         let newCount: any = 0;
         do {
             oldCount = newCount;
-            const userList = await this.userListing.locator('[data-field="name"]').all();
+            const userList = await this.userListing.locator('[data-field="name"]').all();   
             newCount = userList.length;
-
             if (newCount > 0) {
                 await userList[newCount - 1].scrollIntoViewIfNeeded();
                 await this.page.waitForTimeout(1000);
             }
         } while (newCount > oldCount);
-
-        const updatedUserList = await this.userListing.locator('[data-field="name"]').all();
+        const updatedUserList = (await this.userListing.locator('[data-field="name"]').all()).slice(1);
         for (const user of updatedUserList) {
             const userName = await user.textContent();
-            if (userName?.trim().toLowerCase() && !userName.trim().toLowerCase().includes(name.toLowerCase())) {
+            if (userName?.trim().toLowerCase() && !userName.trim().toLowerCase().includes(value.toLowerCase())) {
                 return false;
             }
         }
@@ -253,8 +286,39 @@ export class UserPage {
 
     /**
      * Is No Results visible
+     * @returns A boolean indicating whether the text "No results" is visible or not
      */
     async isNoResultsVisible(): Promise<boolean> {
         return await this.noResultsText.isVisible();
     }
+
+    /**
+     * Gets description under 'LinkedIn Url' feild
+     * @returns A String containing the description displayed under the 'LinkedIn Url' feild
+     */
+    async getDescriptionUnderLinkedInUrl(): Promise<string> {
+        return await this.linkedInUrlDescription.innerText();
+    }
+
+    /**
+     * Is all system role dispayed in role dropdown
+     * @returns A Booelan indicating whether the dropdown list displays all the system roles or not
+     */
+    async isAllSystemRoleDisplayedInRoleDropdown(expectedroles: Array<string>): Promise<boolean> {
+        await this.roleDropdownOptions.waitFor();
+        const actualroles = await this.roleDropdownOptions.allInnerTexts();
+        const actualrolesdesiredformat = actualroles.toString().split('\n');
+        const isincluded = expectedroles.every(role => actualrolesdesiredformat.includes(role));
+        return isincluded;
+    }
+
+    /**
+     * Is status active chip visible
+     * @returns A Booelan indicating whether status active chip is visible  or not
+     */
+    async isStatusActiveChipVisible(): Promise<boolean> {
+        return await this.statusActiveChip.isVisible();
+    }
+
+
 }

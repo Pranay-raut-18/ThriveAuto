@@ -29,5 +29,6 @@ export class HomePage {
    */
   async clickOnGoToAdminPortal() {
     await this.goToAdminPortal.click();
+    
   }
 }
