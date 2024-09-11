@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
 
-test("TCRP_09: RolesAndPermissions | Verify duplicate functionality of system roles", async ({
+test("TCRP_16: RolesAndPermissions | Verify add functionality of custom roles", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -30,31 +30,21 @@ test("TCRP_09: RolesAndPermissions | Verify duplicate functionality of system ro
   await test.step("Click on Roles and Permissions Tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
-
-  //Click on action menu according to choice
-  await test.step("Click on action menu for choice role", async () => {
-    await rolesAndPermissions.clickOnRoleActionMenu("Admin");
+  //Click on Add "+Roles" custom roles
+  await test.step("Click on add custom roles button", async () => {
+    await rolesAndPermissions.AddNewRoleBtnClick();
   });
-
-  // Click on "Duplicate" menu item
-  await test.step("Click on 'Duplicate' menu item", async () => {
-    await rolesAndPermissions.clickOnMenuItem("Duplicate");
-  });
-
-  // Fill name and description
-  await test.step("Fill name and description", async () => {
+  //Fill auto name and auto description
+  await test.step("Fills auto name and auto description", async () => {
     await page.waitForLoadState("networkidle");
     await rolesAndPermissions.fillRoleAndDescription(Rolename, Description);
-    // Dynamically select/unselect permissions
-    await rolesAndPermissions.setPermission("user", "delete", false);
-    await rolesAndPermissions.setPermission("user", "update", false);
-    await rolesAndPermissions.setPermission("user", "create", false);
-    await rolesAndPermissions.setPermission(
-      "Impersonate user",
-      "update",
-      false
-    );
-    await rolesAndPermissions.setPermission("role", "delete", false);
+  });
+  //Select permissions for the custom role
+  await test.step("Select permissions for the custom role", async () => {
+    await rolesAndPermissions.setPermission("role", "delete", true);
+  });
+  //Click on save button
+  await test.step("Click on save button to add the custom role", async () => {
     await rolesAndPermissions.saveChanges();
   });
 });
