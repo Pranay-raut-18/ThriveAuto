@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("Verify search by description in roles and permissions tab", async ({
+test("TCRP_06: RolesAndPermissions | Verify Search by description", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -36,6 +36,6 @@ test("Verify search by description in roles and permissions tab", async ({
     const isVisible = await rolesAndPermissions.isDescriptionVisible(
       descriptionToSearch
     );
-    await expect(isVisible).toBe(true);
+    expect(isVisible).toBe(true);
   });
 });
