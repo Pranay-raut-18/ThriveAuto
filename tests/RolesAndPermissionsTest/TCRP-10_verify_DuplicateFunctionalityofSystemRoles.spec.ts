@@ -13,7 +13,7 @@ test("TCRP_09: RolesAndPermissions | Verify duplicate functionality of system ro
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
   let timestamp: string;
   timestamp = getCompleteTimestamp();
-  const Rolename: string = `AutoRolename${timestamp}`;
+  const Rolename: string = "AutoRoleName";
   const Description: string = `AutoDescription${timestamp}`;
 
   // Login using email address and password
