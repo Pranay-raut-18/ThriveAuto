@@ -10,6 +10,8 @@ test("TCRP_15: RolesAndPermissions | Verify delete functionality of custom roles
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
+  const roletodelete: string = "AutoRolename";
+  const menuItemName = "Delete";
 
   // Step 1: Login using email address and password
   await test.step("Login using email address and password", async () => {
@@ -25,17 +27,40 @@ test("TCRP_15: RolesAndPermissions | Verify delete functionality of custom roles
   await test.step("Click on Roles and Permissions Tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
-
-  // Step 4: Scroll down and click on the action menu for a specific role
-  await test.step("Scroll down and click on the action menu for 'custom' role", async () => {
-    const agentRoleRow = await rolesAndPermissions.getRoleRow("Asha");
-    await agentRoleRow.scrollIntoViewIfNeeded();
-    await rolesAndPermissions.clickOnRoleActionMenu("Asha");
-    await page.pause();
+  //Step 4: Click on the search bar in roles and permissions tab
+  await test.step("Click on search bar ", async () => {
+    await rolesAndPermissions.clickOnSearchBar();
+  });
+  await test.step("Fill custom role name with role we want to delete", async () => {
+    await rolesAndPermissions.searchForRole(roletodelete);
+    await page.waitForLoadState("networkidle");
+  });
+  // Wait for the role row to be present and visible
+  await test.step(`Wait for the role row: ${roletodelete}`, async () => {
+    const roleRow = page.locator(
+      `.MuiDataGrid-row:has-text("${roletodelete}")`
+    );
+    await roleRow.waitFor({ state: "visible", timeout: 10000 });
   });
 
-  // Step 5: Click on the 'Duplicate' option from the action menu
-  await test.step("Click on 'Duplicate' menu item", async () => {
-    await rolesAndPermissions.clickOnMenuItem("Delete");
+  // Locate the row with the desired role name and click the action menu button
+  await test.step("Click on the action menu for the searched role", async () => {
+    const roleRow = page.locator(
+      `.MuiDataGrid-row:has-text("${roletodelete}")`
+    );
+    await roleRow
+      .locator('button[aria-label="Open roles action menu"]')
+      .click();
+  });
+  await test.step("Click on 'Delete' menu item", async () => {
+    await rolesAndPermissions.clickOnMenuItem(menuItemName);
+    await rolesAndPermissions.clickDeleteButton();
+    await page.waitForLoadState("networkidle");
+  });
+  await test.step("Searching the deleted role", async () => {
+    await rolesAndPermissions.searchForRole(roletodelete);
+    await rolesAndPermissions.getAllRoles();
+    const result = await rolesAndPermissions.isRoleVisible(roletodelete);
+    expect(result).toBe(false);
   });
 });

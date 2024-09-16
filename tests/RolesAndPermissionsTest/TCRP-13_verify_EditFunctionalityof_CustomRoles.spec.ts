@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
 
-test("TCRP_09: RolesAndPermissions | Verify duplicate functionality of system roles", async ({
+test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);

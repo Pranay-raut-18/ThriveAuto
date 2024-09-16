@@ -12,6 +12,9 @@ export class RolesAndPermissionsPage {
   private roleTypeCell: Locator;
   private roleNameInput: Locator;
   private roleDescriptionInput: Locator;
+  private saveButtonInOptionsTab: Locator;
+  private AddCustomRolesButton: Locator;
+  private deletebuttonforcustomrole: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -35,6 +38,12 @@ export class RolesAndPermissionsPage {
     this.roleNameInput = page.locator('input[name="name"]');
     // Locator for the Description textarea field
     this.roleDescriptionInput = page.locator('textarea[name="description"]');
+    this.saveButtonInOptionsTab = page.getByRole("button", { name: "Save" });
+    this.AddCustomRolesButton = page.getByRole("button", {
+      name: "Role",
+      exact: true,
+    });
+    this.deletebuttonforcustomrole = page.locator('button:has-text("Delete")');
   }
 
   /**
@@ -171,7 +180,7 @@ export class RolesAndPermissionsPage {
   }
 
   /**
-   * Fills the role name
+   * Fills the role name and description
    */
   async fillRoleAndDescription(role: string, description: string) {
     await this.roleNameInput.fill(role);
@@ -184,7 +193,6 @@ export class RolesAndPermissionsPage {
    * @returns role row of the virtual scroller table
    */
   async getRoleRow(roleName: string): Promise<Locator> {
-    console.log(this.page.getByRole("row", { name: roleName }));
     return this.page.getByRole("row", { name: roleName });
   }
   /**
@@ -229,9 +237,9 @@ export class RolesAndPermissionsPage {
   }
   /**
    * Function to select permissions dynamically
-   * @param roleName
-   * @param permissionType
-   * @param check
+   * @param roleName is the name of permission to change (for eg:- manage user , impersonate user etc)
+   * @param permissionType is the type of permission to change (for eg:- edit , update , delete , view etc)
+   * @param check to select or deselect as per requirement (for eg:- manage user , delete , true ) true for check false for uncheck
    */
   async setPermission(
     roleName: string,
@@ -243,9 +251,6 @@ export class RolesAndPermissionsPage {
 
     // Construct the dynamic locator
     const permissionLocator = `input[name="privileges\\.${formattedRoleName}-${permissionType}"]`;
-
-    console.log(`Using locator: ${permissionLocator}`); // Log the locator for debugging
-
     // Check or uncheck based on the boolean flag
     if (check) {
       await this.page.locator(permissionLocator).check();
@@ -254,9 +259,27 @@ export class RolesAndPermissionsPage {
     }
   }
   /**
-   * Click on save button in edit permissions tab
+   * Clicks on save button in edit permissions tab
    */
   async saveChanges() {
-    await this.page.getByRole("button", { name: "Save" }).click();
+    await this.saveButtonInOptionsTab.click();
+  }
+  /**
+   * Clicks on add custom roles button in roles and permissions tab
+   */
+  async AddNewRoleBtnClick() {
+    await this.AddCustomRolesButton.click();
+  }
+  /**
+   *
+   * @param page
+   */
+  async clickDeleteButton() {
+    // Define the locator for the delete button
+    const deleteButtonLocator = this.deletebuttonforcustomrole;
+    // Wait for the delete button to be visible
+    await deleteButtonLocator.waitFor({ state: "visible", timeout: 2000 });
+    // Click on the delete button
+    await deleteButtonLocator.click();
   }
 }
