@@ -19,7 +19,7 @@ test("TCCP_01:LoginPage | Verify and Going to admin Portal with correct ID and P
   //Verify user is logged in successfully
   await test.step(`Verify user is logged in successfully`, async () => {
     homePage.clickOnOpenAccountMenu();
-    await expect(await page.getByText("Log Out")).toHaveText("Log Out");
+    await expect(page.getByText("Log Out")).toHaveText("Log Out");
     await page.locator("#account-menu > .MuiBackdrop-root").click();
     await page.waitForSelector(
       "//p[@class='MuiTypography-root MuiTypography-body1 MuiTypography-noWrap MuiListItemText-primary css-gnfns7']"

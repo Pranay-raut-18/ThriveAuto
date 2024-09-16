@@ -43,7 +43,7 @@ test('TCUP_19:UserPage|Verify that user can successfully edit all fields and suc
 
   //Edit all the feilds in the edit form
   await test.step(`Edit all the fields in the edit form`, async () => {
-    await userPage.editUser("auto","user7034","user19191@test.com","Hiring Manager");
+    await userPage.editUser("auto","user7034","user7034@test.com","Hiring Manager");
   })
 
  //verify success message is shown after adding user

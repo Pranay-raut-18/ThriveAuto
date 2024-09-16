@@ -20,7 +20,7 @@ export class UserPage {
     private firstNameField: Locator;
     private lastNameField: Locator;
     private emailField: Locator;
-    public roleField: Locator;
+    public  roleField: Locator;
     private roleDropdownOptions: Locator;
     private addAndSendInviteButton: Locator;
     private successMessage: Locator;
@@ -439,13 +439,10 @@ export class UserPage {
      */
     async editUser(firstname:string,lastname:string,email:string,role:string) {
         let values:Array<string>=[firstname,lastname,email,role];
-        await this.page.waitForFunction(
-            (selector) => {
+        await this.page.waitForFunction((selector) => {
               const input = document.querySelector(selector) as HTMLInputElement;
               return input && input.value.trim() !== '';
-            },
-            '[name="firstName"]'
-          );
+            },'[name="firstName"]');
         for(let i=1;i<=4;i++){
             if(i===4){
                 await this.editFieldBoxes.nth(i).click();

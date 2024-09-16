@@ -1,4 +1,4 @@
-import { Locator, Page} from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 
 /**
  * Customer page
@@ -25,6 +25,9 @@ export class CustomerPage {
   private lastName: Locator;
   private eMail: Locator;
   private invitePrimaryContactButton: Locator;
+  private accountUserButton: Locator;
+  private logOutButton: Locator;
+  private exitAdminButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -34,10 +37,10 @@ export class CustomerPage {
     this.clickDropDown = page.locator(".MuiInputBase-inputAdornedEnd");
     this.applyButton = page.getByRole("button", { name: "Apply" });
     this.removeFilterStatus = page.locator(".MuiChip-deleteIconFilledColorDefault");
-    this.addCustomerButton = page.getByRole("button", { name: "Customer", exact: true,});
+    this.addCustomerButton = page.getByRole("button", {name: "Customer", exact: true,});
     this.nameFeild = page.getByLabel("Name *", { exact: true });
     this.dropDownboxAppear = page.locator('ul[role="listbox"]');
-    this.createCustomerButton = page.getByRole("button", { name: "Create Customer", exact: true,});
+    this.createCustomerButton = page.getByRole("button", {name: "Create Customer", exact: true,});
     this.editDetailsOption = page.getByText("Edit Details");
     this.editPrimaryContactDetailsOption = page.getByText("Edit Primary Contact");
     this.acceptAlertButton = page.locator(".MuiButton-contained");
@@ -46,7 +49,10 @@ export class CustomerPage {
     this.firstName = page.locator("[name='firstName']");
     this.lastName = page.locator("[name='lastName']");
     this.eMail = page.locator("[name='username']");
-    this.invitePrimaryContactButton = page.getByRole("button", { name: "Invite Primary Contact",});
+    this.invitePrimaryContactButton = page.getByRole("button", {name: "Invite Primary Contact",});
+    this.accountUserButton = page.locator("[aria-label='Open Account Menu']");
+    this.logOutButton = page.getByText("Log Out");
+    this.exitAdminButton = page.getByText("Exit Admin");
   }
 
   /**
@@ -141,7 +147,7 @@ export class CustomerPage {
    */
   async getAllRecordofaParticularColoum(ColName: string) {
     let loadMore = true;
-    let customerColText:any;
+    let customerColText: any;
     while (loadMore) {
       await this.rows.first().waitFor();
 
@@ -244,41 +250,62 @@ export class CustomerPage {
   async clickOnInvitePrimaryContact() {
     await this.invitePrimaryContactButton.click();
   }
-
+  
   /**
    * Click on Arrow sort Button"
    * @param feildName for clicking on a particular arrow button feild.
-   */
-  async clickOnArrowSortButton(feildName: string) {
-    const sortArrow = this.page.locator(`div[data-field="${feildName}"]`);
-    await sortArrow.click();
+  */
+ async clickOnArrowSortButton(feildName: string) {
+   const sortArrow = this.page.locator(`div[data-field="${feildName}"]`);
+   await sortArrow.click();
   }
-
+  
   /**
-   * Sort Method For a row
+   * Sort Method For a Coloum
    * @param feildName For getting the particular column feild.
    * @param sortOrder For Ascending or Decending Alphabetical Order.
    * @returns @coloumTextContent A string representing particular customer coloum Text content
    * @returns @sortedTextContent A string representing Sorted customer coloum Text content
+  */
+ async sortMethodForAColumn(fieldName: string, sortOrder: string) {
+   const columnTextContent = await this.page.$$eval(
+     `div[data-field="${fieldName}"] .MuiTypography-body2`,
+     (elements) => elements.map((el) => el.textContent?.trim() || "")
+    );
+    
+    const sortedTextContent = [...columnTextContent].sort(
+      (a: string, b: string) => {
+        if (sortOrder === "Ascending") {
+          return a.localeCompare(b, undefined, { numeric: true });
+        } else if (sortOrder === "Descending") {
+          return b.localeCompare(a, undefined, { numeric: true });
+        } else {
+          throw new Error(`Invalid sortOrder: ${sortOrder}`);
+        }
+      }
+    );
+    
+    return { columnTextContent, sortedTextContent };
+  }
+
+  /**
+   * Click on "Click on Account user"
    */
-  async sortMethodForAColumn(fieldName: string, sortOrder: string) {
-  const columnTextContent = await this.page.$$eval(
-    `div[data-field="${fieldName}"] .MuiTypography-body2`,
-    (elements) => elements.map((el) => el.textContent?.trim() || "")
-  );
+  async clickOnAccountUserButton() {
+    await this.accountUserButton.click();
+  }
 
-  const sortedTextContent = [...columnTextContent].sort((a: string, b: string) => {
-    if (sortOrder === "Ascending") {
-      return a.localeCompare(b, undefined, { numeric: true });
-    } else if (sortOrder === "Descending") {
-      return b.localeCompare(a, undefined, { numeric: true });
-    } else {
-      throw new Error(`Invalid sortOrder: ${sortOrder}`);
-    }
-  });
+  /**
+   * Click on "Click on Account user"
+   */
+  async clickOnLogOutButton() {
+    await this.logOutButton.click();
+  }
 
-  return { columnTextContent, sortedTextContent };
-}
-
-  
+  /**
+   * Click on "Click on Account user"
+   */
+  async clickOnExitAdminButton() {
+    await this.exitAdminButton.click();
+  }
 }
