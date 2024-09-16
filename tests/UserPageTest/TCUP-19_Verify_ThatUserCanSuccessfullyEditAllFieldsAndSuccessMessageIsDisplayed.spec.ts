@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from "../../Pages/LoginPage";
 import { UserPage } from '../../Pages/UserPage';
 import { HomePage } from "../../Pages/HomePage";
-import { Url, EmailAddress, Password } from "../../utils/config-utils"
+import { Url,EmailAddress,Password } from "../../utils/config-utils"
 
 
 test('TCUP_19:UserPage|Verify that user can successfully edit all fields and success message is displayed', async ({ page }) => {

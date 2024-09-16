@@ -407,7 +407,7 @@ export class UserPage {
      * Clicks on all the mandatory feilds on the create user form and moves away without entring any value
      */
     async clickOnMandatoryFields(): Promise<void> {
-        const MandatoryFields:Locator[]=[this.firstNameField,this.lastNameField,this.roleField,this.linkedInFeild];
+        const MandatoryFields:Locator[]=[this.firstNameField,this.lastNameField,this.emailField,this.roleField,this.linkedInFeild];
         for(const feild of MandatoryFields){
             await feild.click();
         }
@@ -438,8 +438,14 @@ export class UserPage {
      * @param role The specific role to be selected from the dropdown options
      */
     async editUser(firstname:string,lastname:string,email:string,role:string) {
-        await this.page.waitForTimeout(1000);
         let values:Array<string>=[firstname,lastname,email,role];
+        await this.page.waitForFunction(
+            (selector) => {
+              const input = document.querySelector(selector) as HTMLInputElement;
+              return input && input.value.trim() !== '';
+            },
+            '[name="firstName"]'
+          );
         for(let i=1;i<=4;i++){
             if(i===4){
                 await this.editFieldBoxes.nth(i).click();
