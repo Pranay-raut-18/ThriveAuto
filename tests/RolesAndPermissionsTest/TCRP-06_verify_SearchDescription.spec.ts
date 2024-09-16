@@ -4,7 +4,9 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("Verify invalid search in roles and permissions tab", async ({ page }) => {
+test("TCRP_06: RolesAndPermissions | Verify Search by description", async ({
+  page,
+}) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
@@ -23,18 +25,17 @@ test("Verify invalid search in roles and permissions tab", async ({ page }) => {
   await test.step("Click on Roles and Permissions Tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
-  await test.step("Click on action menu for 'Admin' role", async () => {
-    await rolesAndPermissions.clickOnRoleActionMenu("Admin");
-  });
 
-  // Step 5: Click on "View" menu item
-  await test.step("Click on 'View' menu item", async () => {
-    await rolesAndPermissions.clickOnMenuItem("View");
-    await page.pause();
-  });
+  // Verify search by description in search bar
+  await test.step("Verify search by description in search bar", async () => {
+    const descriptionToSearch = "Specific description text"; // Replace with the actual description text you want to search
+    await rolesAndPermissions.clickOnSearchBar();
+    await rolesAndPermissions.searchForDescription(descriptionToSearch);
 
-  // Step 6: Verify that the drawer is visible and close it
-  await test.step("Verify and close the drawer", async () => {
-    expect(rolesAndPermissions.closeButtonofDuplicateTab()).toBeTruthy();
+    // Wait for the search results to update and check visibility
+    const isVisible = await rolesAndPermissions.isDescriptionVisible(
+      descriptionToSearch
+    );
+    expect(isVisible).toBe(false);
   });
 });

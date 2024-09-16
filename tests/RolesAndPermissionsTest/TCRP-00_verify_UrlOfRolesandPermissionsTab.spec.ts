@@ -4,10 +4,11 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("Verify partial search roles and permissions tab", async ({ page }) => {
+test("TCRP_00: RolesAndPermissions | Verify_Url of page", async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
+  const expectedUrlSegment = "roles-and-permissions";
 
   // Login using email address and password
   await test.step("Login using email address and password", async () => {
@@ -19,24 +20,13 @@ test("Verify partial search roles and permissions tab", async ({ page }) => {
     await homePage.clickOnGoToAdminPortal();
   });
 
-  // Click on Roles and Permissions Tab
-  await test.step("Click on Roles and Permissions Tab", async () => {
+  // Verify URL of the roles and permissions tab
+  await test.step("Verify URL of the roles and permissions tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
-  });
-
-  // Verify search by role in search bar
-  await test.step("Verify search by role in search bar", async () => {
-    await rolesAndPermissions.clickOnSearchBar();
-    await rolesAndPermissions.searchForRole("admin");
-
-    await page.waitForTimeout(2000);
-
-    // Fetch all roles after searching
-    const rolesAfterSearch = await rolesAndPermissions.getAllRoles();
-    console.log("Roles after search:", rolesAfterSearch);
-
-    // Check if "admin" is among the visible roles
-    const isVisible = await rolesAndPermissions.isRoleVisible("admin");
-    expect(isVisible).toBe(true);
+    await page.waitForTimeout(3000);
+    const currentUrl = await rolesAndPermissions.getPageUrl();
+    await page.waitForURL(currentUrl);
+    const actualUrlSegment = currentUrl.split("/").pop();
+    expect(actualUrlSegment).toEqual(expectedUrlSegment);
   });
 });

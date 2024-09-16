@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("Verify search by description in roles and permissions tab", async ({
+test("TCRP_04: RolesAndPermissions | Verify Search by role name", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -26,16 +26,19 @@ test("Verify search by description in roles and permissions tab", async ({
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
 
-  // Verify search by description in search bar
-  await test.step("Verify search by description in search bar", async () => {
-    const descriptionToSearch = "Specific description text"; // Replace with the actual description text you want to search
+  // Verify search by role in search bar
+  await test.step("Verify search by role in search bar", async () => {
     await rolesAndPermissions.clickOnSearchBar();
-    await rolesAndPermissions.searchForDescription(descriptionToSearch);
+    await rolesAndPermissions.searchForRole("admin");
 
-    // Wait for the search results to update and check visibility
-    const isVisible = await rolesAndPermissions.isDescriptionVisible(
-      descriptionToSearch
-    );
-    await expect(isVisible).toBe(true);
+    await page.waitForLoadState("networkidle");
+
+    // Fetch all roles after searching
+    const rolesAfterSearch = await rolesAndPermissions.getAllRoles();
+    console.log("Roles after search:", rolesAfterSearch);
+
+    // Check if "admin" is among the visible roles
+    const isVisible = await rolesAndPermissions.isRoleVisible("admin");
+    expect(isVisible).toBe(true);
   });
 });
