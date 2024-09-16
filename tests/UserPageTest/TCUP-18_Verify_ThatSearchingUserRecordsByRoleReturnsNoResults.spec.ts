@@ -5,10 +5,11 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
 
-test('TCUP_60:UserPage| Verify that the "Status: Active" filter is applied by default on the "Users" page, and confirm the visibility of the corresponding filter chip', async ({ page }) => {
+test('TCUP_18:UserPage| Verify that searching user records by Role returns no results', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
+    const role:string="Admin";
     
 
     //Login using email address and password
@@ -19,17 +20,19 @@ test('TCUP_60:UserPage| Verify that the "Status: Active" filter is applied by de
     //Go to Admin Potal 
     await test.step(`Go to Admin Potal Customer tab`, async () => {
         await homePage.clickOnGoToAdminPortal();
+    });
+
+    //Search by a valid role
+    await test.step(`Search by a valid role`, async () => {
+        await userPage.enterNameInSearchField(role);
         await page.waitForTimeout(1000);
+
     });
 
-    //Verify status active filter chip is visible
-    await test.step(`Verify status active filter chip is visible`, async () => {
-        expect.soft(await userPage.isStatusActiveChipVisible()).toBeTruthy();
+    //verify  no user is displayed in the user list
+    await test.step(`Verify no user is displayed in the user list`, async () => {
+       expect.soft(await userPage.isNoResultsVisible()).toBeTruthy();
     });
+    
 
-    //Verify that filter status is enabled by default
-    await test.step(`Verify that filter status is enabled by default`, async () =>{
-        expect(await userPage.isAllStausActive()).toBeTruthy();
-    });
-
-});
+});    

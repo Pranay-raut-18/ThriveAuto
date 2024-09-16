@@ -8,7 +8,7 @@ test('TCUP_14:UserPage|Verify searching by Invalid email format', async ({ page 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const partialemail = "AutoLname@testcom"
+  const partialemail = "AutoLname@testcom";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -28,11 +28,12 @@ test('TCUP_14:UserPage|Verify searching by Invalid email format', async ({ page 
   //Search by Invalid email format
   await test.step(`Search by invalid email format`, async () => {
     await userPage.enterNameInSearchField(partialemail);
+    await page.waitForTimeout(1000);
   });
 
   //verify  no user is displayed in the user list
   await test.step(`Verify no user is displayed in the user list`, async () => {
-    expect.soft(userPage.isNoResultsVisible()).toBeTruthy();
+   expect.soft(await userPage.isNoResultsVisible()).toBeTruthy();
   });
 
 });

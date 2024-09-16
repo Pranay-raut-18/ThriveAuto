@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_24: CustomerPage | Verify user can Suspending a Particular Customer", async ({
+test("TCCP_25: CustomerPage | Verify while Editing the Primary Contact of a Costumer the Fname and Lnamealready visible in input Feild", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -13,8 +13,7 @@ test("TCCP_24: CustomerPage | Verify user can Suspending a Particular Customer",
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `Ashes`; //@customeName should be Disabled.
-  const option = `Suspend`;  
+  const customerName = `James Stark122`;
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -44,16 +43,17 @@ test("TCCP_24: CustomerPage | Verify user can Suspending a Particular Customer",
     await customerPage.clickOnOptionButton();
   });
 
-  //Click on Suspended option and verify the Alert Appear.
-  await test.step(`Click on Suspended Option and verify the Alert Appear.`, async () => {
-    await customerPage.clickOnDesiredOption(option);
-    await expect(page.locator("#customer-suspend-dialog-description")).toHaveText(`Are you sure you want to suspend ${customerName}?`);
+  // Click on Edit Primary Contact.   
+  await test.step(`Click on Edit Primary Contact.`, async () => {
+    await customerPage.clickOnEditPrimaryContactOption();
   });
   
-  //   Click on Alert Suspended button
-  await test.step(`Click on Alert Suspended button`, async () => {
-    await customerPage.clickOnAcceptAlertButton();
-    await expect(page.locator(".MuiAlert-message")).toHaveText(`${customerName} customer successfully suspended`);
+  // Verify First Name, Last Name already exist of a customer.()
+  await test.step(`Click on Edit Primary Contact.`, async () => {
+    const fName= customerName.split(" ")[0];
+    await expect.soft(page.locator("[name='firstName']")).toHaveText(`${fName}`);
+    const lName= customerName.split(" ")[1];
+    await expect(page.locator("[name='lastName']")).toHaveText(`${lName}`);
   });
-  
+
 });

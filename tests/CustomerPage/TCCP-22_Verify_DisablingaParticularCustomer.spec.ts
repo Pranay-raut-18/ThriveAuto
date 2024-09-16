@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_22: CustomerPage | Verify Disabling a Particular Customer", async ({
+test("TCCP_22: CustomerPage | Verify user can Disable a Particular Customer", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -13,8 +13,8 @@ test("TCCP_22: CustomerPage | Verify Disabling a Particular Customer", async ({
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `James Stark122`;
-  const option = `Disable`;
+  const customerName = `James Stark122`; //@customeName should be Enabled.
+  const option = `Disable`; 
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -57,4 +57,5 @@ test("TCCP_22: CustomerPage | Verify Disabling a Particular Customer", async ({
     await customerPage.clickOnAcceptAlertButton();
     await expect(page.locator(".MuiAlert-message")).toHaveText(`${customerName} customer successfully disabled`);
   });
+  
 });

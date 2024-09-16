@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_23: CustomerPage | Enabling a Particular Customer Which Is Already Disabled", async ({
+test("TCCP_23: CustomerPage | Verify user can Enable a Particular Customer Which Is Already Disabled", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -13,7 +13,7 @@ test("TCCP_23: CustomerPage | Enabling a Particular Customer Which Is Already Di
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `dybala`;
+  const customerName = `dybala`; //@customeName should be Disabled.
   const option = `Enable`;
 
   //Login using email address and password
