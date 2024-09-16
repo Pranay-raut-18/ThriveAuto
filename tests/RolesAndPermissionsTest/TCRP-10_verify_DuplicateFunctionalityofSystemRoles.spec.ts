@@ -52,6 +52,6 @@ test("TCRP_09: RolesAndPermissions | Verify duplicate functionality of system ro
     await page.pause();
     await rolesAndPermissions.saveChanges();
     await page.pause();
-    expect(page.locator(".MuiAlert-message css-1xsto0d")).toBe(true);
+    expect(page.locator(".MuiAlert-message")).toBe(true);
   });
 });

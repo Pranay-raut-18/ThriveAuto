@@ -14,6 +14,7 @@ export class RolesAndPermissionsPage {
   private roleDescriptionInput: Locator;
   private saveButtonInOptionsTab: Locator;
   private AddCustomRolesButton: Locator;
+  private deletebuttonforcustomrole: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -42,6 +43,7 @@ export class RolesAndPermissionsPage {
       name: "Role",
       exact: true,
     });
+    this.deletebuttonforcustomrole = page.locator('button:has-text("Delete")');
   }
 
   /**
@@ -178,7 +180,7 @@ export class RolesAndPermissionsPage {
   }
 
   /**
-   * Fills the role name
+   * Fills the role name and description
    */
   async fillRoleAndDescription(role: string, description: string) {
     await this.roleNameInput.fill(role);
@@ -191,7 +193,6 @@ export class RolesAndPermissionsPage {
    * @returns role row of the virtual scroller table
    */
   async getRoleRow(roleName: string): Promise<Locator> {
-    console.log(this.page.getByRole("row", { name: roleName }));
     return this.page.getByRole("row", { name: roleName });
   }
   /**
@@ -268,5 +269,17 @@ export class RolesAndPermissionsPage {
    */
   async AddNewRoleBtnClick() {
     await this.AddCustomRolesButton.click();
+  }
+  /**
+   *
+   * @param page
+   */
+  async clickDeleteButton() {
+    // Define the locator for the delete button
+    const deleteButtonLocator = this.deletebuttonforcustomrole;
+    // Wait for the delete button to be visible
+    await deleteButtonLocator.waitFor({ state: "visible", timeout: 2000 });
+    // Click on the delete button
+    await deleteButtonLocator.click();
   }
 }

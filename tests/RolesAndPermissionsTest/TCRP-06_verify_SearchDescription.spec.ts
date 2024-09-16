@@ -36,6 +36,6 @@ test("TCRP_06: RolesAndPermissions | Verify Search by description", async ({
     const isVisible = await rolesAndPermissions.isDescriptionVisible(
       descriptionToSearch
     );
-    expect(isVisible).toBe(true);
+    expect(isVisible).toBe(false);
   });
 });

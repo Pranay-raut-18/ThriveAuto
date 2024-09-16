@@ -13,7 +13,7 @@ test("TCRP_16: RolesAndPermissions | Verify add functionality of custom roles", 
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
   let timestamp: string;
   timestamp = getCompleteTimestamp();
-  const Rolename: string = `AutoRolename${timestamp}`;
+  const Rolename: string = "AutoRolename";
   const Description: string = `AutoDescription${timestamp}`;
 
   // Login using email address and password
@@ -42,9 +42,24 @@ test("TCRP_16: RolesAndPermissions | Verify add functionality of custom roles", 
   //Select permissions for the custom role
   await test.step("Select permissions for the custom role", async () => {
     await rolesAndPermissions.setPermission("role", "delete", true);
+    await rolesAndPermissions.setPermission("tag", "update", true);
+    await rolesAndPermissions.setPermission("tag", "create", true);
+    await rolesAndPermissions.setPermission("note", "create", true);
+    await rolesAndPermissions.setPermission("Impersonate user", "update", true);
+    await rolesAndPermissions.setPermission("person", "update", true);
+    await rolesAndPermissions.setPermission("job view all", "update", false);
+    await rolesAndPermissions.setPermission("job status", "update", true);
+    await rolesAndPermissions.setPermission("job update all", "update", false);
   });
   //Click on save button
-  await test.step("Click on save button to add the custom role", async () => {
+  await test.step("Click on save button to add the custom role and check added notification", async () => {
+    await page.waitForLoadState("networkidle");
     await rolesAndPermissions.saveChanges();
+  });
+  await test.step("search for the created role", async () => {
+    await rolesAndPermissions.searchForRole(Rolename);
+    await rolesAndPermissions.getAllRoles();
+    const result = await rolesAndPermissions.isRoleVisible(Rolename);
+    expect(result).toBe(true);
   });
 });
