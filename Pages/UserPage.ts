@@ -20,7 +20,7 @@ export class UserPage {
     private firstNameField: Locator;
     private lastNameField: Locator;
     private emailField: Locator;
-    private roleField: Locator;
+    public roleField: Locator;
     private roleDropdownOptions: Locator;
     private addAndSendInviteButton: Locator;
     private successMessage: Locator;
@@ -38,6 +38,17 @@ export class UserPage {
     private noResultsText: Locator;
     private linkedInUrlDescription: Locator
     private statusActiveChip: Locator;
+    private searchBar: Locator;
+    private linkedInFeild: Locator;
+    private invalidLinkedInmessage: Locator;
+    private enterFNameMessage: Locator;
+    private enterLNameMessage: Locator;
+    private enterRoleMessage: Locator;
+    private editFieldBoxes:Locator;
+    private editFieldSaveButton:Locator;
+    private editDots: Locator;
+    private editOptions: Locator;
+
 
     constructor(page: Page) {
         this.page = page;
@@ -69,8 +80,17 @@ export class UserPage {
         this.cancelButton = page.locator("text='Cancel'");
         this.noResultsText = page.locator("text='No results'");
         this.linkedInUrlDescription = page.getByText('Entering a LinkedIn URL');
-        this.statusActiveChip=page.locator(" text='Status: Active'");
-
+        this.statusActiveChip = page.locator(" text='Status: Active'");
+        this.searchBar = page.locator("div.MuiInputBase-root");
+        this.linkedInFeild = page.locator("[name='linkedinUrl']");
+        this.invalidLinkedInmessage = page.locator('text="Please enter the LinkedIn URL in this format: https://linkedin.com/in/<unique identifier>"');
+        this.enterFNameMessage=page.locator("text='Please enter a first name'");
+        this.enterLNameMessage=page.locator("text='Please enter a last name'");
+        this.enterRoleMessage=page.locator("text='Please select a role for this user'");
+        this.editFieldBoxes=page.locator("input.MuiInputBase-input ");
+        this.editFieldSaveButton=page.locator('//button[text()="Save"]');
+        this.editDots=page.locator('[data-colindex="4"]');
+        this.editOptions=page.locator('[role="menuitem"]');
     }
 
     /**
@@ -128,6 +148,27 @@ export class UserPage {
         await this.emailField.fill(email);
     }
 
+
+
+    /**
+     * Enters LinkedInUrl
+     * @param linkedinurl The linkedIn Url of the user to be entered into the form
+     */
+    async enterLinkedInUrl(linkedinurl: string) {
+        await this.linkedInFeild.fill(linkedinurl);
+    }
+
+
+
+    /**
+     * Gets the Invalid LinkedIn URL Format error message
+     * @returns A string representing the invalid LinkedIn Url format message
+     */
+    async getLinkedInUrlErrorMessage(): Promise<string | null> {
+        return await this.invalidLinkedInmessage.textContent();
+    }
+
+
     /**
      * Clicks on Role button
      */
@@ -147,7 +188,7 @@ export class UserPage {
 
     /**
      * Gets all the Roles from Dropdown
-     * @returns An array containg all the roles displayed in roles drop-down.
+     * @returns arr-An array containg all the roles displayed in roles drop-down.
      */
     async getRolesFromDropdown() {
         await this.roleDropdownOptions.waitFor();
@@ -191,7 +232,7 @@ export class UserPage {
     /**
      * Gets the newly added user's email
      * @param email The email address of the user to find in the list.
-     * @returns The locator pointing to the email of the newly added user.
+     * @returns emailLocator-The locator pointing to the email of the newly added user.
      */
     async getNewlyAddedUserEmail(email: string): Promise<Locator> {
         const emailLocator = this.userListing.locator(`text="${email}"`);
@@ -254,7 +295,7 @@ export class UserPage {
      */
     async enterNameInSearchField(name: string) {
         await this.searchBox.fill(name);
-        await this.userListing.waitFor();
+
     }
 
     /**
@@ -267,7 +308,7 @@ export class UserPage {
         let newCount: any = 0;
         do {
             oldCount = newCount;
-            const userList = await this.userListing.locator('[data-field="name"]').all();   
+            const userList = await this.userListing.locator('[data-field="name"]').all();
             newCount = userList.length;
             if (newCount > 0) {
                 await userList[newCount - 1].scrollIntoViewIfNeeded();
@@ -302,7 +343,7 @@ export class UserPage {
 
     /**
      * Is all system role dispayed in role dropdown
-     * @returns A Booelan indicating whether the dropdown list displays all the system roles or not
+     * @returns isincluded-A Booelan indicating whether the dropdown list displays all the system roles or not
      */
     async isAllSystemRoleDisplayedInRoleDropdown(expectedroles: Array<string>): Promise<boolean> {
         await this.roleDropdownOptions.waitFor();
@@ -319,6 +360,97 @@ export class UserPage {
     async isStatusActiveChipVisible(): Promise<boolean> {
         return await this.statusActiveChip.isVisible();
     }
+
+    /**
+     * checks if the status of all the user in the userlist is "Active"by default
+     * @returns A Booelan indicating whether all the users displayed in the list are "Active"
+     */
+    async isAllStausActive(): Promise<boolean> {
+        let oldCount = 0;
+        let newCount = 0;
+        do {
+            oldCount = newCount;
+            const statusList = await this.userListing.locator('[data-field="status"]').all();
+            newCount = statusList.length;
+            if (newCount > oldCount) {
+                await statusList[newCount - 1].scrollIntoViewIfNeeded();
+            }
+            await this.page.waitForLoadState('networkidle');
+        } while (newCount > oldCount);
+        const fullStatusList = await this.userListing.locator('[data-field="status"]').allInnerTexts();
+        return fullStatusList.every(status => status.includes('Active'));
+    }
+
+    /**
+     * checks if the search-bar gets highlighted on mouse hovering
+     * @returns A Booelan indicating whether the searchbar gets highlighted or not
+     */
+    async isSearchBarHighlighted(): Promise<boolean> {
+        await this.searchBar.hover();
+        const borderColor = await this.searchBar.evaluate(el => window.getComputedStyle(el).borderColor);
+        return borderColor === 'rgb(20, 27, 39)';
+    }
+
+    /**
+     * Gets the error messages from create user form when mandatory felids are clicked and values are not enterd
+     * @returns An array of strings containing all the error messages when the when mandatory felids are clicked and values are not enterd.
+     */
+    async getErrorMessages(): Promise<Array<string|null>> {
+        const fnamemsg=await this.enterFNameMessage.textContent();
+        const lnamemsg=await this.enterLNameMessage.textContent();
+        const rolemsg=await this.enterRoleMessage.textContent();
+        const emailmsg=await this.invalidEmailMessage.textContent();
+        return [fnamemsg,lnamemsg,emailmsg,rolemsg];
+    }
+
+    /**
+     * Clicks on all the mandatory feilds on the create user form and moves away without entring any value
+     */
+    async clickOnMandatoryFields(): Promise<void> {
+        const MandatoryFields:Locator[]=[this.firstNameField,this.lastNameField,this.roleField,this.linkedInFeild];
+        for(const feild of MandatoryFields){
+            await feild.click();
+        }
+    }
+
+    /**
+     * Clicks on the targeted users three dots button
+     */
+    async clickOnEditButton(): Promise<void> {
+        await this.editDots.first().click();
+        await this.page.locator('.MuiMenu-paper').waitFor();
+    }
+
+    /**
+     * Selects desired option from the edit menu box
+     */
+    async selectOptionFromEditMenu(option:number): Promise<void> {
+        await this.editOptions.nth(option).click();
+        await this.page.waitForLoadState('domcontentloaded');
+    }
+    
+
+    /**
+     * Edits all the values of the selected user
+     * @param firstName The first name of the user to be entered into the form
+     * @param lastName The last name of the user to be entered into the form
+     * @param email The email id of the user to be entered into the form
+     * @param role The specific role to be selected from the dropdown options
+     */
+    async editUser(firstname:string,lastname:string,email:string,role:string) {
+        await this.page.waitForTimeout(1000);
+        let values:Array<string>=[firstname,lastname,email,role];
+        for(let i=1;i<=4;i++){
+            if(i===4){
+                await this.editFieldBoxes.nth(i).click();
+                await this.selectRoleFromDropdown(values[i-1]);
+            }else{
+            await this.editFieldBoxes.nth(i).clear();
+            await this.editFieldBoxes.nth(i).fill(values[i-1]);
+            }
+        }
+        await this.editFieldSaveButton.click();
+    }    
 
 
 }

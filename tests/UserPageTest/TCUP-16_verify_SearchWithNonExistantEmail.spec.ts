@@ -8,7 +8,7 @@ test('TCUP_16:UserPage|Verify Searching with  Non-Existing Email', async ({ page
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const nonExistantemail = "nonexistant@testcom"
+  const nonExistantemail = "autoLname@test.com"
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -28,11 +28,12 @@ test('TCUP_16:UserPage|Verify Searching with  Non-Existing Email', async ({ page
   //Search by Non existant email id
   await test.step(`Search by Non existant email id`, async () => {
     await userPage.enterNameInSearchField(nonExistantemail);
+    await page.waitForTimeout(1000);
   });
 
   //verify  no user is displayed in the user list
   await test.step(`Verify no user is displayed in the user list`, async () => {
-    expect.soft(userPage.isNoResultsVisible()).toBeTruthy();
+    expect.soft(await userPage.isNoResultsVisible()).toBeTruthy();
   });
 
 });
