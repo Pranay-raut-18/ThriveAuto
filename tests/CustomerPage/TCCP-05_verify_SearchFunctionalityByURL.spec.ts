@@ -30,11 +30,6 @@ test("TCCP_05:CustomerPage | Verify search functionality by URL", async ({
     await userPage.clickOnCustomerTab();
   });
 
-  //Click on Search field.
-  await test.step(`Click on Search field.`, async () => {
-    await customerPage.clickOnSearchFeild();
-  });
-
   //Enter URL
   await test.step(`Enter URL`, async () => {
     await customerPage.enterCustomerNameinSearchFeild(url);

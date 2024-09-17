@@ -34,12 +34,7 @@ test("TCCP_04:CustomerPage | Verify search functionality by Name", async ({
       "https://thrive.thrive-dev.com/admin/customers"
     );
   });
-
-  //Click on Search field.
-  await test.step(`Click on Search field.`, async () => {
-    await customerPage.clickOnSearchFeild();
-  });
-
+  
   //Enter Name
   await test.step(`Enter Name`, async () => {
     await customerPage.enterCustomerNameinSearchFeild(customerName);
@@ -51,6 +46,6 @@ test("TCCP_04:CustomerPage | Verify search functionality by Name", async ({
     const records = await customerPage.getAllRecordofaParticularColoum(
       dataField
     );
-    await expect(records).toContain(customerName);
+    expect(records).toContain(customerName);
   });
 });

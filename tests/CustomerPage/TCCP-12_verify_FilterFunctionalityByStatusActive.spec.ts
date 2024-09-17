@@ -56,6 +56,6 @@ test("TCCP_12:CustomerPage | verify filter functionality by Status 'Active'", as
     const records = await customerPage.getAllRecordofaParticularColoum(
       dataField
     );
-    await expect(records).toContain(status); 
+    expect(records).toContain(status); 
   });
 });

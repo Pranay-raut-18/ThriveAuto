@@ -30,12 +30,7 @@ test("TCCP_06:CustomerPage | Verify search functionality by Primary Contact", as
   await test.step(`Click Customer tab`, async () => {
     await userPage.clickOnCustomerTab();
   });
-
-  //Click on Search field.
-  await test.step(`Click on Search field.`, async () => {
-    await customerPage.clickOnSearchFeild();
-  });
-
+  
   //Enter Primary Contact
   await test.step(`Enter Primary Contact`, async () => {
     await customerPage.enterCustomerNameinSearchFeild(primaryContact);
@@ -47,6 +42,6 @@ test("TCCP_06:CustomerPage | Verify search functionality by Primary Contact", as
     const records = await customerPage.getAllRecordofaParticularColoum(
       dataField
     );
-    await expect(records).toContain(primaryContact); 
+    expect(records).toContain(primaryContact); 
   });
 });

@@ -56,6 +56,6 @@ test("TCCP_10:CustomerPage | verify filter functionality by Customer Type 'Priva
     const records = await customerPage.getAllRecordofaParticularColoum(
       dataField
     );
-    await expect(records).toContain(customerType); 
+    expect(records).toContain(customerType); 
   });
 });
