@@ -16,6 +16,7 @@ export class CustomerPage {
   private nameFeild: Locator;
   private dropDownboxAppear: Locator;
   private createCustomerButton: Locator;
+  private addPrimaryContact: Locator;
   private editDetailsOption: Locator;
   private editPrimaryContactDetailsOption: Locator;
   private acceptAlertButton: Locator;
@@ -41,6 +42,7 @@ export class CustomerPage {
     this.nameFeild = page.getByLabel("Name *", { exact: true });
     this.dropDownboxAppear = page.locator('ul[role="listbox"]');
     this.createCustomerButton = page.getByRole("button", {name: "Create Customer", exact: true,});
+    this.addPrimaryContact = page.getByText("Add Primary Contact");
     this.editDetailsOption = page.getByText("Edit Details");
     this.editPrimaryContactDetailsOption = page.getByText("Edit Primary Contact");
     this.acceptAlertButton = page.locator(".MuiButton-contained");
@@ -60,13 +62,6 @@ export class CustomerPage {
    */
   async removePreFilterStatus() {
     await this.removeFilterStatus.click();
-  }
-
-  /**
-   * Click on Search Feild.
-   */
-  async clickOnSearchFeild() {
-    await this.searchFeild.click();
   }
 
   /**
@@ -125,6 +120,21 @@ export class CustomerPage {
   }
 
   /**
+   * Click On Name Feild
+   */
+  async clickOnNameFeild() {
+    await this.nameFeild.click();
+  }
+
+  /**
+   * Click On DropDown
+   * @param dropdown the drop down number 0-type 1-category 2-customer URL
+   */
+  async clickOnDropDown(dropdown:number) {
+    await this.clickDropDown.nth(dropdown).click();
+  }
+
+  /**
    * Enter the customer name in  the Name Feild
    * @param nameFeild The name of the customer to be Entered.
    */
@@ -132,7 +142,7 @@ export class CustomerPage {
     await this.nameFeild.click();
     await this.nameFeild.fill(nameFeild);
   }
-
+x
   /**
    * Click on "Create customer button".
    */
@@ -178,8 +188,15 @@ export class CustomerPage {
   async clickOnOptionButton() {
     this.rows.first();
     await this.rows.first().waitFor();
-    const colonButton = this.rows.locator(".css-1n12chd").first();
+    const colonButton = this.rows.locator("[aria-label='Open customer action menu']").first();
     colonButton.click();
+  }
+
+  /**
+   * Click on the Add Primary Contact option.
+   */
+  async clickOnAddPrimaryContactOption() {
+    await this.addPrimaryContact.click();
   }
 
   /**
@@ -203,8 +220,9 @@ export class CustomerPage {
   async clickOnDesiredOption(option: string) {
     await this.page.getByText(option).click();
   }
+
   /**
-   * Click on Alert button
+   * Click on Accept Alert button
    */
   async clickOnAcceptAlertButton() {
     await this.acceptAlertButton.nth(1).click();
@@ -296,14 +314,14 @@ export class CustomerPage {
   }
 
   /**
-   * Click on "Click on Account user"
+   * Click on "Log Out Button"
    */
   async clickOnLogOutButton() {
     await this.logOutButton.click();
   }
 
   /**
-   * Click on "Click on Account user"
+   * Click on "Exit Admin Button"
    */
   async clickOnExitAdminButton() {
     await this.exitAdminButton.click();

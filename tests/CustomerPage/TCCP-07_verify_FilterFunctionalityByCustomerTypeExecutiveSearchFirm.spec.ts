@@ -42,7 +42,7 @@ test("TCCP_07:CustomerPage | verify filter functionality by Customer Type Execut
   });
 
   //Select the Customer type to "Executive Search Firm"
-  await test.step(`Select the Customer type to "Executive Search Firm"`, async () => {
+  await test.step(`Select the Customer type to "${customerType}"`, async () => {
     await customerPage.selectFromDropdowns(0,customerType);
   });
 
@@ -56,6 +56,6 @@ test("TCCP_07:CustomerPage | verify filter functionality by Customer Type Execut
     const records = await customerPage.getAllRecordofaParticularColoum(
       dataField
     );
-    await expect(records).toContain(customerType);
+    expect(records).toContain(customerType);
   });
 });

@@ -28,6 +28,7 @@ export class HomePage {
    * Click on Go to Admin portal
    */
   async clickOnGoToAdminPortal() {
+    await this.page.waitForURL("https://thrive.thrive-qa.com/hub");
     await this.goToAdminPortal.click();
     
   }

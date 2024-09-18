@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_21: CustomerPage | Verify Success pop-up appears after Editing the Primary Contact of a Costumer.", async ({
+test("TCCP_32: CustomerPage | Verify Error message appeared when FirstName, LastName and Email kept blank ", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -13,11 +13,10 @@ test("TCCP_21: CustomerPage | Verify Success pop-up appears after Editing the Pr
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const feildNameForName = `name`;
-  const customerName = `moshpit`;
-  const fName = "Mickel";
-  const lName = "Stew";
-  const eMail = "mickelstrw@thrive.com";
+  const customerName = `PW Customer 498`;
+  const fName = "";
+  const lName = "";
+  const eMail = "";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -40,21 +39,15 @@ test("TCCP_21: CustomerPage | Verify Success pop-up appears after Editing the Pr
     await customerPage.removePreFilterStatus();
   });
 
-  //Go to Name in the table and click Sorting button next to it (↑).
-  await test.step(`Go to Name in the table and click Sorting button next to it (↑).`, async () => {
-    await customerPage.clickOnArrowSortButton(feildNameForName);
-  });
-
-  // From the table search for Customer Name and click ":" button for costumer
-  await test.step(`From the table search for ${customerName} and click ":" button for costumer`, async () => {
+  //search for ${customerName} and Click on Option button
+  await test.step(`search for ${customerName} and Click on Option button`, async () => {
     await customerPage.enterCustomerNameinSearchFeild(customerName);
-    await page.waitForSelector(".css-opb0c2");
-    await customerPage.clickOnOptionButton();
+    await customerPage.clickOnOptionButton();  
   });
 
-  //Click on "Edit Primary Contact Details Option"
-  await test.step(`Click on "Edit details"`, async () => {
-    await customerPage.clickOnEditPrimaryContactOption();
+  //Click on Add to primary Contact option
+  await test.step(`Click on Add to primary Contact option`, async () => {
+    await customerPage.clickOnAddPrimaryContactOption()
   });
 
   //Enter First Name
@@ -70,18 +63,16 @@ test("TCCP_21: CustomerPage | Verify Success pop-up appears after Editing the Pr
   // Enter Email
   await test.step(`Enter Email`, async () => {
     await customerPage.enterPrimaryContactEmail(eMail);
-  });
-
-  // Click on the Button "Invite Primary Contact"
-  await test.step(`Click on the Button "Invite Primary Contact"`, async () => {
-    await customerPage.clickOnInvitePrimaryContact();
-  });
-
-  // Verify SUCCESS Pop-up appeared
-  await test.step(`Verify SUCCESS Pop-up appeared`, async () => {
-    await expect(page.locator(".MuiAlert-message")).toContainText(
-      `${fName} ${lName} invited to ${customerName} successfully`
-    );
+    
   });
   
+  // Enter First Name
+  await test.step(`Enter First Name`, async () => {
+    await customerPage.enterPrimaryContactFirstName(fName);
+  
+    await expect(page.getByText("Please enter a first name")).toHaveText("Please enter a first name");
+    await expect(page.getByText("Please enter a last name")).toHaveText("Please enter a last name");
+    await expect(page.getByText("Please enter a valid email")).toHaveText("Please enter a valid email");
+  });
+
 });

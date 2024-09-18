@@ -12,7 +12,7 @@ test("TCCP_04:CustomerPage | Verify search functionality by Name", async ({
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
-  const customerName = "alanis";
+  const customerName = "nexon";
   const dataField = "name";
 
   //Login using email address and password
@@ -24,22 +24,17 @@ test("TCCP_04:CustomerPage | Verify search functionality by Name", async ({
   //Go to Admin Portal
   await test.step(`Go to Admin Portal`, async () => {
     await homePage.clickOnGoToAdminPortal();
-    await expect(page).toHaveURL("https://thrive.thrive-dev.com/admin/users");
+    await expect(page).toHaveURL("https://thrive.thrive-qa.com/admin/users");
   });
 
   //Click on Customer tab
   await test.step(`Click Customer tab`, async () => {
     await userPage.clickOnCustomerTab();
     await expect(page).toHaveURL(
-      "https://thrive.thrive-dev.com/admin/customers"
+      "https://thrive.thrive-qa.com/admin/customers"
     );
   });
-
-  //Click on Search field.
-  await test.step(`Click on Search field.`, async () => {
-    await customerPage.clickOnSearchFeild();
-  });
-
+  
   //Enter Name
   await test.step(`Enter Name`, async () => {
     await customerPage.enterCustomerNameinSearchFeild(customerName);
@@ -51,6 +46,6 @@ test("TCCP_04:CustomerPage | Verify search functionality by Name", async ({
     const records = await customerPage.getAllRecordofaParticularColoum(
       dataField
     );
-    await expect(records).toContain(customerName);
+    expect(records).toContain(customerName);
   });
 });

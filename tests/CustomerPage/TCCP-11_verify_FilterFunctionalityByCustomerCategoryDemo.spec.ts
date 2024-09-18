@@ -56,6 +56,6 @@ test("TCCP_11:CustomerPage | verify filter functionality by Customer Category 'D
     const records = await customerPage.getAllRecordofaParticularColoum(
       dataField
     );
-    await expect(records).toContain(customerCategory); 
+    expect(records).toContain(customerCategory); 
   });
 });

@@ -13,6 +13,7 @@ test("TCCP_20: CustomerPage | Verify Success pop-up appears after creating a new
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   let timstamp: string;
   timstamp = getCompleteTimestamp();
   const customerName = `AutoFname${timstamp}`;

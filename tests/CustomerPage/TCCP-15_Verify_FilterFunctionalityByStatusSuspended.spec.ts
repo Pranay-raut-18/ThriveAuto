@@ -56,6 +56,6 @@ test("TCCP_15:CustomerPage | Verify filter functionality by Status 'Suspended' "
     const records = await customerPage.getAllRecordofaParticularColoum(
       dataField
     );
-    await expect(records).toContain(status); 
+    expect(records).toContain(status); 
   });
 });

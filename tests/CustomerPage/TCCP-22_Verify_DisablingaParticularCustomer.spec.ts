@@ -13,7 +13,7 @@ test("TCCP_22: CustomerPage | Verify user can Disable a Particular Customer", as
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `James Stark122`; //@customeName should be Enabled.
+  const customerName = `Pantera`; //@customeName should be Enabled.
   const option = `Disable`; 
 
   //Login using email address and password
@@ -46,7 +46,6 @@ test("TCCP_22: CustomerPage | Verify user can Disable a Particular Customer", as
 
   //Click on disabled Option and verify the Alert Appear.
   await test.step(`Click on disabled option and verify the Alert Appear.`, async () => {
-    await page.pause();
     await customerPage.clickOnDesiredOption(option);
     await page.waitForLoadState("networkidle");
     await expect(page.locator("#customer-disable-dialog-description")).toHaveText(`Are you sure you want to disable ${customerName}?`);

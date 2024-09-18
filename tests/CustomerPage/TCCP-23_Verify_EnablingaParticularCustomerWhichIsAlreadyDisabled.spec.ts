@@ -13,7 +13,7 @@ test("TCCP_23: CustomerPage | Verify user can Enable a Particular Customer Which
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `dybala`; //@customeName should be Disabled.
+  const customerName = `Tosh`; //@customeName should be Disabled.
   const option = `Enable`;
 
   //Login using email address and password

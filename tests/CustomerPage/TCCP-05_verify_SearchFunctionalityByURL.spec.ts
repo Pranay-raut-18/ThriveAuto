@@ -12,7 +12,7 @@ test("TCCP_05:CustomerPage | Verify search functionality by URL", async ({
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
-  const url = "alanis.thrivetrm.cloud";
+  const url = "disney.thrivetrm.review";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -28,11 +28,6 @@ test("TCCP_05:CustomerPage | Verify search functionality by URL", async ({
   //Click on Customer tab
   await test.step(`Click Customer tab`, async () => {
     await userPage.clickOnCustomerTab();
-  });
-
-  //Click on Search field.
-  await test.step(`Click on Search field.`, async () => {
-    await customerPage.clickOnSearchFeild();
   });
 
   //Enter URL
