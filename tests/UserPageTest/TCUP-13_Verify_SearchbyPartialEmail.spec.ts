@@ -8,7 +8,8 @@ test('TCUP_13:UserPage|Verify searching by partial email (Till the @ Symbol) ', 
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const partialemail = "AutoLname@"
+  const partialemail = "pw_adminuser506@";
+  const datafield="name";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -33,6 +34,6 @@ test('TCUP_13:UserPage|Verify searching by partial email (Till the @ Symbol) ', 
 
   //verify that all displayed users have matching email. 
   await test.step(`verify that all displayed users have matching email`, async () => {
-    expect.soft(await userPage.isSearchedAttributeDisplayedInUserList(partialemail)).toBeTruthy();
+    expect.soft(await userPage.isSearchedAttributeDisplayedInUserList(partialemail,datafield)).toBeTruthy();
   });
 });

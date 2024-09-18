@@ -28,7 +28,7 @@ test('TCUP_16:UserPage|Verify Searching with  Non-Existing Email', async ({ page
   //Search by Non existant email id
   await test.step(`Search by Non existant email id`, async () => {
     await userPage.enterNameInSearchField(nonExistantemail);
-    await page.waitForTimeout(1000);
+    //await page.waitForTimeout(1000);
   });
 
   //verify  no user is displayed in the user list

@@ -6,14 +6,17 @@ import { Url,EmailAddress,Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils"
 
 
-test('TCUP_19:UserPage|Verify that user can successfully edit all fields and success message is displayed', async ({ page }) => {
+test('TCUP_22:UserPage|Verify that clicking "Cancel" during editing discards changes and restores the previous state', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   let timestamp=getCompleteTimestamp();
   const email=`edited${timestamp}@test.com`;
-  const Fullname = "AutoFname"
-  const expsucessmessage="auto user7034 updated successfully"
+  const Fullname = "AutoFname";
+  let credbeforeediting : (string | null)[];
+  let credafterediting: (string | null)[];
+
+ 
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -37,22 +40,38 @@ test('TCUP_19:UserPage|Verify that user can successfully edit all fields and suc
     await page.waitForTimeout(1000);
   });
 
+  //Get the crdentials of the user before editing 
+  await test.step('Get the crdentials of the user before editing', async () => {
+    credbeforeediting =  await userPage.getNewUserCredentialsFromUserList();
+  });
+
   //Click on the users three dots and select edit option
   await test.step(`Click on the users edit button`, async () => {
     await userPage.clickOnEditButton();
     await userPage.selectOptionFromEditMenu(0);
-    
-  })
+  });
 
   //Edit all the feilds in the edit form
   await test.step(`Edit all the fields in the edit form`, async () => {
     await userPage.editUser("auto","user7034",email,"Hiring Manager");
-    await userPage.clickAddButton();
-  })
-
- //verify success message is shown after adding user
- await test.step('Verify sucess message is shown after adding user', async () => {
-    expect.soft(await userPage.getSuccessMessage()).toBe(expsucessmessage);
   });
+  
+  //Click on Cancel Button
+  await test.step('Click on Cancel Button', async () => {
+    await userPage.clickOnCancelButton();
+    });
+
+   //Get the crdentials of the user after editing 
+    await test.step('Get the crdentials of the user before editing', async () => {
+        credafterediting =  await userPage.getNewUserCredentialsFromUserList();
+     });  
+   
+//Verify the users credentials after clicking the cancel button
+  await test.step('Verify Credentials after clicking the cancel button', async () => {
+    const userCredString = JSON.stringify(credbeforeediting);
+    const listcredString = JSON.stringify(credafterediting);
+    expect.soft(listcredString).toBe(userCredString);
+  });
+
 
 });      

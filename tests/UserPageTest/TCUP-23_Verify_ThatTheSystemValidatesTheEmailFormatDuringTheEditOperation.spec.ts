@@ -6,14 +6,17 @@ import { Url,EmailAddress,Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils"
 
 
-test('TCUP_19:UserPage|Verify that user can successfully edit all fields and success message is displayed', async ({ page }) => {
+test('TCUP_23:UserPage|Verify that the system validates the email format during the edit operation', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   let timestamp=getCompleteTimestamp();
-  const email=`edited${timestamp}@test.com`;
-  const Fullname = "AutoFname"
-  const expsucessmessage="auto user7034 updated successfully"
+  const email=`edited${timestamp}@testcom`;
+  const Fullname = "AutoFname";
+  const expInvalidmsg="Please enter a valid email";
+ 
+
+ 
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -41,18 +44,18 @@ test('TCUP_19:UserPage|Verify that user can successfully edit all fields and suc
   await test.step(`Click on the users edit button`, async () => {
     await userPage.clickOnEditButton();
     await userPage.selectOptionFromEditMenu(0);
-    
-  })
+  });
 
   //Edit all the feilds in the edit form
   await test.step(`Edit all the fields in the edit form`, async () => {
     await userPage.editUser("auto","user7034",email,"Hiring Manager");
-    await userPage.clickAddButton();
-  })
-
- //verify success message is shown after adding user
- await test.step('Verify sucess message is shown after adding user', async () => {
-    expect.soft(await userPage.getSuccessMessage()).toBe(expsucessmessage);
   });
+  
+  //Verify Invalid email format message is shown
+  await test.step('Verify Invalid email format message is shown', async () => {
+    expect.soft(await userPage.getInvalidEmailMessage()).toBe(expInvalidmsg);
+  });  
+   
+
 
 });      

@@ -2,18 +2,17 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from "../../Pages/LoginPage";
 import { UserPage } from '../../Pages/UserPage';
 import { HomePage } from "../../Pages/HomePage";
-import { Url,EmailAddress,Password } from "../../utils/config-utils";
-import { getCompleteTimestamp } from "../../utils/common-utils"
+import { Url,EmailAddress,Password } from "../../utils/config-utils"
 
 
-test('TCUP_19:UserPage|Verify that user can successfully edit all fields and success message is displayed', async ({ page }) => {
+test('TCUP_21:UserPage|Verify that error messages are shown when required fields are left empty while editing.', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  let timestamp=getCompleteTimestamp();
-  const email=`edited${timestamp}@test.com`;
-  const Fullname = "AutoFname"
-  const expsucessmessage="auto user7034 updated successfully"
+  const Fullname = "AutoFname";
+  let expErrMsg: (string | null)[] = ["Please enter a first name", "Please enter a last name", "Please enter a valid email", "Please select a role for this user"];
+  let actErrMsg: (string | null)[];
+  
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -42,17 +41,26 @@ test('TCUP_19:UserPage|Verify that user can successfully edit all fields and suc
     await userPage.clickOnEditButton();
     await userPage.selectOptionFromEditMenu(0);
     
-  })
-
-  //Edit all the feilds in the edit form
-  await test.step(`Edit all the fields in the edit form`, async () => {
-    await userPage.editUser("auto","user7034",email,"Hiring Manager");
-    await userPage.clickAddButton();
-  })
-
- //verify success message is shown after adding user
- await test.step('Verify sucess message is shown after adding user', async () => {
-    expect.soft(await userPage.getSuccessMessage()).toBe(expsucessmessage);
   });
 
-});      
+  //Edit and leave all the required fields empty
+  await test.step(`Edit and leave all the required fields empty`, async () => {
+    await userPage.clickOnMandatoryEditFields();
+  });
+
+  //Get the Error messages displayed under each mandatory feilds
+  await test.step('Get the Error messages displayed under each mandatory feilds ', async () => {
+    actErrMsg = await userPage.getErrorMessages();
+  });  
+
+  //Verify error messages are displayed
+  await test.step('Verify error messages are displayed', async () => {
+    const expErrMsgString = JSON.stringify(expErrMsg);
+    const actErrMsgString = JSON.stringify(actErrMsg);
+    expect.soft(actErrMsgString).toBe(expErrMsgString);
+  });
+
+
+
+
+});

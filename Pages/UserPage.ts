@@ -14,7 +14,6 @@ export class UserPage {
     public addUserForm: Locator;
     private statusDisableButton: Locator;
     private searchBox: Locator;
-    private filterIcon: Locator;
     private filterResetButton: Locator;
     private filterApplyButton: Locator;
     private firstNameField: Locator;
@@ -22,7 +21,7 @@ export class UserPage {
     private emailField: Locator;
     public  roleField: Locator;
     private roleDropdownOptions: Locator;
-    private addAndSendInviteButton: Locator;
+    private save: Locator;
     private successMessage: Locator;
     private userListing: Locator;
     private invalidEmailMessage: Locator;
@@ -48,6 +47,8 @@ export class UserPage {
     private editFieldSaveButton:Locator;
     private editDots: Locator;
     private editOptions: Locator;
+    private filterIcon:Locator;
+    private filterRoleFeild:Locator;
 
 
     constructor(page: Page) {
@@ -56,7 +57,6 @@ export class UserPage {
         this.addUserIcon = page.locator("button:text('User')");
         this.addUserForm = page.locator("div.MuiPaper-elevation16");
         this.statusDisableButton = page.locator("//div[@class='MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault css-7lzqhs']//*[name()='svg']");
-        this.filterIcon = page.locator(".MuiBadge-root");
         this.filterResetButton = page.locator("text='Reset'");
         this.filterApplyButton = page.locator("text='Apply'");
         this.searchBox = page.locator("[placeholder='Search by name or email']");
@@ -65,7 +65,7 @@ export class UserPage {
         this.emailField = page.locator("[name='email']");
         this.roleField = page.locator("[role='combobox']");
         this.roleDropdownOptions = page.getByRole('listbox', { name: 'Role' });
-        this.addAndSendInviteButton = page.locator("text='Add and Send Invite'");
+        this.save = page.locator('[type="submit"]');
         this.successMessage = page.locator("//div[@class='MuiAlert-message css-1xsto0d']");
         this.userListing = page.locator("div.MuiDataGrid-virtualScroller");
         this.invalidEmailMessage = page.locator("text='Please enter a valid email'");
@@ -91,6 +91,8 @@ export class UserPage {
         this.editFieldSaveButton=page.locator('//button[text()="Save"]');
         this.editDots=page.locator('[data-colindex="4"]');
         this.editOptions=page.locator('[role="menuitem"]');
+        this.filterIcon=page.getByLabel('Edit Filters');
+        this.filterRoleFeild=page.getByRole('combobox', { name: 'Role' });
     }
 
     /**
@@ -217,7 +219,7 @@ export class UserPage {
      * Clicks on Add and Send Invite
      */
     async clickAddButton() {
-        await this.addAndSendInviteButton.click();
+        await this.save.click();
     }
 
     /**
@@ -244,7 +246,7 @@ export class UserPage {
      * @returns A boolean indicating whether the Add and Send Invite button is disabled or not.
      */
     async isAddAndSendInviteButtonDisabled(): Promise<boolean> {
-        return await this.addAndSendInviteButton.isDisabled();
+        return await this.save.isDisabled();
     }
 
     /**
@@ -303,26 +305,27 @@ export class UserPage {
      * @param value The name or email being searched for in the user list
      * @returns A boolean value indicating whether the searched attribute is displayed in user list or not.
      */
-    async isSearchedAttributeDisplayedInUserList(value: string): Promise<boolean> {
+    async isSearchedAttributeDisplayedInUserList(value:string,colname:string): Promise<boolean> {
         let oldCount: any = 0;
         let newCount: any = 0;
         do {
             oldCount = newCount;
-            const userList = await this.userListing.locator('[data-field="name"]').all();
+            const userList = await this.userListing.locator(`[data-field="${colname}"]`).all();
             newCount = userList.length;
+            console.log(newCount);
             if (newCount > 0) {
                 await userList[newCount - 1].scrollIntoViewIfNeeded();
                 await this.page.waitForTimeout(1000);
             }
         } while (newCount > oldCount);
-        const updatedUserList = (await this.userListing.locator('[data-field="name"]').all()).slice(1);
+        const updatedUserList = (await this.userListing.locator(`[data-field="${colname}"]`).all());
         for (const user of updatedUserList) {
             const userName = await user.textContent();
-            if (userName?.trim().toLowerCase() && !userName.trim().toLowerCase().includes(value.toLowerCase())) {
-                return false;
+            if  (userName && userName.trim().toLowerCase().includes(value.toLowerCase())) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -330,6 +333,7 @@ export class UserPage {
      * @returns A boolean indicating whether the text "No results" is visible or not
      */
     async isNoResultsVisible(): Promise<boolean> {
+        await this.noResultsText.waitFor();
         return await this.noResultsText.isVisible();
     }
 
@@ -358,27 +362,28 @@ export class UserPage {
      * @returns A Booelan indicating whether status active chip is visible  or not
      */
     async isStatusActiveChipVisible(): Promise<boolean> {
+        await this.statusActiveChip.waitFor();
         return await this.statusActiveChip.isVisible();
     }
 
     /**
-     * checks if the status of all the user in the userlist is "Active"by default
+     * checks if the status of all the user in the userlist and also checks the role field of the userlist.
      * @returns A Booelan indicating whether all the users displayed in the list are "Active"
      */
-    async isAllStausActive(): Promise<boolean> {
+    async isAllStausActive(value:string,datafield:string): Promise<boolean> {
         let oldCount = 0;
         let newCount = 0;
         do {
             oldCount = newCount;
-            const statusList = await this.userListing.locator('[data-field="status"]').all();
+            const statusList = await this.userListing.locator(`[data-field="${datafield}"]`).all();
             newCount = statusList.length;
             if (newCount > oldCount) {
                 await statusList[newCount - 1].scrollIntoViewIfNeeded();
             }
             await this.page.waitForLoadState('networkidle');
         } while (newCount > oldCount);
-        const fullStatusList = await this.userListing.locator('[data-field="status"]').allInnerTexts();
-        return fullStatusList.every(status => status.includes('Active'));
+        const fullStatusList = await this.userListing.locator(`[data-field="${datafield}"]`).allInnerTexts();
+        return fullStatusList.every(status => status.includes(value));
     }
 
     /**
@@ -428,6 +433,16 @@ export class UserPage {
         await this.editOptions.nth(option).click();
         await this.page.waitForLoadState('domcontentloaded');
     }
+
+    /**
+     * Waits for the text to be visible in the edit form
+     */   
+    async waitForTextToBeVisible(): Promise<void> {
+        await this.page.waitForFunction((selector) => {
+            const input = document.querySelector(selector) as HTMLInputElement;
+            return input && input.value.trim() !== '';
+          },'[name="firstName"]');
+    }
     
 
     /**
@@ -439,10 +454,7 @@ export class UserPage {
      */
     async editUser(firstname:string,lastname:string,email:string,role:string) {
         let values:Array<string>=[firstname,lastname,email,role];
-        await this.page.waitForFunction((selector) => {
-              const input = document.querySelector(selector) as HTMLInputElement;
-              return input && input.value.trim() !== '';
-            },'[name="firstName"]');
+        await this.waitForTextToBeVisible();
         for(let i=1;i<=4;i++){
             if(i===4){
                 await this.editFieldBoxes.nth(i).click();
@@ -452,8 +464,59 @@ export class UserPage {
             await this.editFieldBoxes.nth(i).fill(values[i-1]);
             }
         }
-        await this.editFieldSaveButton.click();
-    }    
+    } 
 
+    /**
+     * Edits any one of the fields in the Edit box of the users page
+     * @param value value The value to be entered into the specified field in the edit form.
+     * @param boxnum The specific field to be selected for editing(firstname,lastname,email,role)
+     */
+    async editOneField(value:string,boxnum:number){
+        await this.waitForTextToBeVisible();
+        if(boxnum==4){
+            await this.editFieldBoxes.nth(boxnum).click();
+            await this.selectRoleFromDropdown(value);
+        }else if(boxnum>=1 && boxnum<=3){
+            await this.editFieldBoxes.nth(boxnum).clear();
+            await this.editFieldBoxes.nth(boxnum).fill(value);
+        }
+        await this.editFieldSaveButton.click();
+    }
+
+    /**
+     * Clicks on all the mandatory feilds on the create user form and moves away without entring any value
+     */
+    async clickOnMandatoryEditFields(): Promise<void> {
+        await this.waitForTextToBeVisible();
+        for (let i = 1; i <=5; i++) {
+            await this.editFieldBoxes.nth(i).clear();
+        }
+    }
+    /**
+     * Clicks on the Filter icon
+     */
+    async clickOnFilterButton(): Promise<void> {
+        await this.filterIcon.click();
+    }
+
+    /**
+     * Clicks on the Filter Role feild and select roles
+     * @param roles it accepts indefinite number of roles and stores it in an array
+     */
+    async clickFilterRole(...roles:string[]):Promise<void>{
+        await this.filterRoleFeild.click();
+        await this.filterRoleFeild.waitFor();
+        for (const role of roles) {
+            await this.page.getByRole('option', { name: role, exact: true }).click();
+        }
+        await this.filterRoleFeild.click();
+    }
+
+    /**
+     * Clicks on the Filter Apply Button
+     */
+    async clickOnFilterApplyButton(): Promise<void> {
+        await this.filterApplyButton.click();
+    }
 
 }

@@ -47,7 +47,6 @@ test('TCUP_55:UserPage|Verify that a success message is displayed upon adding a 
   //Click on AddandSendInvite Button
   await test.step('Click on AddandSendInvite Button', async () => {
     await userPage.clickAddButton();
-
   });
 
   //verify success message is shown after adding user

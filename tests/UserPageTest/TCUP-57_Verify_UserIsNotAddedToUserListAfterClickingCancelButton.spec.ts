@@ -56,12 +56,9 @@ test('TCUP_57:UserPage|Verify user is not added to user list after clicking canc
         await userPage.clearFilter();
     })
 
-    //verify user is added to the user list
-    await test.step('verify user is added to the user list', async () => {
+    //verify user is not added to the user list
+    await test.step('verify user is added not to the user list', async () => {
         await expect.soft(await userPage.getNewlyAddedUserEmail(email)).toBeHidden();
     });
-
-
-
 
 });

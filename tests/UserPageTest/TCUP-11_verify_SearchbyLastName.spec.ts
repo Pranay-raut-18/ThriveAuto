@@ -8,7 +8,8 @@ test('TCUP_11:UserPage|Verify searching by only Last name ', async ({ page }) =>
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const Lastname = "AutoLname"
+  const Lastname = "User";
+  const datafield="name";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -33,7 +34,7 @@ test('TCUP_11:UserPage|Verify searching by only Last name ', async ({ page }) =>
 
   //verify that all displayed users have the matching Last name
   await test.step(`Verify that all displayed users have the matching Last name`, async () => {
-    expect.soft(await userPage.isSearchedAttributeDisplayedInUserList(Lastname)).toBeTruthy();
+    expect.soft(await userPage.isSearchedAttributeDisplayedInUserList(Lastname,datafield)).toBeTruthy();
   });
 
 });

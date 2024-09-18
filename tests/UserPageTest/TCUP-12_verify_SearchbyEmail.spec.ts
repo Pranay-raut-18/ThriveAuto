@@ -8,7 +8,8 @@ test('TCUP_12:UserPage|Verify searching by email ', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const email = "AutoLname@test.com"
+  const email ="pw_adminuser506@example.com";
+  const datafield="name";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -33,7 +34,7 @@ test('TCUP_12:UserPage|Verify searching by email ', async ({ page }) => {
 
   //verify that all displayed users have matching email
   await test.step(`verify that all displayed users have matching email`, async () => {
-    expect.soft(await userPage.isSearchedAttributeDisplayedInUserList(email)).toBeTruthy();
+    expect.soft(await userPage.isSearchedAttributeDisplayedInUserList(email,datafield)).toBeTruthy();
   });
 
 });

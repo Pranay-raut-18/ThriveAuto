@@ -9,7 +9,8 @@ test('TCUP_09:UserPage|Verify searching by full name', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const Fullname = "Jhon Wick"
+  const Fullname = "Jhon Wick";
+  const datafield="name";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -34,7 +35,7 @@ test('TCUP_09:UserPage|Verify searching by full name', async ({ page }) => {
 
   //Verify the searched Name is visible on the User list
   await test.step(`Verify the searched Name is visible on the User list`, async () => {
-    expect(await userPage.isSearchedAttributeDisplayedInUserList(Fullname)).toBeTruthy();
+    expect(await userPage.isSearchedAttributeDisplayedInUserList(Fullname,datafield)).toBeTruthy();
   });
 
 });      

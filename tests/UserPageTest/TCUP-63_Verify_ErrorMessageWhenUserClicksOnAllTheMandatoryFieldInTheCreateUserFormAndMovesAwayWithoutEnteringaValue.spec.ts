@@ -3,7 +3,7 @@ import { LoginPage } from "../../Pages/LoginPage";
 import { UserPage } from '../../Pages/UserPage';
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
-import { getCompleteTimestamp } from "../../utils/common-utils"
+
 
 test('TCUP_63:UserPage|Verify error message when user clicks on all the Mandatory field in the Create User form and moves away without entering a value', async ({ page }) => {
     const loginPage = new LoginPage(page);
@@ -40,8 +40,8 @@ test('TCUP_63:UserPage|Verify error message when user clicks on all the Mandator
         actErrMsg = await userPage.getErrorMessages();
     });
 
-    //Verify Credentials of the newly added user
-    await test.step('Verify Credentials of the newly added user', async () => {
+    //Verify error messages are displayed
+    await test.step('Verify error messages are displayed', async () => {
         const expErrMsgString = JSON.stringify(expErrMsg);
         const actErrMsgString = JSON.stringify(actErrMsg);
         expect.soft(actErrMsgString).toBe(expErrMsgString);

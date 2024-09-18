@@ -9,6 +9,8 @@ test('TCUP_60:UserPage| Verify that the "Status: Active" filter is applied by de
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
+    let value="Active";
+    let datafield="status";
     
 
     //Login using email address and password
@@ -19,7 +21,6 @@ test('TCUP_60:UserPage| Verify that the "Status: Active" filter is applied by de
     //Go to Admin Potal 
     await test.step(`Go to Admin Potal Customer tab`, async () => {
         await homePage.clickOnGoToAdminPortal();
-        await page.waitForTimeout(1000);
     });
 
     //Verify status active filter chip is visible
@@ -29,7 +30,7 @@ test('TCUP_60:UserPage| Verify that the "Status: Active" filter is applied by de
 
     //Verify that filter status is enabled by default
     await test.step(`Verify that filter status is enabled by default`, async () =>{
-        expect(await userPage.isAllStausActive()).toBeTruthy();
+        expect(await userPage.isAllStausActive(value,datafield)).toBeTruthy();
     });
 
 });
