@@ -13,7 +13,7 @@ test("TCCP_24: CustomerPage | Verify user can Suspending a Particular Customer",
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `Ashes`; //@customeName should be Disabled.
+  const customerName = `Disney`; //@customeName should be Disabled.
   const option = `Suspend`;  
 
   //Login using email address and password

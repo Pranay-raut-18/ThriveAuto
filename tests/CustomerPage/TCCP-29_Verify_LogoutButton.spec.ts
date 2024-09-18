@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_29:CustomerPage | Verify Logout button.", async ({
+test("TCCP_29:CustomerPage | Verify User is able to Logout.", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -42,12 +42,12 @@ test("TCCP_29:CustomerPage | Verify Logout button.", async ({
   // Click on Log Out.
   await test.step(`Click on Log Out Button.`, async () => {
     await customerPage.clickOnLogOutButton();
-    await page.waitForLoadState("networkidle");
+    await page.waitForURL("https://thrive.thrive-qa.com/login");
   });
 
   // Verify User came to the Log In page by URL
   await test.step(`Verify User came to the Log In page by URL`, async () => {
-    expect(page.url()).toBe("https://thrive.thrive-dev.com/login");
+    expect(page.url()).toBe("https://thrive.thrive-qa.com/login");
   });
 
 });

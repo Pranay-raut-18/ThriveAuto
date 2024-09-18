@@ -13,10 +13,11 @@ test("TCCP_21: CustomerPage | Verify Success pop-up appears after Editing the Pr
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `James Stark122`;
-  const fName = "Rosy";
-  const lName = "Stark";
-  const eMail = "rosystark@thrive.com";
+  const feildNameForName = `name`;
+  const customerName = `moshpit`;
+  const fName = "Mickel";
+  const lName = "Stew";
+  const eMail = "mickelstrw@thrive.com";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -37,6 +38,11 @@ test("TCCP_21: CustomerPage | Verify Success pop-up appears after Editing the Pr
   //Remove the Filter "Status Active" by clicking (X) button
   await test.step(`Remove the Filter "Status Active" by clicking (X) button`, async () => {
     await customerPage.removePreFilterStatus();
+  });
+
+  //Go to Name in the table and click Sorting button next to it (↑).
+  await test.step(`Go to Name in the table and click Sorting button next to it (↑).`, async () => {
+    await customerPage.clickOnArrowSortButton(feildNameForName);
   });
 
   // From the table search for Customer Name and click ":" button for costumer

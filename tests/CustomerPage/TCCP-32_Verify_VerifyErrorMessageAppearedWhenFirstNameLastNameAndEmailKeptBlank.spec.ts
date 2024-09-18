@@ -13,7 +13,7 @@ test("TCCP_32: CustomerPage | Verify Error message appeared when FirstName, Last
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `Reichert Group (PW)`;
+  const customerName = `PW Customer 498`;
   const fName = "";
   const lName = "";
   const eMail = "";

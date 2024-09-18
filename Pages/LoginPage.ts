@@ -20,12 +20,18 @@ export class LoginPage {
         this.ContinueWithEmail = page.getByRole('button', { name: 'Continue with email' });
     }
 
+        /**
+     * Goin to url
+     * @param url The url of the website
+     */
     async goTo(url: string): Promise<void> {
+        await this.page.waitForLoadState('networkidle');
         await this.page.goto(url);
     }
 
     /**
      * Enter Email Address
+     * @param emailAddress the email address to be entered
      */
     async enterEmailAddress(emailAddress: string) {
         await this.email_AddressInputFeild.click();
@@ -35,6 +41,7 @@ export class LoginPage {
 
     /**
      * Enter Password
+     * @param password the Password to be enetered.
      */
     async enterPassword(password: string) {
         await this.passwordInputField.click();
@@ -50,6 +57,9 @@ export class LoginPage {
     
     /**
      * Log In
+     * @param url going to the URL website
+     * @param email the email to be entered
+     * @param password the Password to be entered
      */
     async login(url: string, email: string, password: string): Promise<void> {
         await this.goTo(url);

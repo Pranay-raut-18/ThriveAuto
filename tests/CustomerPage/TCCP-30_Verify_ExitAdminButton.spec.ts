@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_30:CustomerPage | Verify Exit Admin button.", async ({
+test("TCCP_30:CustomerPage | Verify user is able to Exit Admin.", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -37,16 +37,16 @@ test("TCCP_30:CustomerPage | Verify Exit Admin button.", async ({
   // Click on Exit Admin Button.
   await test.step(`Click on Exit Admin Button`, async () => {
     await customerPage.clickOnExitAdminButton();
-    await page.waitForLoadState("networkidle");
-    expect(page.url()).toBe("https://thrive.thrive-dev.com/hub");
+    await page.waitForURL("https://thrive.thrive-qa.com/hub");
+    expect(page.url()).toBe("https://thrive.thrive-qa.com/hub");
   });
   
   // Click on Log Out Button
   await test.step(`Click on Log Out Button`, async () => {
     await customerPage.clickOnAccountUserButton();
     await customerPage.clickOnLogOutButton();
-    await page.waitForURL("https://thrive.thrive-dev.com/login");
-    expect(page.url()).toBe("https://thrive.thrive-dev.com/login");
+    await page.waitForURL("https://thrive.thrive-qa.com/login");
+    expect(page.url()).toBe("https://thrive.thrive-qa.com/login");
   });
 
 });

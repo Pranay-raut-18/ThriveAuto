@@ -4,9 +4,8 @@ import { UserPage } from "../../Pages/UserPage";
 import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
-import exp from "constants";
 
-test("TCCP_31: CustomerPage | Verify Error message appeared when Name, cutomer category, customer type and customer URL is kept blank.", async ({
+test("TCCP_31: CustomerPage | Verify Error message appeared when Name, customer category, customer type and customer URL is kept blank.", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);

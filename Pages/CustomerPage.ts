@@ -13,7 +13,7 @@ export class CustomerPage {
   private applyButton: Locator;
   private removeFilterStatus: Locator;
   private addCustomerButton: Locator;
-  public nameFeild: Locator;
+  private nameFeild: Locator;
   private dropDownboxAppear: Locator;
   private createCustomerButton: Locator;
   private addPrimaryContact: Locator;
@@ -188,7 +188,7 @@ x
   async clickOnOptionButton() {
     this.rows.first();
     await this.rows.first().waitFor();
-    const colonButton = this.rows.locator(".css-1n12chd").first();
+    const colonButton = this.rows.locator("[aria-label='Open customer action menu']").first();
     colonButton.click();
   }
 

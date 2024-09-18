@@ -12,7 +12,7 @@ test("TCCP_06:CustomerPage | Verify search functionality by Primary Contact", as
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
-  const primaryContact = "Jill Hughes";
+  const primaryContact = "Rosy Stark";
   const dataField = "primaryUser";
 
   //Login using email address and password

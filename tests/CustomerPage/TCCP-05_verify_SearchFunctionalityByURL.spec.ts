@@ -12,7 +12,7 @@ test("TCCP_05:CustomerPage | Verify search functionality by URL", async ({
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
-  const url = "alanis.thrivetrm.cloud";
+  const url = "disney.thrivetrm.review";
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {

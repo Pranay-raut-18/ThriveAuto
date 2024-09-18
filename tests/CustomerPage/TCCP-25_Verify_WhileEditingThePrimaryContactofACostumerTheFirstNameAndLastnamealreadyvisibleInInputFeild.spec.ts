@@ -13,7 +13,7 @@ test("TCCP_25: CustomerPage | Verify while Editing the Primary Contact of a Cost
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `James Stark122`;
+  const customerName = `JamesCustomer`;
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
