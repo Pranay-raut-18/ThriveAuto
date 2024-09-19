@@ -15,6 +15,11 @@ export class RolesAndPermissionsPage {
   private saveButtonInOptionsTab: Locator;
   private AddCustomRolesButton: Locator;
   private deletebuttonforcustomrole: Locator;
+  private errortxtName: Locator;
+  private errortxtDescription: Locator;
+  private saveButtonLocator: Locator;
+  private maxErrorTypeLast: Locator;
+  private alertMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -44,6 +49,15 @@ export class RolesAndPermissionsPage {
       exact: true,
     });
     this.deletebuttonforcustomrole = page.locator('button:has-text("Delete")');
+    this.errortxtName = page.locator('p[id=":r14:-helper-text"]');
+    this.errortxtDescription = page.locator('p[id=":r15:-helper-text"]');
+    this.saveButtonLocator = page.locator(
+      'button[type="submit"][class*="MuiButton-root"]'
+    );
+    this.maxErrorTypeLast = page.locator(
+      "span.MuiTypography-root.MuiTypography-caption.css-iaqowd"
+    );
+    this.alertMessage = page.locator("div.MuiAlert-message.css-1xsto0d");
   }
 
   /**
@@ -258,11 +272,16 @@ export class RolesAndPermissionsPage {
       await this.page.locator(permissionLocator).uncheck();
     }
   }
+  async CheckifSucessMessageisVisible() {
+    return this.alertMessage.isVisible();
+  }
   /**
    * Clicks on save button in edit permissions tab
    */
   async saveChanges() {
-    await this.saveButtonInOptionsTab.click();
+    await this.saveButtonLocator.isEnabled();
+    await this.saveButtonLocator.click();
+    await this.CheckifSucessMessageisVisible();
   }
   /**
    * Clicks on add custom roles button in roles and permissions tab
@@ -271,8 +290,7 @@ export class RolesAndPermissionsPage {
     await this.AddCustomRolesButton.click();
   }
   /**
-   *
-   * @param page
+   *Clicks on delete button in roles and permissions popup tab
    */
   async clickDeleteButton() {
     // Define the locator for the delete button
@@ -281,5 +299,29 @@ export class RolesAndPermissionsPage {
     await deleteButtonLocator.waitFor({ state: "visible", timeout: 2000 });
     // Click on the delete button
     await deleteButtonLocator.click();
+  }
+  /**
+   * Gets error texts for both name and description
+   * @returns error text of name and description
+   */
+  async getAllErrorTexts(): Promise<Array<string | null>> {
+    const errorName = await this.errortxtName.textContent();
+    const errorDescript = await this.errortxtDescription.textContent();
+    return [errorName, errorDescript];
+  }
+  async saveButtonisNotVisible() {
+    return this.saveButtonLocator.isDisabled();
+  }
+  async saveButtonisVisible() {
+    return this.saveButtonLocator.isEnabled();
+  }
+  async CheckifCorrectInputs() {
+    if (await this.maxErrorTypeLast.isVisible()) {
+      const maxErrorMsg = this.maxErrorTypeLast.textContent();
+      console.log(maxErrorMsg);
+      return maxErrorMsg;
+    } else {
+      return this.alertMessage.isVisible();
+    }
   }
 }

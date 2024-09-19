@@ -4,8 +4,9 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
+import { time, timeStamp } from "console";
 
-test("TCRP_16: RolesAndPermissions | Verify add functionality of custom roles", async ({
+test("TCRP_15: RolesAndPermissions | Verify add functionality of custom roles", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -13,7 +14,7 @@ test("TCRP_16: RolesAndPermissions | Verify add functionality of custom roles", 
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
   let timestamp: string;
   timestamp = getCompleteTimestamp();
-  const Rolename: string = "AutoRolename";
+  const Rolename: string = `AutoRolename${timeStamp()}`;
   const Description: string = `AutoDescription${timestamp}`;
 
   // Login using email address and password
@@ -41,6 +42,8 @@ test("TCRP_16: RolesAndPermissions | Verify add functionality of custom roles", 
   });
   //Select permissions for the custom role
   await test.step("Select permissions for the custom role", async () => {
+    await rolesAndPermissions.setPermission("user", "update", true);
+    await rolesAndPermissions.setPermission("custom field", "update", true);
     await rolesAndPermissions.setPermission("role", "delete", true);
     await rolesAndPermissions.setPermission("tag", "update", true);
     await rolesAndPermissions.setPermission("tag", "create", true);
@@ -52,11 +55,10 @@ test("TCRP_16: RolesAndPermissions | Verify add functionality of custom roles", 
     await rolesAndPermissions.setPermission("job update all", "update", false);
   });
   //Click on save button
-  await test.step("Click on save button to add the custom role and check added notification", async () => {
-    await page.waitForLoadState("networkidle");
+  await test.step("Click on save button to add the custom role", async () => {
     await rolesAndPermissions.saveChanges();
   });
-  await test.step("search for the created role", async () => {
+  await test.step("search for the created role and verify if it is visible", async () => {
     await rolesAndPermissions.searchForRole(Rolename);
     await rolesAndPermissions.getAllRoles();
     const result = await rolesAndPermissions.isRoleVisible(Rolename);
