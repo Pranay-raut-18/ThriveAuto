@@ -49,6 +49,7 @@ export class UserPage {
     private editOptions: Locator;
     private filterIcon:Locator;
     private filterRoleFeild:Locator;
+    private filterChips: Locator;
 
 
     constructor(page: Page) {
@@ -93,6 +94,7 @@ export class UserPage {
         this.editOptions=page.locator('[role="menuitem"]');
         this.filterIcon=page.getByLabel('Edit Filters');
         this.filterRoleFeild=page.getByRole('combobox', { name: 'Role' });
+        this.filterChips=page.locator('.css-7lzqhs');
     }
 
     /**
@@ -301,8 +303,9 @@ export class UserPage {
     }
 
     /**
-     * Is searched attribute(name and email) displayed in user list
-     * @param value The name or email being searched for in the user list
+     * Is searched attribute(name ,email and role) displayed in user list
+     * @param value The value that is entered by the user in the search field
+     * @param colname The attribute that the user want to search(name,email and role)
      * @returns A boolean value indicating whether the searched attribute is displayed in user list or not.
      */
     async isSearchedAttributeDisplayedInUserList(value:string,colname:string): Promise<boolean> {
@@ -367,8 +370,10 @@ export class UserPage {
     }
 
     /**
-     * checks if the status of all the user in the userlist and also checks the role field of the userlist.
-     * @returns A Booelan indicating whether all the users displayed in the list are "Active"
+     * Is all the status feild and role feild filter applied
+     * @param value This is the value that the user searches for (eg.'Active','Disabled','Admin' etc).
+     * @param datafield The attribute that the user want to search(status and role).
+     * @returns A Booelan indicating whether all the users displayed in the list matches the value in the datafield
      */
     async isAllStausActive(value:string,datafield:string): Promise<boolean> {
         let oldCount = 0;
@@ -383,6 +388,7 @@ export class UserPage {
             await this.page.waitForLoadState('networkidle');
         } while (newCount > oldCount);
         const fullStatusList = await this.userListing.locator(`[data-field="${datafield}"]`).allInnerTexts();
+        console.log(fullStatusList);
         return fullStatusList.every(status => status.includes(value));
     }
 
@@ -518,5 +524,21 @@ export class UserPage {
     async clickOnFilterApplyButton(): Promise<void> {
         await this.filterApplyButton.click();
     }
+
+    /**
+     * Clicks on the Filter Reset Button
+     */   
+    async clickOnFilterResetButton(): Promise<void> {
+        await this.filterResetButton.click();
+    }
+
+    /**
+     * Is all the filter chips removed
+     */
+    async isAllFilterChipsRemoved(): Promise<boolean> {
+        const filterCount=await this.filterChips.count();
+        return filterCount === 0;
+    }
+
 
 }

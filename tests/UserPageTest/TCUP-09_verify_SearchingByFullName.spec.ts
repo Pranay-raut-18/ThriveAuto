@@ -9,7 +9,7 @@ test('TCUP_09:UserPage|Verify searching by full name', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const Fullname = "Jhon Wick";
+  const Fullname = "Test Vi Test";
   const datafield="name";
 
   //Login using email address and password
