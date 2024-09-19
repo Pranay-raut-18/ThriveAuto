@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCRP_15: RolesAndPermissions | Verify delete functionality of custom roles", async ({
+test("TCRP_16: RolesAndPermissions | Verify delete functionality of custom roles", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);

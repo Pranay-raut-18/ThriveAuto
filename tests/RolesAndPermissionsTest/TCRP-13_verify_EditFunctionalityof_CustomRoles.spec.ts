@@ -4,6 +4,8 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
+import { resourceUsage } from "process";
+import { log } from "util";
 
 test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles", async ({
   page,
@@ -13,7 +15,7 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
   let timestamp: string;
   timestamp = getCompleteTimestamp();
-  const Rolename: string = `AutoRolename${timestamp}`;
+  const RoleNametoEdit: string = "Cindy";
   const Description: string = `AutoDescription${timestamp}`;
 
   // Login using email address and password
@@ -26,25 +28,39 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
     await homePage.clickOnGoToAdminPortal();
   });
 
-  // Click on Roles and Permissions Tab
+  // Clicks on Roles and Permissions Tab
   await test.step("Click on Roles and Permissions Tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
 
-  //Click on action menu according to choice
-  await test.step("Click on action menu for choice role", async () => {
-    await rolesAndPermissions.clickOnRoleActionMenu("Admin");
+  //Clicks on search bar to search for the role to be edited
+  await test.step("Click on Search and search for the role to be edited", async () => {
+    await rolesAndPermissions.clickOnSearchBar();
+    await rolesAndPermissions.searchForRole(RoleNametoEdit);
   });
 
-  // Click on "Duplicate" menu item
-  await test.step("Click on 'Duplicate' menu item", async () => {
-    await rolesAndPermissions.clickOnMenuItem("Duplicate");
+  //Click on menu item for rolename to edit
+  await test.step("Click on the action menu for the searched role", async () => {
+    const roleRow = page.locator(
+      `.MuiDataGrid-row:has-text("${RoleNametoEdit}")`
+    );
+    await roleRow
+      .locator('button[aria-label="Open roles action menu"]')
+      .click();
+  });
+
+  // Click on "Edit" menu item
+  await test.step("Click on 'Edit' menu item", async () => {
+    await rolesAndPermissions.clickOnMenuItem("Edit Details");
   });
 
   // Fill name and description
   await test.step("Fill name and description", async () => {
     await page.waitForLoadState("networkidle");
-    await rolesAndPermissions.fillRoleAndDescription(Rolename, Description);
+    await rolesAndPermissions.fillRoleAndDescription(
+      RoleNametoEdit,
+      Description
+    );
     // Dynamically select/unselect permissions
     await rolesAndPermissions.setPermission("user", "delete", false);
     await rolesAndPermissions.setPermission("user", "update", false);
@@ -55,6 +71,19 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
       false
     );
     await rolesAndPermissions.setPermission("role", "delete", false);
+    await rolesAndPermissions.setPermission("note", "delete", true);
+    await rolesAndPermissions.setPermission(
+      "scorecard template",
+      "delete",
+      true
+    );
     await rolesAndPermissions.saveChanges();
+    await page.waitForLoadState("load");
+  });
+  await test.step("Verify if correct inputs", async () => {
+    const get = await rolesAndPermissions.CheckifCorrectInputs();
+    console.log(get);
+    const result = await rolesAndPermissions.CheckifSucessMessageisVisible();
+    expect(result).toBe(true);
   });
 });
