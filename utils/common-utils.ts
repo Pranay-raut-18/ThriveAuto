@@ -6,6 +6,6 @@ export function getCompleteTimestamp(): string {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
-    const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
-    return `${year}${month}${day}${hours}${minutes}${seconds}${milliseconds}`;
+    const milliseconds = String(now.getMilliseconds()).padStart(1, '0');
+    return `${milliseconds}`;
   }
