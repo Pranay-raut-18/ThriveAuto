@@ -12,6 +12,7 @@ test("TCCP_07:CustomerPage | verify filter functionality by Customer Type Execut
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const customerType = "Executive Search Firm";
   const dataField = "customerType";
 

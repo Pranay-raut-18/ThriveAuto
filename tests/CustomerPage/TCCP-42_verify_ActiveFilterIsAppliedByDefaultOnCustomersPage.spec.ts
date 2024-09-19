@@ -12,6 +12,7 @@ test("TCCP_42:CustomerPage | Verify Status Filter is 'Active' by default on Cust
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const status = "Active";
   const dataField = "customerStatus";
 

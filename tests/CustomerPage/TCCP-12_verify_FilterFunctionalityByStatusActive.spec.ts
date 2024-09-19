@@ -12,6 +12,7 @@ test("TCCP_12:CustomerPage | verify filter functionality by Status 'Active'", as
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const status = "Active";
   const dataField = "customerStatus";
 

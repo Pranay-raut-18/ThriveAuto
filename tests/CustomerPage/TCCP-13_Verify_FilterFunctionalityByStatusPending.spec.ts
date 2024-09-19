@@ -12,6 +12,7 @@ test("TCCP_13:CustomerPage | Verify filter functionality by Status 'Pending' ", 
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const status = "Pending";
   const dataField = "customerStatus";
 

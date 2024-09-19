@@ -25,8 +25,8 @@ export class LoginPage {
      * @param url The url of the website
      */
     async goTo(url: string): Promise<void> {
+        await this.page.goto(url,{timeout:60000});
         await this.page.waitForLoadState('networkidle');
-        await this.page.goto(url);
     }
 
     /**

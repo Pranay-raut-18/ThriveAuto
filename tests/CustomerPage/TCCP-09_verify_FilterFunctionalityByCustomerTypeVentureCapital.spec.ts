@@ -12,6 +12,7 @@ test("TCCP_09:CustomerPage | verify filter functionality by Customer Type 'Ventu
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const customerType = "Venture Capital";
   const dataField = "customerType";
 

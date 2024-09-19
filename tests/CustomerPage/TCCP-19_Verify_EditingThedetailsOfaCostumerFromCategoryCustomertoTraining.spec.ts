@@ -12,6 +12,7 @@ test("TCCP_19: CustomerPage | Verify Editing the details of a Costumer from Cate
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const customerName = "James Stark";
   const customerCategory = "Training";
 

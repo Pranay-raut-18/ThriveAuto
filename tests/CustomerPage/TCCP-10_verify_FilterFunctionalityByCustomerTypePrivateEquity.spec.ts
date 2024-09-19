@@ -12,6 +12,7 @@ test("TCCP_10:CustomerPage | verify filter functionality by Customer Type 'Priva
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const customerType = "Private Equity";
   const dataField = "customerType";
 

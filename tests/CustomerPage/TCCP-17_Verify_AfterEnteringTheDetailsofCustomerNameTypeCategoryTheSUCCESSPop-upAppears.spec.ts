@@ -13,6 +13,7 @@ test("TCCP_17: CustomerPage | Verify After entering the details of Name, Type, C
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   let timstamp: string;
   timstamp = getCompleteTimestamp();
   const customerName = `AutoFname${timstamp}`;

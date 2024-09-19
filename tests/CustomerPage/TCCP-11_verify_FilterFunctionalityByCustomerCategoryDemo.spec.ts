@@ -12,6 +12,7 @@ test("TCCP_11:CustomerPage | verify filter functionality by Customer Category 'D
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const customerCategory = "Demo";
   const dataField = "customerCategory";
 

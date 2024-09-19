@@ -12,6 +12,7 @@ test("TCCP_05:CustomerPage | Verify search functionality by URL", async ({
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const url = "disney.thrivetrm.review";
 
   //Login using email address and password

@@ -12,6 +12,7 @@ test("TCCP_08:CustomerPage | verify filter functionality by Customer Type 'Enter
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const customerType = "Enterprise";
   const dataField = "customerType";
 

@@ -12,6 +12,7 @@ test("TCCP_15:CustomerPage | Verify filter functionality by Status 'Suspended' "
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const status = "Suspended";
   const dataField = "customerStatus";
 

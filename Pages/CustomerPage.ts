@@ -61,6 +61,7 @@ export class CustomerPage {
    * Remove the Filter "Status Active" by clicking (X) button
    */
   async removePreFilterStatus() {
+    await this.page.waitForLoadState('networkidle');
     await this.removeFilterStatus.click();
   }
 

@@ -12,6 +12,7 @@ test("TCCP_14:CustomerPage | Verify filter functionality by Status 'Disabaled' "
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const status = "Disabled";
   const dataField = "customerStatus";
 

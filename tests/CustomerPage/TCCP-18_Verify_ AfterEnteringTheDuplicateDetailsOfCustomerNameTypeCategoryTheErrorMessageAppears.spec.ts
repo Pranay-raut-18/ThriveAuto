@@ -12,6 +12,7 @@ test("TCCP_18: CustomerPage | Verify After entering the Duplicate details of Nam
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
+  
   const customerName = `James Stark`;
   const customerType = "Executive Search Firm";
   const customerCategory = "Customer";
