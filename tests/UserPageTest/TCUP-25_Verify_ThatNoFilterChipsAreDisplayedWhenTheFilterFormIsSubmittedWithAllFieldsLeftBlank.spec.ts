@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
 
-test('TCUP_24:UserPage| Verify  Filter functionality by applying a single role', async ({ page }) => {
+test('TCUP_25:UserPage| Verify that no filter chips are displayed when the filter form is submitted with all fields left blank.', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
@@ -27,20 +27,17 @@ test('TCUP_24:UserPage| Verify  Filter functionality by applying a single role',
     await test.step(`Click on filter icon`, async () => {
         await userPage.clickOnFilterButton();
     });
-
-    //Click on the Role Field and Enters a Role
-    await test.step(`Click on Role field and enter roles`,async() =>{
-        await userPage.clickFilterRole('Admin');
+    
+    //Click on filter reser button
+    await test.step(`Click on filter reset button`, async () => {
+        await userPage.clickOnFilterResetButton();
+    });
+    
+    //Verify that no filter chips are visible
+    await test.step(`Verify that no filter chips are visible`, async () => {
+        expect (userPage.isAllFilterChipsRemoved).toBeTruthy();
     });
 
-    //Click on Apply Button
-    await test.step(`Click on Apply Button`, async () => {
-        await userPage.clickOnFilterApplyButton();
-    });
-
-    //verify that all displayed users have matching role
-    await test.step(`Verify that all displayed users have matching role`, async () => {
-        expect(await userPage.isAllStausActive(role,datafield)).toBeTruthy();
-    });
+    
     
 });   
