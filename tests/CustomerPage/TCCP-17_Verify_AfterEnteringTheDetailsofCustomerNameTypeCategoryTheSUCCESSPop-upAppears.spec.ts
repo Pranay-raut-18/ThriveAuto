@@ -16,7 +16,7 @@ test("TCCP_17: CustomerPage | Verify After entering the details of Name, Type, C
   
   let timstamp: string;
   timstamp = getCompleteTimestamp();
-  const customerName = `AutoFname${timstamp}`;
+  const customerName = `Richard ${timstamp}`;
   const customerType = "Executive Search Firm";
   const customerCategory = "Customer";
 
