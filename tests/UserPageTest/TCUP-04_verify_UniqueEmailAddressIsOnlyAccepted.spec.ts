@@ -11,8 +11,8 @@ test('TCUP_04:UserPage|Verify unique email address is only accepted.',async({pag
     const homePage = new HomePage(page); 
     let timestamp:string  
     timestamp=getCompleteTimestamp();
-    const Fname:string="AutoFname";
-    const Lname:string=`AutoLname${timestamp}`;
+    const Fname:string="Test";
+    const Lname:string=`User${timestamp}`;
     let existingemail: any;
     const reqrole:string='Admin';
     const expuniqueemailmsg:string="must be unique";

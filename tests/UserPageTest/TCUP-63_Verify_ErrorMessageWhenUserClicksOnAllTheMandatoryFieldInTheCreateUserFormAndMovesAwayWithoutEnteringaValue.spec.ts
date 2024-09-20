@@ -9,6 +9,7 @@ test('TCUP_63:UserPage|Verify error message when user clicks on all the Mandator
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
+    
     let expErrMsg: (string | null)[] = ["Please enter a first name", "Please enter a last name", "Please enter a valid email", "Please select a role for this user"];
     let actErrMsg: (string | null)[];
 

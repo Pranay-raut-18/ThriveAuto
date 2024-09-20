@@ -321,6 +321,7 @@ export class UserPage {
                 await this.page.waitForTimeout(1000);
             }
         } while (newCount > oldCount);
+    
         const updatedUserList = (await this.userListing.locator(`[data-field="${colname}"]`).all());
         for (const user of updatedUserList) {
             const userName = await user.textContent();
@@ -330,6 +331,8 @@ export class UserPage {
         }
         return false;
     }
+
+
 
     /**
      * Is No Results visible
@@ -388,7 +391,6 @@ export class UserPage {
             await this.page.waitForLoadState('networkidle');
         } while (newCount > oldCount);
         const fullStatusList = await this.userListing.locator(`[data-field="${datafield}"]`).allInnerTexts();
-        console.log(fullStatusList);
         return fullStatusList.every(status => status.includes(value));
     }
 
@@ -441,7 +443,7 @@ export class UserPage {
     }
 
     /**
-     * Waits for the text to be visible in the edit form
+     * Waits for the text to be visible in the edit form before editing
      */   
     async waitForTextToBeVisible(): Promise<void> {
         await this.page.waitForFunction((selector) => {
@@ -514,6 +516,7 @@ export class UserPage {
         await this.filterRoleFeild.waitFor();
         for (const role of roles) {
             await this.page.getByRole('option', { name: role, exact: true }).click();
+            await this.filterRoleFeild.click();
         }
         await this.filterRoleFeild.click();
     }
@@ -534,11 +537,47 @@ export class UserPage {
 
     /**
      * Is all the filter chips removed
+     * @returns A boolean value representing whether the filter chip is removed or not
      */
     async isAllFilterChipsRemoved(): Promise<boolean> {
         const filterCount=await this.filterChips.count();
         return filterCount === 0;
     }
+    /**
+     * Is selected filter chips visible
+     * @param chips it accepts indefinite number of roles and stores it in an array
+     * @returns A Boolean indicating if the applied filter's chips are visible or not
+     */
+    async isFilterChipsVisible(...chips:string[]): Promise<boolean> {
+          for(const chip of chips){
+            const chipsdisplayed= this.page.locator(`text=${chip}`);
+            const isChipVisible=await  chipsdisplayed.isVisible();
+            if(!isChipVisible) return false;
+          }
+          return true;
+    }
+
+    /**
+     * Gets the values from Role field,Status Feild and createdBby feilds 
+     * @param feild It is the field from which the values are to returned(Role,Status,CreatedBy)
+     * @param allRoles It is a set that stores the value of the field
+     * @returns An array containing non-duplicate valued from the field
+     */
+    async getFilterValues(feild:string,allRoles=new Set<string>()): Promise<string[]> {
+        await this.page.waitForTimeout(1000);
+        const filterValues = await this.userListing.locator(`[data-field="${feild}"]`).allInnerTexts();
+        filterValues.forEach(value => allRoles.add(value));
+        const size=allRoles.size;
+        const lastElement=this.userListing.locator(`[data-field="${feild}"]`).last();
+        await lastElement.scrollIntoViewIfNeeded();
+        await this.page.waitForTimeout(1000);
+        if(allRoles.size > size){
+            this.getFilterValues(feild,allRoles);
+        }
+        console.log([...allRoles]);
+    return [...allRoles]
+    }
+
 
 
 }

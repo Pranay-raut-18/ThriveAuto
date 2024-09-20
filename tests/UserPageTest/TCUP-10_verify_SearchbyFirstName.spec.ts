@@ -24,7 +24,6 @@ test('TCUP_10:UserPage|Verify searching by only First name ', async ({ page }) =
   //Clear preapplied filter
   await test.step(`Clear preapplied filter`, async () => {
     await userPage.clearFilter();
-
   });
 
   //Search by name

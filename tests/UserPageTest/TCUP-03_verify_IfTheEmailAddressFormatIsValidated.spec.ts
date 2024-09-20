@@ -11,8 +11,8 @@ test('TCUP_03_UserPage|Verify if the email address format is validated.', async 
   const userPage = new UserPage(page);
   let timestamp: string
   timestamp = getCompleteTimestamp();
-  const Fname: string = "AutoFname";
-  const Lname: string = `AutoLname${timestamp}`;
+  const Fname: string = "Eden";
+  const Lname: string = `Hazard${timestamp}`;
   const email: string = Lname + "@testcom";
   const reqrole: string = 'Admin';
   const expInvalidmsg: string = "Please enter a valid email";

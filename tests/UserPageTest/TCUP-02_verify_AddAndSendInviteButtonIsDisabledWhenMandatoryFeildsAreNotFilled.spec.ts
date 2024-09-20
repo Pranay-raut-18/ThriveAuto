@@ -11,7 +11,7 @@ test('TCUP_02:UserPage|verify "Add and Send Invite" button is disabled when mand
   const userPage = new UserPage(page);
   let timestamp: string
   timestamp = getCompleteTimestamp();
-  const Lname: string = `AutoLname${timestamp}`;
+  const Lname: string = `User${timestamp}`;
   const email: string = Lname + "@test.com";
   const reqrole: string = 'Admin';
 

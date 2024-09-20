@@ -28,7 +28,7 @@ test('TCUP_25:UserPage| Verify that no filter chips are displayed when the filte
         await userPage.clickOnFilterButton();
     });
     
-    //Click on filter reser button
+    //Click on filter reset button
     await test.step(`Click on filter reset button`, async () => {
         await userPage.clickOnFilterResetButton();
     });
