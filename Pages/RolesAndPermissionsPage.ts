@@ -1,5 +1,10 @@
 import { Locator, Page } from "@playwright/test";
 
+/**
+ *  RolesAndPermissionsPage page
+ * @author Vallail N
+ */
+
 export class RolesAndPermissionsPage {
   readonly page: Page;
   private rolesTabButton: Locator;
