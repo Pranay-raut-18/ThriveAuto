@@ -11,8 +11,8 @@ test('TCUP_05:UserPage|Verify Newly Added User Credentials is visible in the use
   const userPage = new UserPage(page);
   let timestamp: string
   timestamp = getCompleteTimestamp();
-  const Fname: string = "AutoFname";
-  const Lname: string = `AutoLname${timestamp}`;
+  const Fname: string = "Test";
+  const Lname: string = `User${timestamp}`;
   const Fullname: string = `${Fname} ${Lname}`;
   const email: string = Lname + "@test.com";
   const reqrole: string = 'Admin';

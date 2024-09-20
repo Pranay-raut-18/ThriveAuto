@@ -11,8 +11,8 @@ test('TCUP_56:UserPage|Verify newly created user is added to user List', async (
   const userPage = new UserPage(page);
   let timestamp: string
   timestamp = getCompleteTimestamp();
-  const Fname: string = "AutoFname";
-  const Lname: string = `AutoLname${timestamp}`;
+  const Fname: string = "Jhon";
+  const Lname: string = `Smith${timestamp}`;
   const email: string = Lname + "@test.com";
   const reqrole: string = 'Admin';
   const expsucessmessage: string = `${Fname} ${Lname} successfully invited`;

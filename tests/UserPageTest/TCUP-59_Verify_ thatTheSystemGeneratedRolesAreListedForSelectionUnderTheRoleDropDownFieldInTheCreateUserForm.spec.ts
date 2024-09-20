@@ -9,7 +9,7 @@ test('TCUP_59:UserPage| Verify that the system-generated roles are listed for se
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
-    let expectedroles:Array<string>=["Admin","Candidate","Engagement Coordinator","Hiring Manager","Investment Company","New API Role","Partner","Recruiter","Researcher","Super Admin","Talent Leader","Talent Specialist"];
+    let expectedroles:Array<string>=["Admin","Candidate","Engagement Coordinator","Hiring Manager","Investment Company","Partner","Recruiter","Researcher","Super Admin","Talent Leader","Talent Specialist"];
 
 
 

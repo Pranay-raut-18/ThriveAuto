@@ -11,8 +11,8 @@ test('TCUP_55:UserPage|Verify that a success message is displayed upon adding a 
   const userPage = new UserPage(page);
   let timestamp: string
   timestamp = getCompleteTimestamp();
-  const Fname: string = "AutoFname";
-  const Lname: string = `AutoLname${timestamp}`;
+  const Fname: string = "Jhon";
+  const Lname: string = `White${timestamp}`;
   const email: string = Lname + "@test.com";
   const reqrole: string = 'Admin';
   const expsucessmessage: string = `${Fname} ${Lname} successfully invited`;

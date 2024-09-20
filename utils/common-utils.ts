@@ -7,5 +7,5 @@ export function getCompleteTimestamp(): string {
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
     const milliseconds = String(now.getMilliseconds()).padStart(1, '0');
-    return `${milliseconds}`;
+    return `$${milliseconds}`;
   }

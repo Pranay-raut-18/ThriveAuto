@@ -11,11 +11,11 @@ test('TCUP_57:UserPage|Verify user is not added to user list after clicking canc
     const userPage = new UserPage(page);
     let timestamp: string
     timestamp = getCompleteTimestamp();
-    const Fname: string = "AutoFname";
-    const Lname: string = `AutoLname${timestamp}`;
+    const Fname: string = "Shaun";
+    const Lname: string = `Michelles${timestamp}`;
     const email: string = Lname + "@test.com";
     const reqrole: string = 'Admin';
-    let existingemail: any
+   
 
 
 
@@ -28,11 +28,6 @@ test('TCUP_57:UserPage|Verify user is not added to user list after clicking canc
     await test.step(`Go to Admin Potal Customer tab`, async () => {
         await homePage.clickOnGoToAdminPortal();
 
-    });
-
-    // Get an Existing email id
-    await test.step('Get an Existing email id', async () => {
-        existingemail = await userPage.getExistingEmail();
     });
 
     //Click on Adduser icon

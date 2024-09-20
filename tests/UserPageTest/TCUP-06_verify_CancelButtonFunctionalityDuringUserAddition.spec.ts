@@ -11,8 +11,8 @@ test('TCUP_06:UserPage|Verify "Cancel" Button Functionality During User Addition
     const userPage = new UserPage(page);
     let timestamp: string
     timestamp = getCompleteTimestamp();
-    const Fname: string = "AutoFname";
-    const Lname: string = `AutoLname${timestamp}`;
+    const Fname: string = "Test";
+    const Lname: string = `User${timestamp}`;
     const email: string = Lname + "@test.com";
     const reqrole: string = 'Admin';
     
@@ -52,7 +52,7 @@ test('TCUP_06:UserPage|Verify "Cancel" Button Functionality During User Addition
     await test.step('Verify create user form is closed', async () => {
         await userPage.addUserForm.waitFor({ state: 'hidden' });
         expect(await userPage.isAddUserFormVisible()).toBeFalsy();
-    })
+    });
     
 
 });
