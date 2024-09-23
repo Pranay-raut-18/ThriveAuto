@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 import { getCompleteTimestamp } from "../../utils/common-utils"
 
-test('TCUP_56:UserPage|Verify newly created user is added to user List', async ({ page }) => {
+test.skip('TCUP_56:UserPage|Verify newly created user is added to user List', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);

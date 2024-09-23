@@ -577,7 +577,37 @@ export class UserPage {
         console.log([...allRoles]);
     return [...allRoles]
     }
+  
 
-
+    async getTheFullList() {
+        let totalHeight = await this.userListing.evaluate(el => el.scrollHeight);
+        let currentHeight = await this.userListing.evaluate(el => el.scrollTop);
+        let maxScrollAttempts = 10;  // Set a max scroll limit to avoid infinite scrolling
+        let scrollAttempts = 0;
+    
+        while (currentHeight < totalHeight && scrollAttempts < maxScrollAttempts) {
+            await this.userListing.evaluate(el => el.scrollBy(0, 100)); // Scroll down
+            await this.page.waitForTimeout(1000); // Wait for lazy load
+    
+            // Recalculate scrollHeight and scrollTop
+            const newTotalHeight = await this.userListing.evaluate(el => el.scrollHeight);
+            const newCurrentHeight = await this.userListing.evaluate(el => el.scrollTop);
+    
+            // Break the loop if no new content is loaded (prevent infinite scroll)
+            if (newCurrentHeight === currentHeight && newTotalHeight === totalHeight) {
+                break;
+            }
+    
+            totalHeight = newTotalHeight;
+            currentHeight = newCurrentHeight;
+            scrollAttempts++;
+        }
+    
+        // Fetch all role fields after scrolling
+        const fullStatusList = await this.userListing.locator(`[data-field="role"]`).allInnerTexts();
+        console.log(fullStatusList);
+        return fullStatusList.every(status => status.includes("Admin"));
+    }
+    
 
 }

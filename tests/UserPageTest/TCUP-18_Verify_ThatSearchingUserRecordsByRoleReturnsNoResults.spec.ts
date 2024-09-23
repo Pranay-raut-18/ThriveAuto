@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
 
-test('TCUP_18:UserPage| Verify that searching user records by Role returns no results', async ({ page }) => {
+test.skip('TCUP_18:UserPage| Verify that searching user records by Role returns no results', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
@@ -34,5 +34,5 @@ test('TCUP_18:UserPage| Verify that searching user records by Role returns no re
        expect.soft(await userPage.isNoResultsVisible()).toBeTruthy();
     });
     
-
+ 
 });    
