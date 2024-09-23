@@ -2,7 +2,6 @@ import { expect, test } from "@playwright/test";
 import { LoginPage } from "../../Pages/LoginPage";
 import { PheonixAppPage } from "../../Pages/PheonixAppPage";
 import { EmailAddress, Password, Url } from "../../utils/config-utils";
-import { timeStamp } from "console";
 import { getCompleteTimestamp } from "../../utils/common-utils";
 
 test("Verify user with access to create company can create companies in phoenix application", async ({
@@ -30,11 +29,11 @@ test("Verify user with access to create company can create companies in phoenix 
     await pheonixAppPage.clickOnCreateNewCompanyButton();
   });
   //Input Company Name and URL
-  await test.step("Fills company name and urls", async () => {
+  await test.step("Fills company name and url", async () => {
     await pheonixAppPage.enterCompanyName(inputCompanyName);
   });
   //verify if continue button is visible
-  await test.step("Fills company name and urls", async () => {
+  await test.step("Verify if continue button is enabled", async () => {
     const result = await pheonixAppPage.isSaveCompanyButtonVisible();
     expect(result).toBe(true);
   });
