@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_25: CustomerPage | Verify while Editing the Primary Contact of a Costumer the Fname and Lnamealready visible in input Feild", async ({
+test("TCCP_25: CustomerPage | Verify while Editing the Primary Contact of a Costumer the Fname, and Lname are not prefilled", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -48,12 +48,10 @@ test("TCCP_25: CustomerPage | Verify while Editing the Primary Contact of a Cost
     await customerPage.clickOnEditPrimaryContactOption();
   });
   
-  // Verify First Name, Last Name already exist of a customer.()
-  await test.step(`Click on Edit Primary Contact.`, async () => {
-    const fName= customerName.split(" ")[0];
-    await expect.soft(page.locator("[name='firstName']")).toHaveText(`${fName}`);
-    const lName= customerName.split(" ")[1];
-    await expect(page.locator("[name='lastName']")).toHaveText(`${lName}`);
+  // Verify First Name and Last Name are not Prefilled.
+  await test.step(`Verify First Name and Last Name are not Prefilled.`, async () => {
+    await expect(page.locator("[name='firstName']")).toBeEmpty();
+    await expect(page.locator("[name='lastName']")).toBeEmpty();
   });
 
 });
