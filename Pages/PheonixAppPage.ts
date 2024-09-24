@@ -17,6 +17,20 @@ export class PheonixAppPage {
   private createCompanyButton: Locator;
   private companyNameInput: Locator;
   private saveButtonCompany: Locator;
+  private createJobButton: Locator;
+  private createPersonButton: Locator;
+  private jobFNameInput: Locator;
+  private jobLNameInput: Locator;
+  private jobEmail: Locator;
+  private jobLinkedUrlInput: Locator;
+  private saveButtonPerson: Locator;
+  public saveButtonProject: Locator;
+  private titleFieldinProject: Locator;
+  private hiringCompanyFieldinProject: Locator;
+  private teamLeadFieldinProject: Locator;
+  private editButtoninCompanyTab: Locator;
+  private saveButtoninEditCompany: Locator;
+  private editButtoninEditJobs: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -36,12 +50,38 @@ export class PheonixAppPage {
     this.createCompanyButton = page.getByRole("menuitem", {
       name: "Create New Company",
     });
+    this.createJobButton = page.getByRole("menuitem", {
+      name: "Create Project",
+    });
+    this.createPersonButton = page.getByRole("menuitem", {
+      name: "Create New Person",
+    });
     this.companyNameInput = page.locator(
       'input[name="name"][placeholder="Enter Company Name"]'
     );
+    this.jobFNameInput = page.locator('input[name="firstName"]');
+    this.jobLNameInput = page.locator('input[name="lastName"]');
+    this.jobEmail = page.locator('input[placeholder="Enter Email"]');
+    this.jobLinkedUrlInput = page.locator(
+      'input[placeholder="Paste LinkedIn URL"]'
+    );
+    this.titleFieldinProject = page.getByLabel("Title *");
+    this.hiringCompanyFieldinProject = page.getByLabel("Hiring company *");
+    this.teamLeadFieldinProject = page.getByLabel("Team lead");
     this.saveButtonCompany = page
       .locator('button[type="submit"]:has-text("Continue")')
       .first();
+    this.saveButtonPerson = page.locator(
+      "(//button[@type='submit'][normalize-space()='Continue'])[1]"
+    );
+    this.saveButtonProject = page.locator(
+      "(//button[@type='submit'][normalize-space()='Create Project'][1])"
+    );
+    this.editButtoninCompanyTab = page.locator(
+      "(//button[@class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeSmall css-1gun7om'])[1]"
+    );
+    this.saveButtoninEditCompany = page.getByRole("button", { name: "Save" });
+    this.editButtoninEditJobs = page.locator(".css-1sy0xge button");
   }
 
   /**
@@ -98,7 +138,8 @@ export class PheonixAppPage {
    * @returns returns true if the view tab is visible of person
    */
   async checkifNameinViewisVisible(): Promise<boolean> {
-    return await this.peopleViewTab.isVisible();
+    await this.peopleViewTab.waitFor({ state: "visible" });
+    return this.peopleViewTab.isVisible();
   }
   /**
    * Gets the locator of company
@@ -113,7 +154,7 @@ export class PheonixAppPage {
    * @param name name of company passed as argument
    */
   async clickTabByCompanyButton(name: string): Promise<void> {
-    const tab = this.getTabByButton(name);
+    const tab = this.getTabByButton(name).first();
     await tab.click();
     await this.companyViewTab.waitFor();
   }
@@ -189,5 +230,110 @@ export class PheonixAppPage {
    */
   async isSaveCompanyButtonVisible(): Promise<boolean> {
     return this.saveButtonCompany.isEnabled();
+  }
+  /**
+   * Clicks on create prject button in phoenix app
+   * @returns Clicks on create project button in menu
+   */
+  async clickOnCreateProjects() {
+    return this.createJobButton.click();
+  }
+  /**
+   * Clicks on create a new person in phoenix app
+   * @returns Clicks on create a new person in menu
+   */
+  async clickOnCreatePerson() {
+    return this.createPersonButton.click();
+  }
+  /**
+   * Fills all the input fields in create new person tab
+   * @param fname fills the first name passed as argument
+   * @param lname fills the last name passed as argument
+   * @param email fills the email passed as argument
+   * @param linkedinurl fills the linkedin url passed as an argument
+   */
+  async fillPersonNameEmail(
+    fname: string,
+    lname: string,
+    email: string,
+    lurl: string
+  ) {
+    await this.jobFNameInput.fill(fname);
+    await this.jobLNameInput.fill(lname);
+    await this.jobEmail.fill(email);
+    await this.jobLinkedUrlInput.fill(lurl);
+  }
+  /**
+   * checks wheather the save button in
+   * @returns true if the save button is visible or not
+   */
+  async isSavePersonButtonVisible(): Promise<boolean> {
+    return this.saveButtonPerson.isEnabled();
+  }
+  /**
+   * Fills the title in menu of projects
+   * @param title Title in menu of projects to be filled passed as argument
+   */
+  async fillTitleinProject(title: string): Promise<void> {
+    await this.titleFieldinProject.click();
+    await this.titleFieldinProject.fill(title);
+  }
+
+  /**
+   * Fill hiring company name and select from dropdown
+   * @param companyName company name to be selected passed as argument
+   */
+  async fillHiringCompanyinProject(companyName: string): Promise<void> {
+    await this.hiringCompanyFieldinProject.fill(companyName);
+    // Wait for the dropdown options to appear
+    await this.page.waitForSelector(".MuiAutocomplete-option");
+    // Select the desired option from the dropdown
+    await this.page.click(`.MuiAutocomplete-option >> text=${companyName}`);
+  }
+
+  /**
+   * Fills the teamlead and selects from the dropdown
+   * @param teamLead selects the team lead passed as an argument
+   */
+  async fillTeamLeadinProject(teamLead: string): Promise<void> {
+    await this.teamLeadFieldinProject.fill(teamLead);
+    // Wait for the dropdown options to appear
+    await this.page.waitForSelector(".MuiAutocomplete-option");
+    // Select the desired option from the dropdown
+    await this.page.click(`.MuiAutocomplete-option >> text=${teamLead}`);
+  }
+
+  /**
+   * Fills the full form by calling 3 method to get desired input
+   * @param title fills the title passed as argument
+   * @param companyName fills the company name passed as argument
+   * @param teamLead fills the team lead passed as argument
+   */
+  async fillProjectDetailsinProject(
+    title: string,
+    companyName: string,
+    teamLead: string
+  ): Promise<void> {
+    await this.fillTitleinProject(title);
+    await this.fillHiringCompanyinProject(companyName);
+    await this.fillTeamLeadinProject(teamLead);
+  }
+  /**
+   * @returns clicks on edit button in selected company tab
+   */
+  async clickonEditButtoninCompanyTab() {
+    return this.editButtoninCompanyTab.click();
+  }
+  /**
+   * @returns Clicks on Save Button in Edit company tab
+   */
+  async clickonSaveButtoninEditCompanyTab() {
+    return this.saveButtoninEditCompany.click();
+  }
+  /**
+   *@returns true if edit button is visible
+   */
+  async isEditButtoninJobsVisible(): Promise<boolean> {
+    return this.editButtoninEditJobs.isVisible();
   }
 }

@@ -52,11 +52,20 @@ test("TCCP_11:CustomerPage | verify filter functionality by Customer Category 'D
     await customerPage.clickOnApplyButton();
   });
 
-  //Verify all the records of Customer Filtered by customer Category "Demo"
-  await test.step(`Verify all the records of Customer Filtered by customer Category ${customerCategory}`, async () => {
-    const records = await customerPage.getAllRecordofaParticularColoum(
-      dataField
-    );
-    expect(records).toContain(customerCategory); 
+  //Click On ":" button of first customer.
+  await test.step(`Click On ":" button of first customer.`, async () => {
+    await customerPage.clickOnOptionButton();
+  });
+
+  //Click On "Edit details Option"
+  await test.step(`Click On "Edit details Option"`, async () => {
+    await customerPage.clickOnEditDetailsOption();
+  });
+
+  //Verify the Customer Category is "Demo".
+  await test.step(`Verify the Customer Category is "Demo".`, async () => {
+    await page.waitForSelector('input[role="combobox"]', { state: 'visible' });
+    const selectedCategory = await page.locator('input[role="combobox"]').nth(1).inputValue();
+    expect(selectedCategory).toBe('Demo');
   });
 });
