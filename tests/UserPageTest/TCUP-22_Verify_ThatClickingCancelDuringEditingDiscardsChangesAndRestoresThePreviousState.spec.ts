@@ -12,7 +12,7 @@ test('TCUP_22:UserPage|Verify that clicking "Cancel" during editing discards cha
   const userPage = new UserPage(page);
   let timestamp=getCompleteTimestamp();
   const email=`edited${timestamp}@test.com`;
-  const Fullname = "AutoFname";
+  const Fullname = "Test User577";
   let credbeforeediting : (string | null)[];
   let credafterediting: (string | null)[];
 

@@ -9,7 +9,7 @@ test('TCUP_20:UserPage|Verify an error message is shown when editing the email t
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const Fullname = "AutoFname"
+  const Fullname = "Test User577"
   const email="vinayak.patil@v2solutions.com"
   const experrormessage="must be unique"
 

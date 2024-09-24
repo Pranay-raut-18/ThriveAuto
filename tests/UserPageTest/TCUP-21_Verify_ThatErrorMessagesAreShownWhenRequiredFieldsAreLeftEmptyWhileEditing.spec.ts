@@ -9,7 +9,7 @@ test('TCUP_21:UserPage|Verify that error messages are shown when required fields
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
-  const Fullname = "AutoFname";
+  const Fullname = "Test User577";
   let expErrMsg: (string | null)[] = ["Please enter a first name", "Please enter a last name", "Please enter a valid email", "Please select a role for this user"];
   let actErrMsg: (string | null)[];
   

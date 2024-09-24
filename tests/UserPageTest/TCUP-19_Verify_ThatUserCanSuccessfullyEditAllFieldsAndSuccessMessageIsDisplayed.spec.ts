@@ -12,7 +12,7 @@ test('TCUP_19:UserPage|Verify that user can successfully edit all fields and suc
   const userPage = new UserPage(page);
   let timestamp=getCompleteTimestamp();
   const email=`edited${timestamp}@test.com`;
-  const Fullname = "AutoFname"
+  const Fullname = "Test User577"
   const expsucessmessage="auto user7034 updated successfully"
 
   //Login using email address and password

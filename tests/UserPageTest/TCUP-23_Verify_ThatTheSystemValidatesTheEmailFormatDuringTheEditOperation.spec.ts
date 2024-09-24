@@ -12,7 +12,7 @@ test('TCUP_23:UserPage|Verify that the system validates the email format during 
   const userPage = new UserPage(page);
   let timestamp=getCompleteTimestamp();
   const email=`edited${timestamp}@testcom`;
-  const Fullname = "AutoFname";
+  const Fullname = "Test User577";
   const expInvalidmsg="Please enter a valid email";
  
 
