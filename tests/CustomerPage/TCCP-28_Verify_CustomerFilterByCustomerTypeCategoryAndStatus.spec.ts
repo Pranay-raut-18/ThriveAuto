@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_28:CustomerPage | Verify filter functionality by using Selecting different filter pattern of Customer Type, Category and status.", async ({
+test("TCCP_28:CustomerPage | Verify customer filter by Customer Type, Category and status.", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);

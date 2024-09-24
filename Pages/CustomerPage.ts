@@ -72,18 +72,7 @@ export class CustomerPage {
   async enterCustomerNameinSearchFeild(customername: string) {
     await this.searchFeild.fill(customername);
   }
-
-  /**
-   *  is URL visible in the table
-   * @param url The URL of the customer to be searched.
-   * @returns @cusNameLocator A string representing customer URL.
-   */
-  async isURLVisible(url: string) {
-    const customerList = this.customerTable;
-    const cusNameLocator = customerList.getByText(url);
-    return cusNameLocator;
-  }
-
+  
   /**
    * Click on Filter Option (Symbol).
    */

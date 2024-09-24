@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_23: CustomerPage | Verify user can Enable a Particular Customer Which Is Already Disabled", async ({
+test("TCCP_23: CustomerPage | Verify user can enable a Disabled Customer", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
