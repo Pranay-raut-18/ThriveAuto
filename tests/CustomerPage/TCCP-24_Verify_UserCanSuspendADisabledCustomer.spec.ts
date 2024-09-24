@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { CustomerPage } from "../../Pages/CustomerPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCCP_22: CustomerPage | Verify user can Disable a Particular Customer", async ({
+test("TCCP_24: CustomerPage | Verify user can enable a Suspend Customer", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -13,8 +13,8 @@ test("TCCP_22: CustomerPage | Verify user can Disable a Particular Customer", as
   const userPage = new UserPage(page);
   const customerPage = new CustomerPage(page);
 
-  const customerName = `Pantera`; //@customeName should be Enabled.
-  const option = `Disable`; 
+  const customerName = `Disney`; //@customeName should be Disabled.
+  const option = `Suspend`;  
 
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
@@ -36,7 +36,7 @@ test("TCCP_22: CustomerPage | Verify user can Disable a Particular Customer", as
   await test.step(`Remove the Filter "Status Active" by clicking (X) button`, async () => {
     await customerPage.removePreFilterStatus();
   });
-
+  
   // From the table search for Customer Name and click ":" button for costumer
   await test.step(`From the table search for ${customerName} and click ":" button for costumer`, async () => {
     await customerPage.enterCustomerNameinSearchFeild(customerName);
@@ -44,17 +44,16 @@ test("TCCP_22: CustomerPage | Verify user can Disable a Particular Customer", as
     await customerPage.clickOnOptionButton();
   });
 
-  //Click on disabled Option and verify the Alert Appear.
-  await test.step(`Click on disabled option and verify the Alert Appear.`, async () => {
+  //Click on Suspended option and verify the Alert Appear.
+  await test.step(`Click on Suspended Option and verify the Alert Appear.`, async () => {
     await customerPage.clickOnDesiredOption(option);
-    await page.waitForLoadState("networkidle");
-    await expect(page.locator("#customer-disable-dialog-description")).toHaveText(`Are you sure you want to disable ${customerName}?`);
+    await expect(page.locator("#customer-suspend-dialog-description")).toHaveText(`Are you sure you want to suspend ${customerName}?`);
   });
   
-  //Click on Alert disabled button and verify the Success Pop-Up Appear.
-  await test.step(`Click on Alert disabled button and verify the Alert Appear.`, async () => {
+  //   Click on Alert Suspended button
+  await test.step(`Click on Alert Suspended button`, async () => {
     await customerPage.clickOnAcceptAlertButton();
-    await expect(page.locator(".MuiAlert-message")).toHaveText(`${customerName} customer successfully disabled`);
+    await expect(page.locator(".MuiAlert-message")).toHaveText(`${customerName} customer successfully suspended`);
   });
   
 });
