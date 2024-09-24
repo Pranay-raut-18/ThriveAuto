@@ -1,5 +1,6 @@
 
 import { Locator, Page, expect } from '@playwright/test';
+import { promises } from 'dns';
 
 
 /**
@@ -50,6 +51,7 @@ export class UserPage {
     private filterIcon:Locator;
     private filterRoleFeild:Locator;
     private filterChips: Locator;
+    private filterCreatedByFeild: Locator;
 
 
     constructor(page: Page) {
@@ -71,7 +73,7 @@ export class UserPage {
         this.userListing = page.locator("div.MuiDataGrid-virtualScroller");
         this.invalidEmailMessage = page.locator("text='Please enter a valid email'");
         this.uniqueEmailMessage = page.locator("text='must be unique'");
-        this.duplicateEmail = page.locator("div.MuiBox-root  a").first();
+        this.duplicateEmail = page.locator("div.MuiBox-root  a").nth(2);
         this.userFirstRow = page.locator('[data-rowindex="0"]');
         this.userFirstRowName = page.locator('[data-rowindex="0"] p').nth(0);
         this.userFirstRowCreatedDate = page.locator('[data-rowindex="0"] p').nth(1);
@@ -95,6 +97,7 @@ export class UserPage {
         this.filterIcon=page.getByLabel('Edit Filters');
         this.filterRoleFeild=page.getByRole('combobox', { name: 'Role' });
         this.filterChips=page.locator('.css-7lzqhs');
+        this.filterCreatedByFeild=page.locator("text='Created by'").first();
     }
 
     /**
@@ -303,9 +306,9 @@ export class UserPage {
     }
 
     /**
-     * Is searched attribute(name ,email and role) displayed in user list
+     * Is searched attribute(name ,email,createdBy and role) displayed in user list
      * @param value The value that is entered by the user in the search field
-     * @param colname The attribute that the user want to search(name,email and role)
+     * @param colname The attribute that the user want to search(name,email,createdBy and role)
      * @returns A boolean value indicating whether the searched attribute is displayed in user list or not.
      */
     async isSearchedAttributeDisplayedInUserList(value:string,colname:string): Promise<boolean> {
@@ -375,7 +378,7 @@ export class UserPage {
     /**
      * Is all the status feild and role feild filter applied
      * @param value This is the value that the user searches for (eg.'Active','Disabled','Admin' etc).
-     * @param datafield The attribute that the user want to search(status and role).
+     * @param datafield The attribute that the user want to search(status,roleand createdBy).
      * @returns A Booelan indicating whether all the users displayed in the list matches the value in the datafield
      */
     async isAllStausActive(value:string,datafield:string): Promise<boolean> {
@@ -543,12 +546,14 @@ export class UserPage {
         const filterCount=await this.filterChips.count();
         return filterCount === 0;
     }
+
     /**
      * Is selected filter chips visible
      * @param chips it accepts indefinite number of roles and stores it in an array
      * @returns A Boolean indicating if the applied filter's chips are visible or not
      */
     async isFilterChipsVisible(...chips:string[]): Promise<boolean> {
+        await this.page.locator(`text=${chips[0]}`).waitFor();
           for(const chip of chips){
             const chipsdisplayed= this.page.locator(`text=${chip}`);
             const isChipVisible=await  chipsdisplayed.isVisible();
@@ -558,7 +563,7 @@ export class UserPage {
     }
 
     /**
-     * Gets the values from Role field,Status Feild and createdBby feilds 
+     * Gets the values from Role field,Status Feild and created By feilds 
      * @param feild It is the field from which the values are to returned(Role,Status,CreatedBy)
      * @param allRoles It is a set that stores the value of the field
      * @returns An array containing non-duplicate valued from the field
@@ -577,37 +582,16 @@ export class UserPage {
         console.log([...allRoles]);
     return [...allRoles]
     }
-  
 
-    async getTheFullList() {
-        let totalHeight = await this.userListing.evaluate(el => el.scrollHeight);
-        let currentHeight = await this.userListing.evaluate(el => el.scrollTop);
-        let maxScrollAttempts = 10;  // Set a max scroll limit to avoid infinite scrolling
-        let scrollAttempts = 0;
-    
-        while (currentHeight < totalHeight && scrollAttempts < maxScrollAttempts) {
-            await this.userListing.evaluate(el => el.scrollBy(0, 100)); // Scroll down
-            await this.page.waitForTimeout(1000); // Wait for lazy load
-    
-            // Recalculate scrollHeight and scrollTop
-            const newTotalHeight = await this.userListing.evaluate(el => el.scrollHeight);
-            const newCurrentHeight = await this.userListing.evaluate(el => el.scrollTop);
-    
-            // Break the loop if no new content is loaded (prevent infinite scroll)
-            if (newCurrentHeight === currentHeight && newTotalHeight === totalHeight) {
-                break;
-            }
-    
-            totalHeight = newTotalHeight;
-            currentHeight = newCurrentHeight;
-            scrollAttempts++;
-        }
-    
-        // Fetch all role fields after scrolling
-        const fullStatusList = await this.userListing.locator(`[data-field="role"]`).allInnerTexts();
-        console.log(fullStatusList);
-        return fullStatusList.every(status => status.includes("Admin"));
+    /**
+     * Clicks and enters value in the Filter createdBy feild
+     * @param value The desired name to be enterd in the createdBy feild
+     * @returns A boolean value indicating whether the value is an valid name or not
+     */ 
+    async enterCreateFeildValue(value:string):Promise<boolean | undefined>{
+        await this.filterCreatedByFeild.fill(value);
+        const optVisible=await this.page.getByRole('option', { name: value }).waitFor( {timeout:1000}).catch(()=>{return false});
+        if(optVisible == false){return false}else
+        await this.page.getByRole('option', { name: value }).click();
     }
-    
-
 }
