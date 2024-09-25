@@ -20,7 +20,7 @@ export class UserPage {
     private firstNameField: Locator;
     private lastNameField: Locator;
     private emailField: Locator;
-    public  roleField: Locator;
+    public roleField: Locator;
     private roleDropdownOptions: Locator;
     private save: Locator;
     private successMessage: Locator;
@@ -44,14 +44,15 @@ export class UserPage {
     private enterFNameMessage: Locator;
     private enterLNameMessage: Locator;
     private enterRoleMessage: Locator;
-    private editFieldBoxes:Locator;
-    private editFieldSaveButton:Locator;
+    private editFieldBoxes: Locator;
+    private editFieldSaveButton: Locator;
     private editDots: Locator;
     private editOptions: Locator;
-    private filterIcon:Locator;
-    private filterRoleFeild:Locator;
+    private filterIcon: Locator;
+    private filterRoleFeild: Locator;
     private filterChips: Locator;
-    private filterCreatedByFeild: Locator;
+    private filterCreatedByField: Locator;
+    private filterCreateByFieldDropdown: Locator;
 
 
     constructor(page: Page) {
@@ -87,17 +88,18 @@ export class UserPage {
         this.searchBar = page.locator("div.MuiInputBase-root");
         this.linkedInFeild = page.locator("[name='linkedinUrl']");
         this.invalidLinkedInmessage = page.locator('text="Please enter the LinkedIn URL in this format: https://linkedin.com/in/<unique identifier>"');
-        this.enterFNameMessage=page.locator("text='Please enter a first name'");
-        this.enterLNameMessage=page.locator("text='Please enter a last name'");
-        this.enterRoleMessage=page.locator("text='Please select a role for this user'");
-        this.editFieldBoxes=page.locator("input.MuiInputBase-input ");
-        this.editFieldSaveButton=page.locator('//button[text()="Save"]');
-        this.editDots=page.locator('[data-colindex="4"]');
-        this.editOptions=page.locator('[role="menuitem"]');
-        this.filterIcon=page.getByLabel('Edit Filters');
-        this.filterRoleFeild=page.getByRole('combobox', { name: 'Role' });
-        this.filterChips=page.locator('.css-7lzqhs');
-        this.filterCreatedByFeild=page.locator("text='Created by'").first();
+        this.enterFNameMessage = page.locator("text='Please enter a first name'");
+        this.enterLNameMessage = page.locator("text='Please enter a last name'");
+        this.enterRoleMessage = page.locator("text='Please select a role for this user'");
+        this.editFieldBoxes = page.locator("input.MuiInputBase-input ");
+        this.editFieldSaveButton = page.locator('//button[text()="Save"]');
+        this.editDots = page.locator('[data-colindex="4"]');
+        this.editOptions = page.locator('[role="menuitem"]');
+        this.filterIcon = page.getByLabel('Edit Filters');
+        this.filterRoleFeild = page.getByRole('combobox', { name: 'Role' });
+        this.filterChips = page.locator('.css-7lzqhs');
+        this.filterCreatedByField = page.locator("text='Created by'").first();
+        this.filterCreateByFieldDropdown=page.getByRole('listbox', { name: 'Created by' })
     }
 
     /**
@@ -311,7 +313,7 @@ export class UserPage {
      * @param colname The attribute that the user want to search(name,email,createdBy and role)
      * @returns A boolean value indicating whether the searched attribute is displayed in user list or not.
      */
-    async isSearchedAttributeDisplayedInUserList(value:string,colname:string): Promise<boolean> {
+    async isSearchedAttributeDisplayedInUserList(value: string, colname: string): Promise<boolean> {
         let oldCount: any = 0;
         let newCount: any = 0;
         do {
@@ -324,11 +326,11 @@ export class UserPage {
                 await this.page.waitForTimeout(1000);
             }
         } while (newCount > oldCount);
-    
+
         const updatedUserList = (await this.userListing.locator(`[data-field="${colname}"]`).all());
         for (const user of updatedUserList) {
             const userName = await user.textContent();
-            if  (userName && userName.trim().toLowerCase().includes(value.toLowerCase())) {
+            if (userName && userName.trim().toLowerCase().includes(value.toLowerCase())) {
                 return true;
             }
         }
@@ -381,7 +383,7 @@ export class UserPage {
      * @param datafield The attribute that the user want to search(status,roleand createdBy).
      * @returns A Booelan indicating whether all the users displayed in the list matches the value in the datafield
      */
-    async isAllStausActive(value:string,datafield:string): Promise<boolean> {
+    async isAllStausActive(value: string, datafield: string): Promise<boolean> {
         let oldCount = 0;
         let newCount = 0;
         do {
@@ -398,7 +400,7 @@ export class UserPage {
     }
 
     /**
-     * checks if the search-bar gets highlighted on mouse hovering
+     * Checks if the search-bar gets highlighted on mouse hovering
      * @returns A Booelan indicating whether the searchbar gets highlighted or not
      */
     async isSearchBarHighlighted(): Promise<boolean> {
@@ -411,20 +413,20 @@ export class UserPage {
      * Gets the error messages from create user form when mandatory felids are clicked and values are not enterd
      * @returns An array of strings containing all the error messages when the when mandatory felids are clicked and values are not enterd.
      */
-    async getErrorMessages(): Promise<Array<string|null>> {
-        const fnamemsg=await this.enterFNameMessage.textContent();
-        const lnamemsg=await this.enterLNameMessage.textContent();
-        const rolemsg=await this.enterRoleMessage.textContent();
-        const emailmsg=await this.invalidEmailMessage.textContent();
-        return [fnamemsg,lnamemsg,emailmsg,rolemsg];
+    async getErrorMessages(): Promise<Array<string | null>> {
+        const fnamemsg = await this.enterFNameMessage.textContent();
+        const lnamemsg = await this.enterLNameMessage.textContent();
+        const rolemsg = await this.enterRoleMessage.textContent();
+        const emailmsg = await this.invalidEmailMessage.textContent();
+        return [fnamemsg, lnamemsg, emailmsg, rolemsg];
     }
 
     /**
      * Clicks on all the mandatory feilds on the create user form and moves away without entring any value
      */
     async clickOnMandatoryFields(): Promise<void> {
-        const MandatoryFields:Locator[]=[this.firstNameField,this.lastNameField,this.emailField,this.roleField,this.linkedInFeild];
-        for(const feild of MandatoryFields){
+        const MandatoryFields: Locator[] = [this.firstNameField, this.lastNameField, this.emailField, this.roleField, this.linkedInFeild];
+        for (const feild of MandatoryFields) {
             await feild.click();
         }
     }
@@ -440,21 +442,21 @@ export class UserPage {
     /**
      * Selects desired option from the edit menu box
      */
-    async selectOptionFromEditMenu(option:number): Promise<void> {
+    async selectOptionFromEditMenu(option: number): Promise<void> {
         await this.editOptions.nth(option).click();
         await this.page.waitForLoadState('domcontentloaded');
     }
 
     /**
      * Waits for the text to be visible in the edit form before editing
-     */   
+     */
     async waitForTextToBeVisible(): Promise<void> {
         await this.page.waitForFunction((selector) => {
             const input = document.querySelector(selector) as HTMLInputElement;
             return input && input.value.trim() !== '';
-          },'[name="firstName"]');
+        }, '[name="firstName"]');
     }
-    
+
 
     /**
      * Edits all the values of the selected user
@@ -463,31 +465,31 @@ export class UserPage {
      * @param email The email id of the user to be entered into the form
      * @param role The specific role to be selected from the dropdown options
      */
-    async editUser(firstname:string,lastname:string,email:string,role:string) {
-        let values:Array<string>=[firstname,lastname,email,role];
+    async editUser(firstname: string, lastname: string, email: string, role: string) {
+        let values: Array<string> = [firstname, lastname, email, role];
         await this.waitForTextToBeVisible();
-        for(let i=1;i<=4;i++){
-            if(i===4){
+        for (let i = 1; i <= 4; i++) {
+            if (i === 4) {
                 await this.editFieldBoxes.nth(i).click();
-                await this.selectRoleFromDropdown(values[i-1]);
-            }else{
-            await this.editFieldBoxes.nth(i).clear();
-            await this.editFieldBoxes.nth(i).fill(values[i-1]);
+                await this.selectRoleFromDropdown(values[i - 1]);
+            } else {
+                await this.editFieldBoxes.nth(i).clear();
+                await this.editFieldBoxes.nth(i).fill(values[i - 1]);
             }
         }
-    } 
+    }
 
     /**
      * Edits any one of the fields in the Edit box of the users page
      * @param value value The value to be entered into the specified field in the edit form.
      * @param boxnum The specific field to be selected for editing(firstname,lastname,email,role)
      */
-    async editOneField(value:string,boxnum:number){
+    async editOneField(value: string, boxnum: number) {
         await this.waitForTextToBeVisible();
-        if(boxnum==4){
+        if (boxnum == 4) {
             await this.editFieldBoxes.nth(boxnum).click();
             await this.selectRoleFromDropdown(value);
-        }else if(boxnum>=1 && boxnum<=3){
+        } else if (boxnum >= 1 && boxnum <= 3) {
             await this.editFieldBoxes.nth(boxnum).clear();
             await this.editFieldBoxes.nth(boxnum).fill(value);
         }
@@ -499,7 +501,7 @@ export class UserPage {
      */
     async clickOnMandatoryEditFields(): Promise<void> {
         await this.waitForTextToBeVisible();
-        for (let i = 1; i <=5; i++) {
+        for (let i = 1; i <= 5; i++) {
             await this.editFieldBoxes.nth(i).clear();
         }
     }
@@ -514,7 +516,7 @@ export class UserPage {
      * Clicks on the Filter Role feild and select roles
      * @param roles it accepts indefinite number of roles and stores it in an array
      */
-    async clickFilterRole(...roles:string[]):Promise<void>{
+    async clickFilterRole(...roles: string[]): Promise<void> {
         await this.filterRoleFeild.click();
         await this.filterRoleFeild.waitFor();
         for (const role of roles) {
@@ -533,7 +535,7 @@ export class UserPage {
 
     /**
      * Clicks on the Filter Reset Button
-     */   
+     */
     async clickOnFilterResetButton(): Promise<void> {
         await this.filterResetButton.click();
     }
@@ -543,7 +545,7 @@ export class UserPage {
      * @returns A boolean value representing whether the filter chip is removed or not
      */
     async isAllFilterChipsRemoved(): Promise<boolean> {
-        const filterCount=await this.filterChips.count();
+        const filterCount = await this.filterChips.count();
         return filterCount === 0;
     }
 
@@ -552,14 +554,14 @@ export class UserPage {
      * @param chips it accepts indefinite number of roles and stores it in an array
      * @returns A Boolean indicating if the applied filter's chips are visible or not
      */
-    async isFilterChipsVisible(...chips:string[]): Promise<boolean> {
+    async isFilterChipsVisible(...chips: string[]): Promise<boolean> {
         await this.page.locator(`text=${chips[0]}`).waitFor();
-          for(const chip of chips){
-            const chipsdisplayed= this.page.locator(`text=${chip}`);
-            const isChipVisible=await  chipsdisplayed.isVisible();
-            if(!isChipVisible) return false;
-          }
-          return true;
+        for (const chip of chips) {
+            const chipsdisplayed = this.page.locator(`text=${chip}`);
+            const isChipVisible = await chipsdisplayed.isVisible();
+            if (!isChipVisible) return false;
+        }
+        return true;
     }
 
     /**
@@ -568,30 +570,58 @@ export class UserPage {
      * @param allRoles It is a set that stores the value of the field
      * @returns An array containing non-duplicate valued from the field
      */
-    async getFilterValues(feild:string,allRoles=new Set<string>()): Promise<string[]> {
+    async getFilterValues(feild: string, allRoles = new Set<string>()): Promise<string[]> {
         await this.page.waitForTimeout(1000);
         const filterValues = await this.userListing.locator(`[data-field="${feild}"]`).allInnerTexts();
         filterValues.forEach(value => allRoles.add(value));
-        const size=allRoles.size;
-        const lastElement=this.userListing.locator(`[data-field="${feild}"]`).last();
+        const size = allRoles.size;
+        const lastElement = this.userListing.locator(`[data-field="${feild}"]`).last();
         await lastElement.scrollIntoViewIfNeeded();
         await this.page.waitForTimeout(1000);
-        if(allRoles.size > size){
-            this.getFilterValues(feild,allRoles);
+        if (allRoles.size > size) {
+            this.getFilterValues(feild, allRoles);
         }
         console.log([...allRoles]);
-    return [...allRoles]
+        return [...allRoles]
     }
+
+    /**
+     * Clicks and fills value in the Filter createdBy feild 
+     * @param value The desired name to be enterd in the createdBy feild   
+     */
+    async fillFilterCreatedByField(value: string): Promise<void> {
+        await this.filterCreatedByField.fill(value);
+    }
+
+    /**
+     * Clears the value entered in the Filter createdBy feild   
+     */    
+    async clearFilterCreatedByField(): Promise<void> {
+        await this.filterCreatedByField.clear();
+    }
+    
+    /**
+     * Gets all  the value from the Filter createdBy feild dropdown  
+     */
+    async getFilterCreatedByValues(value:string): Promise<string[]> {
+        await this.filterCreatedByField.fill(value);
+        await this.page.getByRole('option', { name: value }).waitFor()
+        const actsuggestions=await this.filterCreateByFieldDropdown.allInnerTexts();
+        return actsuggestions;     
+    }
+
+
 
     /**
      * Clicks and enters value in the Filter createdBy feild
      * @param value The desired name to be enterd in the createdBy feild
      * @returns A boolean value indicating whether the value is an valid name or not
-     */ 
-    async enterCreateFeildValue(value:string):Promise<boolean | undefined>{
-        await this.filterCreatedByFeild.fill(value);
-        const optVisible=await this.page.getByRole('option', { name: value }).waitFor( {timeout:1000}).catch(()=>{return false});
-        if(optVisible == false){return false}else
-        await this.page.getByRole('option', { name: value }).click();
+     */
+    async enterCreateFeildValue(value: string): Promise<boolean | undefined> {
+        //await this.filterCreatedByFeild.fill(value);
+        await this.fillFilterCreatedByField(value);
+        const optVisible = await this.page.getByRole('option', { name: value }).waitFor({ timeout: 1000 }).catch(() => { return false });
+        if (optVisible == false) { return false } else
+            await this.page.getByRole('option', { name: value }).click();
     }
 }
