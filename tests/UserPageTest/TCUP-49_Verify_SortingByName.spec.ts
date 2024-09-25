@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from "../../Pages/LoginPage";
 import { UserPage } from '../../Pages/UserPage';
+import { UserPagePr } from '../../Pages/UserPagePr';
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
@@ -9,6 +10,7 @@ test('TCUP_49:UserPage | Verify Sorting by Name', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
+    const userPagepr = new UserPagePr();
 
     const feildNameForName = "name";
     const sortingOrderAsce = "Ascending";
@@ -31,23 +33,23 @@ test('TCUP_49:UserPage | Verify Sorting by Name', async ({ page }) => {
     
     // Click on the "Name" column header to sort the users alphabetically from A-Z.
     await test.step(`Click on the "Name" column header to sort the users alphabetically from A-Z.`, async () => {
-    await userPage.clickOnArrowSortButton(feildNameForName);
+    await userPagepr.clickOnArrowSortButton(feildNameForName);
     });
     
     // Verify  list is sorted in ascending order by the Name column.
     await test.step(`Verify  list is sorted in ascending order by the Name column.`, async () => {
-        const { columnTextContent, sortedTextContent } = await userPage.sortMethodForAColumn(feildNameForName,sortingOrderAsce);
+        const { columnTextContent, sortedTextContent } = await userPagepr.sortMethodForAColumn(feildNameForName,sortingOrderAsce);
         expect(columnTextContent).toEqual(sortedTextContent);
     });
     
     // Click on the "Name" column header again to sort the users alphabetically from Z-A.
     await test.step(`Click on the "Name" column header again to sort the users alphabetically from Z-A.`, async () => {
-        await userPage.clickOnArrowSortButton(feildNameForName);
+        await userPagepr.clickOnArrowSortButton(feildNameForName);
     });
     
     // Verify list is sorted in descending order by the Name column.
     await test.step(`Verify list is sorted in descending order by the Name column.`, async () => {
-        const { columnTextContent, sortedTextContent } = await userPage.sortMethodForAColumn(feildNameForName,sortingOrderDesc);
+        const { columnTextContent, sortedTextContent } = await userPagepr.sortMethodForAColumn(feildNameForName,sortingOrderDesc);
         expect(columnTextContent).toEqual(sortedTextContent);
     });
 
