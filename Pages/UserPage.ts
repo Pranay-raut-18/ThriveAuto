@@ -610,8 +610,6 @@ export class UserPage {
         return actsuggestions;     
     }
 
-
-
     /**
      * Clicks and enters value in the Filter createdBy feild
      * @param value The desired name to be enterd in the createdBy feild

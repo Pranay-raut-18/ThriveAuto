@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
 
-test('TCUP_28:UserPage|Verify No Suggestions appear for Non-Existent Names in the "created by" feild', async ({ page }) => {
+test('TCUP_29:UserPage| Verify Clearing "Created By" Field Resets Suggestions', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
