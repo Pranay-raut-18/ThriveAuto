@@ -31,6 +31,8 @@ export class PheonixAppPage {
   private editButtoninCompanyTab: Locator;
   private saveButtoninEditCompany: Locator;
   private editButtoninEditJobs: Locator;
+  private popUpinPersonEditTab: Locator;
+  private editDivinPersonTab: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -82,6 +84,8 @@ export class PheonixAppPage {
     );
     this.saveButtoninEditCompany = page.getByRole("button", { name: "Save" });
     this.editButtoninEditJobs = page.locator(".css-1sy0xge button");
+    this.popUpinPersonEditTab = page.locator(".css-afwwpk button");
+    this.editDivinPersonTab = page.locator(".css-xhilgd");
   }
 
   /**
@@ -335,5 +339,34 @@ export class PheonixAppPage {
    */
   async isEditButtoninJobsVisible(): Promise<boolean> {
     return this.editButtoninEditJobs.isVisible();
+  }
+  /**
+   * Clicks on popup in edit people tab
+   */
+  async clickonPopupInEditPeople() {
+    return this.popUpinPersonEditTab.click();
+  }
+  /**
+   * Clicks on edit people in edit people tab
+   */
+  async clickonEditPeopleinEditPeopleTab() {
+    await this.editDivinPersonTab.hover();
+    return this.page
+      .locator(
+        ".MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall.css-1c6vowq"
+      )
+      .click();
+  }
+  /**
+   * Gets the text content of the success alert.
+   * @returns The text content of the success alert div.
+   */
+  async getSuccessAlertTextinPeopleEdit(): Promise<string> {
+    const alertLocator = this.page.locator(
+      ".MuiPaper-root.MuiAlert-root.MuiAlert-colorSuccess .MuiAlert-message"
+    );
+    await alertLocator.waitFor();
+    const alertText = await alertLocator.innerText();
+    return alertText;
   }
 }
