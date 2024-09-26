@@ -30,9 +30,7 @@ test("To Verify that the System role with view functionality is able to view peo
     await pheonixAppPage.clickonPopupInEditPeople();
     await pheonixAppPage.clickonEditPeopleinEditPeopleTab();
     await pheonixAppPage.clickonSaveButtoninEditCompanyTab();
-    await page.pause();
-    const textmg: string =
-      await pheonixAppPage.getSuccessAlertTextinPeopleEdit();
-    console.log(textmg);
+    const actualtext = await pheonixAppPage.getSuccessAlertTextinPeopleEdit();
+    expect(actualtext.trim()).toBe("Contact info successfully updated.");
   });
 });
