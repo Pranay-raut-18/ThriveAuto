@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
 
-test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system roles", async ({
+test("TCRP_17: RolesAndPermissions | Add Functionality Does not allow to manage cust", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -13,7 +13,7 @@ test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system ro
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
   let timestamp: string;
   timestamp = getCompleteTimestamp();
-  const Rolename: string = `AutoRoleName${timestamp}`;
+  const Rolename: string = `AutoRolename${timestamp}`;
   const Description: string = `AutoDescription${timestamp}`;
 
   // Login using email address and password
@@ -30,32 +30,26 @@ test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system ro
   await test.step("Click on Roles and Permissions Tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
-
-  //Click on action menu according to choice
-  await test.step("Click on action menu for choice role", async () => {
-    await rolesAndPermissions.clickOnRoleActionMenu("Engagement Coordinator");
+  //Click on Add "+Roles" custom roles
+  await test.step("Click on add custom roles button", async () => {
+    await rolesAndPermissions.AddNewRoleBtnClick();
   });
-
-  // Click on "Duplicate" menu item
-  await test.step("Click on 'Duplicate' menu item", async () => {
-    await rolesAndPermissions.clickOnMenuItem("Duplicate");
-  });
-
-  // Fill name and description
-  await test.step("Fill name and description", async () => {
-    await page.waitForSelector(".css-ai157c");
+  //Fill auto name and auto description
+  await test.step("Fills auto name and auto description", async () => {
+    await page.waitForLoadState("networkidle");
     await rolesAndPermissions.fillRoleAndDescription(Rolename, Description);
   });
-  await test.step("Change permissions", async () => {
-    await rolesAndPermissions.setPermission("person", "update", true);
-    await rolesAndPermissions.setPermission("person", "create", true);
-    await rolesAndPermissions.setPermission("job", "update", true);
-    await rolesAndPermissions.setPermission("job", "create", true);
-    await rolesAndPermissions.setPermission("tag", "delete", false);
-    await rolesAndPermissions.setPermission("tag", "create", true);
-    await rolesAndPermissions.setPermission("tag", "update", true);
-    await rolesAndPermissions.setPermission("Note", "delete", true);
+  //Select update permission to manage customer
+  await test.step("Select permission to manage Customer", async () => {
+    await rolesAndPermissions.setPermission("customer", "delete", true);
+  });
+  //Click on save button
+  await test.step("Click on save button to add the custom role", async () => {
     await rolesAndPermissions.saveChanges();
-    await page.pause();
+  });
+  await test.step("Verify invalid text", async () => {
+    const actualtext =
+      await rolesAndPermissions.getErrorMessageTextinCreateRole();
+    expect(actualtext).toBe("invalid privilege action_name or resource_name");
   });
 });

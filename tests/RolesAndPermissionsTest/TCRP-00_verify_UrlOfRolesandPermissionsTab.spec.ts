@@ -23,7 +23,6 @@ test("TCRP_00: RolesAndPermissions | Verify_Url of page", async ({ page }) => {
   // Verify URL of the roles and permissions tab
   await test.step("Verify URL of the roles and permissions tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
-    await page.waitForTimeout(3000);
     const currentUrl = await rolesAndPermissions.getPageUrl();
     await page.waitForURL(currentUrl);
     const actualUrlSegment = currentUrl.split("/").pop();

@@ -14,7 +14,7 @@ test("TCRP_15: RolesAndPermissions | Verify add functionality of custom roles", 
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
   let timestamp: string;
   timestamp = getCompleteTimestamp();
-  const Rolename: string = `AutoRolename${timeStamp()}`;
+  const Rolename: string = `AutoRolename${timestamp}`;
   const Description: string = `AutoDescription${timestamp}`;
 
   // Login using email address and password
@@ -43,6 +43,7 @@ test("TCRP_15: RolesAndPermissions | Verify add functionality of custom roles", 
   //Select permissions for the custom role
   await test.step("Select permissions for the custom role", async () => {
     await rolesAndPermissions.setPermission("user", "update", true);
+    await rolesAndPermissions.setPermission("customer", "read", false);
     await rolesAndPermissions.setPermission("custom field", "update", true);
     await rolesAndPermissions.setPermission("role", "delete", true);
     await rolesAndPermissions.setPermission("tag", "update", true);
@@ -53,10 +54,12 @@ test("TCRP_15: RolesAndPermissions | Verify add functionality of custom roles", 
     await rolesAndPermissions.setPermission("job view all", "update", false);
     await rolesAndPermissions.setPermission("job status", "update", true);
     await rolesAndPermissions.setPermission("job update all", "update", false);
+    await rolesAndPermissions.setPermission("company", "create", true);
   });
   //Click on save button
   await test.step("Click on save button to add the custom role", async () => {
     await rolesAndPermissions.saveChanges();
+    await page.waitForSelector(".css-1xsto0d");
   });
   await test.step("search for the created role and verify if it is visible", async () => {
     await rolesAndPermissions.searchForRole(Rolename);

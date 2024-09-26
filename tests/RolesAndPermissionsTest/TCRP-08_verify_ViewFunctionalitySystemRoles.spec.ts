@@ -38,6 +38,6 @@ test("TCRP_08: RolesAndPermissions | Verify view functionality of system roles",
 
   // Step 6: Verify that the drawer is visible and close it
   await test.step("Verify and close the drawer", async () => {
-    expect(rolesAndPermissions.closeButtonofDuplicateTab()).toBeTruthy();
+    expect(rolesAndPermissions.closeButtonofDuplicateTab()).toBe(true);
   });
 });

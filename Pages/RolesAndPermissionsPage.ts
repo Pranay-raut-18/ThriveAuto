@@ -25,6 +25,9 @@ export class RolesAndPermissionsPage {
   private saveButtonLocator: Locator;
   private maxErrorTypeLast: Locator;
   private alertMessage: Locator;
+  private errorMessageWhenSelectingCustomers: Locator;
+  private roleShouldbeUniqueErrTxt: Locator;
+  private menuItems: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -63,6 +66,11 @@ export class RolesAndPermissionsPage {
       "span.MuiTypography-root.MuiTypography-caption.css-iaqowd"
     );
     this.alertMessage = page.locator("div.MuiAlert-message.css-1xsto0d");
+    this.errorMessageWhenSelectingCustomers = page.locator(
+      "span.MuiTypography-root.MuiTypography-caption.css-iaqowd"
+    );
+    this.roleShouldbeUniqueErrTxt = page.locator(".css-nce39c");
+    this.menuItems = page.locator('ul[role="menu"] li');
   }
 
   /**
@@ -101,6 +109,7 @@ export class RolesAndPermissionsPage {
   async searchForRole(roleName: string) {
     await this.searchBar.fill("");
     await this.searchBar.fill(roleName);
+    await this.rolesTable.waitFor();
   }
 
   /**
@@ -262,7 +271,7 @@ export class RolesAndPermissionsPage {
    */
   async setPermission(
     roleName: string,
-    permissionType: "create" | "edit" | "delete" | "view" | "update",
+    permissionType: "create" | "edit" | "delete" | "view" | "update" | "read",
     check: boolean
   ) {
     // Adjust the roleName to match the actual format used in the HTML (lowercase and underscores)
@@ -314,12 +323,21 @@ export class RolesAndPermissionsPage {
     const errorDescript = await this.errortxtDescription.textContent();
     return [errorName, errorDescript];
   }
+  /**
+   * @returns true if the save button is disabled
+   */
   async saveButtonisNotVisible() {
     return this.saveButtonLocator.isDisabled();
   }
+  /**
+   * @returns Checks if save button in roles and permissions tab is enabled
+   */
   async saveButtonisVisible() {
     return this.saveButtonLocator.isEnabled();
   }
+  /**
+   * @returns true if the aleret message is visible
+   */
   async CheckifCorrectInputs() {
     if (await this.maxErrorTypeLast.isVisible()) {
       const maxErrorMsg = this.maxErrorTypeLast.textContent();
@@ -328,5 +346,31 @@ export class RolesAndPermissionsPage {
     } else {
       return this.alertMessage.isVisible();
     }
+  }
+  /**
+   * @returns error message when selecting to mage customers
+   */
+  async getErrorMessageTextinCreateRole(): Promise<string> {
+    return await this.errorMessageWhenSelectingCustomers.innerText();
+  }
+  /**
+   * @returns error message text for duplicate role name
+   */
+  async getErrTxtWhenDuplicateRoleName() {
+    await this.roleShouldbeUniqueErrTxt.waitFor({ state: "visible" });
+
+    // Return the text content of the error message
+    const errorMessage = await this.roleShouldbeUniqueErrTxt.textContent();
+    return errorMessage?.trim() || "";
+  }
+  /**
+   * Verifies that the Delete button is not present in the menu items
+   * @returns A boolean indicating if the Delete button is absent
+   */
+  async isDeleteButtonAbsent(): Promise<boolean> {
+    const itemsText = await this.menuItems.allTextContents();
+
+    // Check if "Delete" is not present in the menu items
+    return !itemsText.some((text) => text.includes("Delete"));
   }
 }

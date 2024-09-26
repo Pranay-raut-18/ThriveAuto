@@ -33,9 +33,5 @@ test("TCRP_07: RolesAndPermissions | Verify Search by invalid name", async ({
 
     // Wait for the "No results" message to be visible
     expect(await rolesAndPermissions.isNoResultsMessageVisible());
-
-    // // Verify the text of the "No results" message
-    // const messageText = await rolesAndPermissions.getNoResultsMessageText();
-    // expect(messageText).toBe("No results");
   });
 });

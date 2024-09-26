@@ -25,11 +25,13 @@ test("TCRP_11: RolesAndPermissions | Verify Search by role name", async ({
   await test.step("Click on Roles and Permissions Tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
-  //Click on System role
-  await test.step("Click on system role", async () => {});
+  //Click on the action menu according to choice
+  await test.step("Click on action menu for 'Admin' role", async () => {
+    await rolesAndPermissions.clickOnRoleActionMenu("Candidate");
+  });
   //Expect delete button to be not visible
   await test.step("Check Delete button is not visible", async () => {
-    const isVisible = await rolesAndPermissions.clickOnMenuItem("Delete");
-    expect(isVisible).toBe(false);
+    const isVisible = await rolesAndPermissions.isDeleteButtonAbsent();
+    expect(isVisible).toBe(true);
   });
 });
