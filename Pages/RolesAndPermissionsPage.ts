@@ -373,4 +373,14 @@ export class RolesAndPermissionsPage {
     // Check if "Delete" is not present in the menu items
     return !itemsText.some((text) => text.includes("Delete"));
   }
+  /**
+   * Verifies that the Delete button is not present in the menu items
+   * @returns A boolean indicating if the Delete button is absent
+   */
+  async isViewButtonAbsent(): Promise<boolean> {
+    const itemsText = await this.menuItems.allTextContents();
+
+    // Check if "Delete" is not present in the menu items
+    return !itemsText.some((text) => text.includes("View"));
+  }
 }
