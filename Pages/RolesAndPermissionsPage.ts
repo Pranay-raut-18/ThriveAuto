@@ -211,7 +211,9 @@ export class RolesAndPermissionsPage {
    * Fills the role name and description
    */
   async fillRoleAndDescription(role: string, description: string) {
+    await this.roleNameInput.click();
     await this.roleNameInput.fill(role);
+    await this.roleDescriptionInput.click();
     await this.roleDescriptionInput.fill(description);
   }
 
@@ -382,5 +384,15 @@ export class RolesAndPermissionsPage {
 
     // Check if "Delete" is not present in the menu items
     return !itemsText.some((text) => text.includes("View"));
+  }
+  /**
+   * Verifies that the Delete button is not present in the menu items
+   * @returns A boolean indicating if the Delete button is absent
+   */
+  async isEditButtonAbsent(): Promise<boolean> {
+    const itemsText = await this.menuItems.allTextContents();
+
+    // Check if "Delete" is not present in the menu items
+    return !itemsText.some((text) => text.includes("Edit Details"));
   }
 }
