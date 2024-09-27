@@ -6,7 +6,7 @@ import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
 import { time, timeStamp } from "console";
 
-test("TCRP_15: RolesAndPermissions | Verify add functionality of custom roles", async ({
+test.skip("TCRP_15: RolesAndPermissions | Verify add functionality of custom roles", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);

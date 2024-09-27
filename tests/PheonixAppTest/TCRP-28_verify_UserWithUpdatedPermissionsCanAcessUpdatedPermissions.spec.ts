@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../Pages/LoginPage";
-import { Url, EmailAddress, Password } from "../../utils/config-utils";
+import { Url, EmailAddress1, Password1 } from "../../utils/config-utils";
 import { PheonixAppPage } from "../../Pages/PheonixAppPage";
 
 test("To Verify that the System role with view functionality is able to view people in the Pheonix Appplication", async ({
@@ -13,7 +13,7 @@ test("To Verify that the System role with view functionality is able to view peo
 
   // Login using email address and password
   await test.step("Login using email address and password", async () => {
-    await loginPage.login(Url, EmailAddress, Password);
+    await loginPage.login(Url, EmailAddress1, Password1);
   });
   //Clicks on People tab in pheonix application
   await test.step("Click on people tab", async () => {

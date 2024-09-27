@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
 
-test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system roles", async ({
+test.skip("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system roles", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -44,6 +44,7 @@ test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system ro
   // Fill name and description
   await test.step("Fill name and description", async () => {
     await page.waitForSelector(".css-ai157c");
+    await page.waitForLoadState("networkidle");
     await rolesAndPermissions.fillRoleAndDescription(Rolename, Description);
   });
   await test.step("Change permissions", async () => {

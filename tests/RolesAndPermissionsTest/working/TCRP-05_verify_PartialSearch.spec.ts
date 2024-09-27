@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCRP_08: RolesAndPermissions | Verify view functionality of system roles", async ({
+test("TCRP_05: RolesAndPermissions | Verify Search by partial role name", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -26,18 +26,18 @@ test("TCRP_08: RolesAndPermissions | Verify view functionality of system roles",
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
 
-  //Click on the action menu according to choice
-  await test.step("Click on action menu for 'Admin' role", async () => {
-    await rolesAndPermissions.clickOnRoleActionMenu("Candidate");
-  });
+  // Verify search by role in search bar
+  await test.step("Verify search by role in search bar", async () => {
+    await rolesAndPermissions.clickOnSearchBar();
+    await rolesAndPermissions.searchForRole("admi");
+    await page.waitForLoadState("networkidle");
 
-  // Step 5: Click on "View" menu item
-  await test.step("Click on 'View' menu item", async () => {
-    await rolesAndPermissions.clickOnMenuItem("View");
-  });
+    // Fetch all roles after searching
+    const rolesAfterSearch = await rolesAndPermissions.getAllRoles();
+    console.log("Roles after search:", rolesAfterSearch);
 
-  // Step 6: Verify that the drawer is visible and close it
-  await test.step("Verify and close the drawer", async () => {
-    expect(rolesAndPermissions.closeButtonofDuplicateTab()).toBe(true);
+    // Check if "admin" is among the visible roles
+    const isVisible = await rolesAndPermissions.isRoleVisible("admin");
+    expect(isVisible).toBe(true);
   });
 });

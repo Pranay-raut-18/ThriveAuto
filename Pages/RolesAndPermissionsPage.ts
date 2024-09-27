@@ -57,8 +57,8 @@ export class RolesAndPermissionsPage {
       exact: true,
     });
     this.deletebuttonforcustomrole = page.locator('button:has-text("Delete")');
-    this.errortxtName = page.locator('p[id=":r14:-helper-text"]');
-    this.errortxtDescription = page.locator('p[id=":r15:-helper-text"]');
+    this.errortxtName = page.locator(".css-nce39c").first();
+    this.errortxtDescription = page.locator(".css-nce39c").last();
     this.saveButtonLocator = page.locator(
       'button[type="submit"][class*="MuiButton-root"]'
     );
@@ -109,7 +109,6 @@ export class RolesAndPermissionsPage {
   async searchForRole(roleName: string) {
     await this.searchBar.fill("");
     await this.searchBar.fill(roleName);
-    await this.rolesTable.waitFor();
   }
 
   /**
@@ -169,6 +168,7 @@ export class RolesAndPermissionsPage {
    * @returns true/false if no results message si visible or not
    */
   async isNoResultsMessageVisible(): Promise<boolean> {
+    this.noResultsMessage.waitFor();
     return this.noResultsMessage.isVisible();
   }
   /**
@@ -202,7 +202,7 @@ export class RolesAndPermissionsPage {
    * Function to verify drawer is open or not
    * @returns true/false if the option tab is visible or not
    */
-  async closeButtonofDuplicateTab() {
+  async closeButtonofDuplicateTab(): Promise<boolean> {
     const closeButton = this.page.getByLabel("Close Drawer");
     return closeButton.isVisible();
   }
