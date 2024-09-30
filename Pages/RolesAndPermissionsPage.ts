@@ -272,7 +272,21 @@ export class RolesAndPermissionsPage {
    * @param check to select or deselect as per requirement (for eg:- manage user , delete , true ) true for check false for uncheck
    */
   async setPermission(
-    roleName: string,
+    roleName:
+      | "customer"
+      | "user"
+      | "impersonate user"
+      | "role"
+      | "custom field"
+      | "person"
+      | "company"
+      | "job"
+      | "job status"
+      | "job view all"
+      | "job update all"
+      | "note"
+      | "tag"
+      | "scorecard template",
     permissionType: "create" | "edit" | "delete" | "view" | "update" | "read",
     check: boolean
   ) {
@@ -394,5 +408,19 @@ export class RolesAndPermissionsPage {
 
     // Check if "Delete" is not present in the menu items
     return !itemsText.some((text) => text.includes("Edit Details"));
+  }
+  async clickOptionsMenuofSearchedRole(role: string) {
+    const roleRow = this.page
+      .locator(`.MuiDataGrid-row:has-text("${role}")`)
+      .first();
+    return roleRow
+      .locator('button[aria-label="Open roles action menu"]')
+      .click();
+  }
+  async waitForRoleToAppear(role: string) {
+    const roleRow = this.page
+      .locator(`.MuiDataGrid-row:has-text("${role}")`)
+      .first();
+    await roleRow.waitFor({ state: "visible", timeout: 10000 });
   }
 }

@@ -48,12 +48,8 @@ test("To Verify that the System role with updated view functionality is able to 
   });
   //Click on menu item for rolename to edit
   await test.step("Click on the action menu for the searched role", async () => {
-    const roleRow = page.locator(
-      `.MuiDataGrid-row:has-text("${RoleNametoEdit}")`
-    );
-    await roleRow
-      .locator('button[aria-label="Open roles action menu"]')
-      .click();
+    await rolesAndPermissions.waitForRoleToAppear(RoleNametoEdit);
+    await rolesAndPermissions.clickOptionsMenuofSearchedRole(RoleNametoEdit);
   });
 
   // Click on "Edit" menu item

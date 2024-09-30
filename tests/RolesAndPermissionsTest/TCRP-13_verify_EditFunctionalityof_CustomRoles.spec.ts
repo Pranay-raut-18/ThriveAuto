@@ -64,7 +64,7 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
     await rolesAndPermissions.setPermission("user", "update", false);
     await rolesAndPermissions.setPermission("user", "create", false);
     await rolesAndPermissions.setPermission(
-      "Impersonate user",
+      "impersonate user",
       "update",
       false
     );

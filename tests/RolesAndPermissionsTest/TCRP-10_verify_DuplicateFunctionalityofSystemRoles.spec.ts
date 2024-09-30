@@ -56,8 +56,10 @@ test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system ro
     await rolesAndPermissions.setPermission("tag", "delete", false);
     await rolesAndPermissions.setPermission("tag", "create", true);
     await rolesAndPermissions.setPermission("tag", "update", true);
-    await rolesAndPermissions.setPermission("Note", "delete", true);
+    await rolesAndPermissions.setPermission("note", "delete", true);
+    await rolesAndPermissions.setPermission("custom field", "delete", true);
     await rolesAndPermissions.saveChanges();
     await page.waitForLoadState("networkidle");
+    await page.pause();
   });
 });

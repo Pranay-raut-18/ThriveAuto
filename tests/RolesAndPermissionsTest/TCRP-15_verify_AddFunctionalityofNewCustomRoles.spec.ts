@@ -49,7 +49,7 @@ test.skip("TCRP_15: RolesAndPermissions | Verify add functionality of custom rol
     await rolesAndPermissions.setPermission("tag", "update", true);
     await rolesAndPermissions.setPermission("tag", "create", true);
     await rolesAndPermissions.setPermission("note", "create", true);
-    await rolesAndPermissions.setPermission("Impersonate user", "update", true);
+    await rolesAndPermissions.setPermission("impersonate user", "update", true);
     await rolesAndPermissions.setPermission("person", "update", true);
     await rolesAndPermissions.setPermission("job view all", "update", false);
     await rolesAndPermissions.setPermission("job status", "update", true);

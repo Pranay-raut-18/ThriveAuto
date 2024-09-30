@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
 
-test.skip("TCRP_14: RolesAndPermissions | Verify duplicate functionality of custom roles", async ({
+test("TCRP_14: RolesAndPermissions | Verify duplicate functionality of custom roles", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -37,34 +37,23 @@ test.skip("TCRP_14: RolesAndPermissions | Verify duplicate functionality of cust
 
   // Wait for the role row to be present and visible
   await test.step(`Wait for the role row: ${roletoduplicate}`, async () => {
-    const roleRow = page.locator(
-      `.MuiDataGrid-row:has-text("${roletoduplicate}")`
-    );
-    await roleRow.waitFor({ state: "visible", timeout: 10000 });
+    await rolesAndPermissions.waitForRoleToAppear(roletoduplicate);
   });
 
   // Locate the row with the desired role name and click the action menu button
   await test.step("Click on the action menu for the searched role", async () => {
-    const roleRow = page.locator(
-      `.MuiDataGrid-row:has-text("${roletoduplicate}")`
-    );
-    await roleRow
-      .locator('button[aria-label="Open roles action menu"]')
-      .click();
+    await rolesAndPermissions.clickOptionsMenuofSearchedRole(roletoduplicate);
   });
   // Fill name and description
   await test.step("Fill name and description", async () => {
     await rolesAndPermissions.clickOnMenuItem(menuItemName);
-    await page.waitForTimeout(2000);
     await rolesAndPermissions.fillRoleAndDescription(newRolename, Description);
     await rolesAndPermissions.setPermission("impersonate user", "update", true);
     await rolesAndPermissions.setPermission("tag", "delete", false);
     await rolesAndPermissions.setPermission("tag", "create", true);
     await rolesAndPermissions.setPermission("tag", "update", true);
     await rolesAndPermissions.setPermission("Note", "delete", true);
-    await page.pause();
     await rolesAndPermissions.saveChanges();
-    await page.waitForLoadState("domcontentloaded");
     expect(await rolesAndPermissions.CheckifSucessMessageisVisible()).toBe(
       true
     );

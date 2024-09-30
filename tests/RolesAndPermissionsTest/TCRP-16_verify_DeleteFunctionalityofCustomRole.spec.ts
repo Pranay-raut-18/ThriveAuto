@@ -37,25 +37,17 @@ test.skip("TCRP_16: RolesAndPermissions | Verify delete functionality of custom 
   });
   // Wait for the role row to be present and visible
   await test.step(`Wait for the role row: ${roletodelete}`, async () => {
-    const roleRow = page
-      .locator(`.MuiDataGrid-row:has-text("${roletodelete}")`)
-      .first();
-    await roleRow.waitFor({ state: "visible", timeout: 10000 });
+    await rolesAndPermissions.waitForRoleToAppear(roletodelete);
   });
 
   // Locate the row with the desired role name and click the action menu button
   await test.step("Click on the action menu for the searched role", async () => {
-    const roleRow = page.locator(
-      `.MuiDataGrid-row:has-text("${roletodelete}")`
-    );
-    await roleRow
-      .locator('button[aria-label="Open roles action menu"]')
-      .click();
+    await rolesAndPermissions.clickOptionsMenuofSearchedRole(roletodelete);
   });
   await test.step("Click on 'Delete' menu item", async () => {
     await rolesAndPermissions.clickOnMenuItem(menuItemName);
     await rolesAndPermissions.clickDeleteButton();
-    await page.waitForSelector(".css-1a75746");
+    await page.waitForLoadState("networkidle");
   });
   await test.step("Searching the deleted role", async () => {
     await rolesAndPermissions.searchForRole(roletodelete);
