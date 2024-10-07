@@ -50,13 +50,13 @@ export class PheonixAppPage {
     this.jobCards = page.locator(".MuiCard-root");
     this.AddButtonPA = page.getByLabel("Open Action Menu").first();
     this.createCompanyButton = page.getByRole("menuitem", {
-      name: "Create New Company",
+      name: "Create Company",
     });
     this.createJobButton = page.getByRole("menuitem", {
       name: "Create Project",
     });
     this.createPersonButton = page.getByRole("menuitem", {
-      name: "Create New Person",
+      name: "Add Person",
     });
     this.companyNameInput = page.locator(
       'input[name="name"][placeholder="Enter Company Name"]'
@@ -71,16 +71,16 @@ export class PheonixAppPage {
     this.hiringCompanyFieldinProject = page.getByLabel("Hiring company *");
     this.teamLeadFieldinProject = page.getByLabel("Team lead");
     this.saveButtonCompany = page
-      .locator('button[type="submit"]:has-text("Continue")')
+      .locator('button[type="button"]:has-text("Continue")')
       .first();
     this.saveButtonPerson = page.locator(
-      "(//button[@type='submit'][normalize-space()='Continue'])[1]"
+      'button[type="button"]:has-text("Continue")'
     );
     this.saveButtonProject = page.locator(
-      "(//button[@type='submit'][normalize-space()='Create Project'][1])"
+      'button[type="button"]:has-text("Create Project")'
     );
     this.editButtoninCompanyTab = page.locator(
-      "(//button[@class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeSmall css-1gun7om'])[1]"
+      ".MuiButtonBase-root.MuiIconButton-sizeSmall.css-1sl9f94"
     );
     this.saveButtoninEditCompany = page.getByRole("button", { name: "Save" });
     this.editButtoninEditJobs = page.locator(".css-1sy0xge button");
@@ -167,6 +167,7 @@ export class PheonixAppPage {
    * @returns true if company view tab is visible
    */
   async companyViewbarisVisible(): Promise<boolean> {
+    await this.companyViewTab.waitFor();
     return await this.companyViewTab.isVisible();
   }
   /**
@@ -338,6 +339,7 @@ export class PheonixAppPage {
    *@returns true if edit button is visible
    */
   async isEditButtoninJobsVisible(): Promise<boolean> {
+    await this.editButtoninEditJobs.waitFor();
     return this.editButtoninEditJobs.isVisible();
   }
   /**
@@ -353,7 +355,7 @@ export class PheonixAppPage {
     await this.editDivinPersonTab.hover();
     return this.page
       .locator(
-        ".MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall.css-1c6vowq"
+        ".MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall.css-1a1fzv4"
       )
       .click();
   }

@@ -59,9 +59,7 @@ export class RolesAndPermissionsPage {
     this.deletebuttonforcustomrole = page.locator('button:has-text("Delete")');
     this.errortxtName = page.locator(".css-nce39c").first();
     this.errortxtDescription = page.locator(".css-nce39c").last();
-    this.saveButtonLocator = page.locator(
-      'button[type="submit"][class*="MuiButton-root"]'
-    );
+    this.saveButtonLocator = page.locator('//button[text()="Save"]');
     this.maxErrorTypeLast = page.locator(
       "span.MuiTypography-root.MuiTypography-caption.css-iaqowd"
     );
@@ -273,7 +271,6 @@ export class RolesAndPermissionsPage {
    */
   async setPermission(
     roleName:
-      | "customer"
       | "user"
       | "impersonate user"
       | "role"
@@ -282,9 +279,6 @@ export class RolesAndPermissionsPage {
       | "company"
       | "job"
       | "job status"
-      | "job view all"
-      | "job update all"
-      | "note"
       | "tag"
       | "scorecard template",
     permissionType: "create" | "edit" | "delete" | "view" | "update" | "read",

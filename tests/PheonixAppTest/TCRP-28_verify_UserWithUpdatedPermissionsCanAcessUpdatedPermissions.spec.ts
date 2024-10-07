@@ -64,6 +64,7 @@ test("To Verify that the System role with updated view functionality is able to 
       RoleNametoEdit,
       Description
     );
+    await rolesAndPermissions.setPermission("user", "update", true);
     await rolesAndPermissions.setPermission("person", "delete", true);
     await rolesAndPermissions.saveChanges();
     await page.waitForLoadState("networkidle");
