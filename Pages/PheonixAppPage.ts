@@ -37,15 +37,15 @@ export class PheonixAppPage {
   constructor(page: Page) {
     this.page = page;
     this.searchBar = page.locator(
-      'input[placeholder="Search by contact information, domain expertise, or skills..."]'
+      'input[placeholder="Search by name, title, company, sector..."]'
     );
     this.peopleViewTab = page.locator(".MuiStack-root.css-7d0zx8");
     this.searchCompanyBar = page.locator(
-      'input[placeholder="Search by location, sectors, revenue, headcount, or ownership..."]'
+      'input[placeholder="Search by name, location, sector..."]'
     );
-    this.companyViewTab = page.locator(".MuiStack-root.css-ak720g");
+    this.companyViewTab = page.locator(".MuiStack-root.css-1g4yje1");
     this.searchBarinProjects = page.locator(
-      'input[placeholder="Search by hiring company, title and project team members..."]'
+      'input[placeholder="Search by title, hiring company, sector…"]'
     );
     this.jobCards = page.locator(".MuiCard-root");
     this.AddButtonPA = page.getByLabel("Open Action Menu").first();

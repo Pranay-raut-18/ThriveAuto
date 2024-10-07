@@ -39,12 +39,7 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
 
   //Click on menu item for rolename to edit
   await test.step("Click on the action menu for the searched role", async () => {
-    const roleRow = page.locator(
-      `.MuiDataGrid-row:has-text("${RoleNametoEdit}")`
-    );
-    await roleRow
-      .locator('button[aria-label="Open roles action menu"]')
-      .click();
+    await rolesAndPermissions.clickOptionsMenuofSearchedRole(RoleNametoEdit);
   });
 
   // Click on "Edit" menu item
@@ -63,11 +58,7 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
     await rolesAndPermissions.setPermission("user", "delete", false);
     await rolesAndPermissions.setPermission("user", "update", false);
     await rolesAndPermissions.setPermission("user", "create", false);
-    await rolesAndPermissions.setPermission(
-      "impersonate user",
-      "update",
-      false
-    );
+    await rolesAndPermissions.setPermission("impersonate user", "update", true);
     await rolesAndPermissions.setPermission("role", "delete", false);
     await rolesAndPermissions.setPermission("note", "delete", true);
     await rolesAndPermissions.setPermission(

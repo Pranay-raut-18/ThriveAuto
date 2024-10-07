@@ -33,12 +33,8 @@ test("TCRP_11: RolesAndPermissions | Verify Search by role name", async ({
   });
   //Click on menu item for rolename to edit
   await test.step("Click on the action menu for the searched role", async () => {
-    const roleRow = page.locator(
-      `.MuiDataGrid-row:has-text("${customRoleName}")`
-    );
-    await roleRow
-      .locator('button[aria-label="Open roles action menu"]')
-      .click();
+    await rolesAndPermissions.waitForRoleToAppear(customRoleName);
+    await rolesAndPermissions.clickOptionsMenuofSearchedRole(customRoleName);
   });
   //Expect view button to be not visible
   await test.step("Check Delete button is not visible", async () => {

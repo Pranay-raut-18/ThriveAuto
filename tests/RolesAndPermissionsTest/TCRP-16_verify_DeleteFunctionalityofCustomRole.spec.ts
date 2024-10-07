@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test.skip("TCRP_16: RolesAndPermissions | Verify delete functionality of custom roles", async ({
+test("TCRP_16: RolesAndPermissions | Verify delete functionality of custom roles", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -47,7 +47,6 @@ test.skip("TCRP_16: RolesAndPermissions | Verify delete functionality of custom 
   await test.step("Click on 'Delete' menu item", async () => {
     await rolesAndPermissions.clickOnMenuItem(menuItemName);
     await rolesAndPermissions.clickDeleteButton();
-    await page.waitForLoadState("networkidle");
   });
   await test.step("Searching the deleted role", async () => {
     await rolesAndPermissions.searchForRole(roletodelete);

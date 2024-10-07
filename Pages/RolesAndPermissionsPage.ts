@@ -168,7 +168,7 @@ export class RolesAndPermissionsPage {
    * @returns true/false if no results message si visible or not
    */
   async isNoResultsMessageVisible(): Promise<boolean> {
-    this.noResultsMessage.waitFor();
+    await this.noResultsMessage.waitFor();
     return this.noResultsMessage.isVisible();
   }
   /**
@@ -303,6 +303,7 @@ export class RolesAndPermissionsPage {
     }
   }
   async CheckifSucessMessageisVisible() {
+    await this.alertMessage.waitFor();
     return this.alertMessage.isVisible();
   }
   /**
@@ -409,6 +410,11 @@ export class RolesAndPermissionsPage {
     // Check if "Delete" is not present in the menu items
     return !itemsText.some((text) => text.includes("Edit Details"));
   }
+  /**
+   *
+   * @param role role name passed as an argument to click on its options menu
+   * @returns clicks on options menu of role searched
+   */
   async clickOptionsMenuofSearchedRole(role: string) {
     const roleRow = this.page
       .locator(`.MuiDataGrid-row:has-text("${role}")`)
@@ -417,6 +423,9 @@ export class RolesAndPermissionsPage {
       .locator('button[aria-label="Open roles action menu"]')
       .click();
   }
+  /**
+   * @param role waits for role to appear passed as an argument
+   */
   async waitForRoleToAppear(role: string) {
     const roleRow = this.page
       .locator(`.MuiDataGrid-row:has-text("${role}")`)
