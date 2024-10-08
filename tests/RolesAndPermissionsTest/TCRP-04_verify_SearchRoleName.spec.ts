@@ -29,16 +29,14 @@ test("TCRP_04: RolesAndPermissions | Verify Search by role name", async ({
   // Verify search by role in search bar
   await test.step("Verify search by role in search bar", async () => {
     await rolesAndPermissions.clickOnSearchBar();
-    await rolesAndPermissions.searchForRole("admin");
-
-    await page.waitForLoadState("networkidle");
-
+    await rolesAndPermissions.searchForRole("sdfds");
+    await rolesAndPermissions.waitForRoleToAppear("sdfds");
     // Fetch all roles after searching
     const rolesAfterSearch = await rolesAndPermissions.getAllRoles();
     console.log("Roles after search:", rolesAfterSearch);
 
     // Check if "admin" is among the visible roles
-    const isVisible = await rolesAndPermissions.isRoleVisible("admin");
+    const isVisible = await rolesAndPermissions.isRoleVisible("sdfds");
     expect(isVisible).toBe(true);
   });
 });

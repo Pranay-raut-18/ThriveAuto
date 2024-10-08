@@ -136,13 +136,14 @@ export class PheonixAppPage {
    */
   async clickSearchResultByName(name: string): Promise<void> {
     await this.page.getByRole("button", { name }).click();
+    await this.peopleViewTab.waitFor({ state: "visible", timeout: 3000 });
   }
   /**
    *Checks for view tab is visible or not
    * @returns returns true if the view tab is visible of person
    */
   async checkifNameinViewisVisible(): Promise<boolean> {
-    await this.peopleViewTab.waitFor({ state: "visible" });
+    await this.peopleViewTab.waitFor({ state: "visible", timeout: 3000 });
     return this.peopleViewTab.isVisible();
   }
   /**

@@ -24,7 +24,6 @@ test("To Verify that the System role with view functionality is able to view peo
     await pheonixAppPage.clickOnSearchBar();
     await pheonixAppPage.enterTextToSearch(persontosearch);
     await pheonixAppPage.clickSearchResultByName(persontosearch);
-    await page.waitForLoadState("networkidle");
   });
   //Checks weather user is able to view people
   await test.step("check weather user is able to view name", async () => {

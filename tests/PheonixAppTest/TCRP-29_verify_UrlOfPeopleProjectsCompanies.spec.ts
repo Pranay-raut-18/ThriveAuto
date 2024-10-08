@@ -17,7 +17,9 @@ test("To Verify Url of People ,Projects , Companies", async ({ page }) => {
   //Clicks on People tab in pheonix application
   await test.step("Click on people tab and check url", async () => {
     await pheonixAppPage.clickTabByName(tabtoclick1);
-    await page.waitForLoadState("networkidle");
+    await page.waitForURL(`**/${tabtoclick1.toLowerCase()}`, {
+      timeout: 10000, // Adjust the timeout as needed
+    });
     const currentUrl = page.url();
     await page.waitForURL(currentUrl);
     const actualUrlSegment = currentUrl.split("/").pop();
@@ -26,7 +28,9 @@ test("To Verify Url of People ,Projects , Companies", async ({ page }) => {
   //Clicks on Companies tab in pheonix application
   await test.step("Click on Companies tab and check url", async () => {
     await pheonixAppPage.clickTabByName(tabtoclick2);
-    await page.waitForLoadState("networkidle");
+    await page.waitForURL(`**/${tabtoclick2.toLowerCase()}`, {
+      timeout: 10000, // Adjust the timeout as needed
+    });
     const currentUrl = page.url();
     await page.waitForURL(currentUrl);
     const actualUrlSegment = currentUrl.split("/").pop();
@@ -35,7 +39,9 @@ test("To Verify Url of People ,Projects , Companies", async ({ page }) => {
   //Clicks on Companies tab in pheonix application
   await test.step("Click on Projects tab and check url", async () => {
     await pheonixAppPage.clickTabByName(tabtoclick3);
-    await page.waitForLoadState("networkidle");
+    await page.waitForURL("**/jobs", {
+      timeout: 10000, // Adjust the timeout as needed
+    });
     const currentUrl = page.url();
     await page.waitForURL(currentUrl);
     const actualUrlSegment = currentUrl.split("/").pop();
