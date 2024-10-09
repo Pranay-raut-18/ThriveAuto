@@ -60,7 +60,6 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
     await rolesAndPermissions.setPermission("user", "create", false);
     await rolesAndPermissions.setPermission("impersonate user", "update", true);
     await rolesAndPermissions.setPermission("role", "delete", false);
-    await rolesAndPermissions.setPermission("note", "delete", true);
     await rolesAndPermissions.setPermission(
       "scorecard template",
       "delete",

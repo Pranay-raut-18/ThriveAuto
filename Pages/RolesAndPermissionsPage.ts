@@ -194,6 +194,7 @@ export class RolesAndPermissionsPage {
    * Clicks on menu item in options of roles for eg:-(view, duplicate , delete ,edit)
    */
   async clickOnMenuItem(menuItemName: string) {
+    await this.page.getByRole("menuitem", { name: menuItemName }).waitFor();
     await this.page.getByRole("menuitem", { name: menuItemName }).click();
   }
   /**
@@ -201,7 +202,8 @@ export class RolesAndPermissionsPage {
    * @returns true/false if the option tab is visible or not
    */
   async closeButtonofDuplicateTab(): Promise<boolean> {
-    const closeButton = this.page.getByLabel("Close Drawer");
+    await this.page.locator(".MuiDialogContent-root.css-cdpnct").waitFor();
+    const closeButton = this.page.locator(".MuiDialogContent-root.css-cdpnct");
     return closeButton.isVisible();
   }
 
@@ -281,7 +283,7 @@ export class RolesAndPermissionsPage {
       | "job status"
       | "tag"
       | "scorecard template",
-    permissionType: "create" | "edit" | "delete" | "view" | "update" | "read",
+    permissionType: "create" | "delete" | "update" | "read",
     check: boolean
   ) {
     // Adjust the roleName to match the actual format used in the HTML (lowercase and underscores)

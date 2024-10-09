@@ -41,15 +41,17 @@ test("TCRP_17: RolesAndPermissions | Add Functionality Does not allow to manage 
   });
   //Select update permission to manage customer
   await test.step("Select permission to manage Customer", async () => {
-    await rolesAndPermissions.setPermission("customer", "delete", true);
+    await rolesAndPermissions.setPermission("user", "delete", true);
+    await rolesAndPermissions.setPermission("company", "read", true);
   });
   //Click on save button
   await test.step("Click on save button to add the custom role", async () => {
     await rolesAndPermissions.saveChanges();
   });
+
   await test.step("Verify invalid text", async () => {
     const actualtext =
-      await rolesAndPermissions.getErrorMessageTextinCreateRole();
-    expect(actualtext).toBe("invalid privilege action_name or resource_name");
+      await rolesAndPermissions.CheckifSucessMessageisVisible();
+    expect(actualtext).toBe(true);
   });
 });

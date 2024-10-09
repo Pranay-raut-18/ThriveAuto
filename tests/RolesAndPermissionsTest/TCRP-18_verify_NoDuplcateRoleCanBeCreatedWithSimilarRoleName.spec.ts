@@ -39,7 +39,7 @@ test("TCRP_18: RolesAndPermissions | No Duplicate roles can be created with simi
   });
   //Select update permission to manage customer
   await test.step("Select permission to manage Customer", async () => {
-    await rolesAndPermissions.setPermission("customer", "delete", true);
+    await rolesAndPermissions.setPermission("user", "delete", true);
   });
   //Click on save button
   await test.step("Click on save button to add the custom role", async () => {

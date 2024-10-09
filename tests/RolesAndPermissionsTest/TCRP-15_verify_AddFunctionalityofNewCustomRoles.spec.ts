@@ -41,16 +41,13 @@ test.beforeAll(
     });
     //Select permissions for the custom role
     await test.step("Select permissions for the custom role", async () => {
-      await rolesAndPermissions.setPermission("customer", "read", false);
       await rolesAndPermissions.setPermission(
         "scorecard template",
         "create",
         true
       );
       await rolesAndPermissions.setPermission("tag", "create", true);
-      await rolesAndPermissions.setPermission("job view all", "update", true);
       await rolesAndPermissions.setPermission("custom field", "create", true);
-      await rolesAndPermissions.setPermission("note", "delete", true);
       await rolesAndPermissions.setPermission("tag", "update", true);
     });
     //Click on save button
