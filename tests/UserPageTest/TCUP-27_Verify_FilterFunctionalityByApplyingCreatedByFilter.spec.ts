@@ -9,6 +9,7 @@ test('TCUP_27:UserPage|Verify  Filter functionality  by applying  "Created By" f
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
+    
     const chip1="Created By: MK Admin 0.12"
     const datafield="createdAt"
     const value="MK Admin 0.12";
@@ -45,12 +46,10 @@ test('TCUP_27:UserPage|Verify  Filter functionality  by applying  "Created By" f
         
     });
    
-
     //Verify that  the createdBy chip is visible
     await test.step(`Verify that  the createdBy chip is visible`, async () => {
         expect.soft(await userPage.isFilterChipsVisible(chip1)).toBeTruthy()
     });
-
 
     //Verify if the createdBy field has applied filter
     await test.step(`Verify if the createdBy field has applied filter`, async () => {
