@@ -44,8 +44,11 @@ test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system ro
   // Fill name and description
   await test.step("Fill name and description", async () => {
     await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(500);
     await rolesAndPermissions.fillRoleAndDescription(Rolename, Description);
+  });
+
+  //Change Permissions
+  await test.step("Change permissions", async () => {
     await rolesAndPermissions.setPermission("person", "update", true);
     await rolesAndPermissions.setPermission("person", "create", true);
     await rolesAndPermissions.setPermission("job", "update", true);
@@ -53,8 +56,9 @@ test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system ro
     await rolesAndPermissions.setPermission("tag", "delete", false);
     await rolesAndPermissions.setPermission("tag", "create", true);
     await rolesAndPermissions.setPermission("tag", "update", true);
-    await rolesAndPermissions.setPermission("Note", "delete", true);
+    await rolesAndPermissions.setPermission("custom field", "delete", true);
     await rolesAndPermissions.saveChanges();
-    expect(rolesAndPermissions.saveChanges()).toBeTruthy();
+    await page.waitForLoadState("networkidle");
+    await page.pause();
   });
 });

@@ -31,30 +31,32 @@ export class PheonixAppPage {
   private editButtoninCompanyTab: Locator;
   private saveButtoninEditCompany: Locator;
   private editButtoninEditJobs: Locator;
+  private popUpinPersonEditTab: Locator;
+  private editDivinPersonTab: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.searchBar = page.locator(
-      'input[placeholder="Search by contact information, domain expertise, or skills..."]'
+      'input[placeholder="Search by name, title, company, sector..."]'
     );
     this.peopleViewTab = page.locator(".MuiStack-root.css-7d0zx8");
     this.searchCompanyBar = page.locator(
-      'input[placeholder="Search by location, sectors, revenue, headcount, or ownership..."]'
+      'input[placeholder="Search by name, location, sector..."]'
     );
-    this.companyViewTab = page.locator(".MuiStack-root.css-ak720g");
+    this.companyViewTab = page.locator(".MuiStack-root.css-1g4yje1");
     this.searchBarinProjects = page.locator(
-      'input[placeholder="Search by hiring company, title and project team members..."]'
+      'input[placeholder="Search by title, hiring company, sector…"]'
     );
     this.jobCards = page.locator(".MuiCard-root");
     this.AddButtonPA = page.getByLabel("Open Action Menu").first();
     this.createCompanyButton = page.getByRole("menuitem", {
-      name: "Create New Company",
+      name: "Create Company",
     });
     this.createJobButton = page.getByRole("menuitem", {
       name: "Create Project",
     });
     this.createPersonButton = page.getByRole("menuitem", {
-      name: "Create New Person",
+      name: "Add Person",
     });
     this.companyNameInput = page.locator(
       'input[name="name"][placeholder="Enter Company Name"]'
@@ -69,19 +71,21 @@ export class PheonixAppPage {
     this.hiringCompanyFieldinProject = page.getByLabel("Hiring company *");
     this.teamLeadFieldinProject = page.getByLabel("Team lead");
     this.saveButtonCompany = page
-      .locator('button[type="submit"]:has-text("Continue")')
+      .locator('button[type="button"]:has-text("Continue")')
       .first();
     this.saveButtonPerson = page.locator(
-      "(//button[@type='submit'][normalize-space()='Continue'])[1]"
+      'button[type="button"]:has-text("Continue")'
     );
     this.saveButtonProject = page.locator(
-      "(//button[@type='submit'][normalize-space()='Create Project'][1])"
+      'button[type="button"]:has-text("Create Project")'
     );
     this.editButtoninCompanyTab = page.locator(
-      "(//button[@class='MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeSmall css-1gun7om'])[1]"
+      ".MuiButtonBase-root.MuiIconButton-sizeSmall.css-1sl9f94"
     );
     this.saveButtoninEditCompany = page.getByRole("button", { name: "Save" });
     this.editButtoninEditJobs = page.locator(".css-1sy0xge button");
+    this.popUpinPersonEditTab = page.locator(".css-afwwpk button");
+    this.editDivinPersonTab = page.locator(".css-xhilgd");
   }
 
   /**
@@ -132,13 +136,14 @@ export class PheonixAppPage {
    */
   async clickSearchResultByName(name: string): Promise<void> {
     await this.page.getByRole("button", { name }).click();
+    await this.peopleViewTab.waitFor({ state: "visible", timeout: 3000 });
   }
   /**
    *Checks for view tab is visible or not
    * @returns returns true if the view tab is visible of person
    */
   async checkifNameinViewisVisible(): Promise<boolean> {
-    await this.peopleViewTab.waitFor({ state: "visible" });
+    await this.peopleViewTab.waitFor({ state: "visible", timeout: 3000 });
     return this.peopleViewTab.isVisible();
   }
   /**
@@ -163,6 +168,7 @@ export class PheonixAppPage {
    * @returns true if company view tab is visible
    */
   async companyViewbarisVisible(): Promise<boolean> {
+    await this.companyViewTab.waitFor();
     return await this.companyViewTab.isVisible();
   }
   /**
@@ -334,6 +340,36 @@ export class PheonixAppPage {
    *@returns true if edit button is visible
    */
   async isEditButtoninJobsVisible(): Promise<boolean> {
+    await this.editButtoninEditJobs.waitFor();
     return this.editButtoninEditJobs.isVisible();
+  }
+  /**
+   * Clicks on popup in edit people tab
+   */
+  async clickonPopupInEditPeople() {
+    return this.popUpinPersonEditTab.click();
+  }
+  /**
+   * Clicks on edit people in edit people tab
+   */
+  async clickonEditPeopleinEditPeopleTab() {
+    await this.editDivinPersonTab.hover();
+    return this.page
+      .locator(
+        ".MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall.css-1a1fzv4"
+      )
+      .click();
+  }
+  /**
+   * Gets the text content of the success alert.
+   * @returns The text content of the success alert div.
+   */
+  async getSuccessAlertTextinPeopleEdit(): Promise<string> {
+    const alertLocator = this.page.locator(
+      ".MuiPaper-root.MuiAlert-root.MuiAlert-colorSuccess .MuiAlert-message"
+    );
+    await alertLocator.waitFor();
+    const alertText = await alertLocator.innerText();
+    return alertText;
   }
 }

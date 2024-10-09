@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCRP_31: RolesAndPermissions | Verify Search by invalid name", async ({
+test("TCRP_31: RolesAndPermissions | Verify save button is not visible", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -31,7 +31,7 @@ test("TCRP_31: RolesAndPermissions | Verify Search by invalid name", async ({
   });
   //Checks weather save button is visible or not
   await test.step("Check weather save button is visible or not", async () => {
-    await page.pause();
-    expect(await rolesAndPermissions.saveButtonisNotVisible()).toBe(true);
+    const result = await rolesAndPermissions.saveButtonisNotVisible();
+    expect(result).toBe(true);
   });
 });

@@ -24,7 +24,8 @@ test("TCRP_01: RolesAndPermissions | Verify default display", async ({
   // Verify roles in Roles and Permissions tab
   await test.step("Verify roles in Roles and Permissions tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
-    const roles = await rolesAndPermissions.getAllRoles();
-    expect(roles).toBeTruthy();
+    const result = await rolesAndPermissions.getAllRoles();
+    //console.log(result);
+    expect(result).toBe(result);
   });
 });

@@ -4,8 +4,6 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
-import { resourceUsage } from "process";
-import { log } from "util";
 
 test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles", async ({
   page,
@@ -15,7 +13,7 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
   let timestamp: string;
   timestamp = getCompleteTimestamp();
-  const RoleNametoEdit: string = "Cindy";
+  const RoleNametoEdit: string = "sdfds";
   const Description: string = `AutoDescription${timestamp}`;
 
   // Login using email address and password
@@ -41,12 +39,7 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
 
   //Click on menu item for rolename to edit
   await test.step("Click on the action menu for the searched role", async () => {
-    const roleRow = page.locator(
-      `.MuiDataGrid-row:has-text("${RoleNametoEdit}")`
-    );
-    await roleRow
-      .locator('button[aria-label="Open roles action menu"]')
-      .click();
+    await rolesAndPermissions.clickOptionsMenuofSearchedRole(RoleNametoEdit);
   });
 
   // Click on "Edit" menu item
@@ -65,24 +58,17 @@ test("TCRP_13: RolesAndPermissions | Verify edit functionality of custom roles",
     await rolesAndPermissions.setPermission("user", "delete", false);
     await rolesAndPermissions.setPermission("user", "update", false);
     await rolesAndPermissions.setPermission("user", "create", false);
-    await rolesAndPermissions.setPermission(
-      "Impersonate user",
-      "update",
-      false
-    );
+    await rolesAndPermissions.setPermission("impersonate user", "update", true);
     await rolesAndPermissions.setPermission("role", "delete", false);
-    await rolesAndPermissions.setPermission("note", "delete", true);
     await rolesAndPermissions.setPermission(
       "scorecard template",
       "delete",
       true
     );
     await rolesAndPermissions.saveChanges();
-    await page.waitForLoadState("load");
+    await page.waitForSelector(".css-1xsto0d");
   });
-  await test.step("Verify if correct inputs", async () => {
-    const get = await rolesAndPermissions.CheckifCorrectInputs();
-    console.log(get);
+  await test.step("Verify if edited successfully messsage", async () => {
     const result = await rolesAndPermissions.CheckifSucessMessageisVisible();
     expect(result).toBe(true);
   });

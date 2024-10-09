@@ -55,9 +55,12 @@ export class UserPage {
     private filterStatusDropdown: Locator;
     private calendar: Locator;
     private selectDateField: Locator;
+<<<<<<< HEAD
     private disableConfirmationButton: Locator;
     private enableCofirmationButton: Locator;
     public  popUp: Locator;
+=======
+>>>>>>> e1e879f3d30e56a3f9ca5c28742a8cbd06ca366c
 
 
     constructor(page: Page) {
@@ -109,10 +112,13 @@ export class UserPage {
         this.filterStatusDropdown=page.getByRole('listbox', { name: 'Status' });
         this.calendar=page.locator('.css-1xhj18k');
         this.selectDateField=page.locator('[placeholder="MM/DD/YYYY"]');
+<<<<<<< HEAD
         this.disableConfirmationButton=page.locator("text='Disable'");
         this.enableCofirmationButton=page.locator("text='Enable'").nth(1);
         this.popUp=this.page.locator(".css-1ktdlx3")
         
+=======
+>>>>>>> e1e879f3d30e56a3f9ca5c28742a8cbd06ca366c
         
     }
 
@@ -722,6 +728,7 @@ export class UserPage {
       await this.clickFilterStatusField(status);
     }
 
+<<<<<<< HEAD
     /**
      * Clicks on Disable Confirmation button 
      */ 
@@ -760,4 +767,6 @@ export class UserPage {
     }
 
 
+=======
+>>>>>>> e1e879f3d30e56a3f9ca5c28742a8cbd06ca366c
 }

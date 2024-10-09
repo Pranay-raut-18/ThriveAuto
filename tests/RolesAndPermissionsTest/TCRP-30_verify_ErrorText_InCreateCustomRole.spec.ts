@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCRP_31: RolesAndPermissions | Verify Search by invalid name", async ({
+test("TCRP_31: RolesAndPermissions | Verify Error text in create custom roles (name,description not filled)", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -48,7 +48,7 @@ test("TCRP_31: RolesAndPermissions | Verify Search by invalid name", async ({
     const expErrMsgString = JSON.stringify(expErrMsg);
     const actErrMsgString = JSON.stringify(actErrMsg);
     expect.soft(actErrMsgString).toBe(expErrMsgString);
-    // console.log(actErrMsgString);
-    // console.log(expErrMsgString);
+    console.log(actErrMsgString);
+    console.log(expErrMsgString);
   });
 });

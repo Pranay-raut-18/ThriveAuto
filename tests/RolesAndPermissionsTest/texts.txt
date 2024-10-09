@@ -1,1 +1,0 @@
-<div class="MuiAlert-message css-1xsto0d">Admi- Thrive (Copy) test successfully created</div>
