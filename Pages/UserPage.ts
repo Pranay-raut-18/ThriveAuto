@@ -51,6 +51,10 @@ export class UserPage {
     private filterChips: Locator;
     private filterCreatedByField: Locator;
     private filterCreateByFieldDropdown: Locator;
+    private filterStatusField: Locator;
+    private filterStatusDropdown: Locator;
+    private calendar: Locator;
+    private selectDateField: Locator;
 
 
     constructor(page: Page) {
@@ -97,7 +101,12 @@ export class UserPage {
         this.filterRoleFeild = page.getByRole('combobox', { name: 'Role' });
         this.filterChips = page.locator('.css-7lzqhs');
         this.filterCreatedByField = page.locator("text='Created by'").first();
-        this.filterCreateByFieldDropdown=page.getByRole('listbox', { name: 'Created by' })
+        this.filterCreateByFieldDropdown=page.getByRole('listbox', { name: 'Created by' });
+        this.filterStatusField=page.getByPlaceholder('Select Status');
+        this.filterStatusDropdown=page.getByRole('listbox', { name: 'Status' });
+        this.calendar=page.locator('.css-1xhj18k');
+        this.selectDateField=page.locator('[placeholder="MM/DD/YYYY"]');
+        
     }
 
   /**
@@ -589,11 +598,11 @@ export class UserPage {
             this.getFilterValues(feild,allRoles);
         }
         console.log([...allRoles]);
-    return [...allRoles]
+        return [...allRoles]
     }
 
     /**
-     * Clicks and fills value in the Filter createdBy feild 
+     * Clicks and only fill the value in the createdBy field
      * @param value The desired name to be enterd in the createdBy feild   
      */
     async fillFilterCreatedByField(value: string): Promise<void> {
@@ -623,10 +632,75 @@ export class UserPage {
      * @returns A boolean value indicating whether the value is an valid name or not
      */
     async enterCreateFeildValue(value: string): Promise<boolean | undefined> {
-        //await this.filterCreatedByFeild.fill(value);
+        await this.filterCreatedByField.fill(value);
         await this.fillFilterCreatedByField(value);
         const optVisible = await this.page.getByRole('option', { name: value }).waitFor({ timeout: 1000 }).catch(() => { return false });
         if (optVisible == false) { return false } else
             await this.page.getByRole('option', { name: value }).click();
     }
+
+    /**
+     * Clicks and selects the Filter status value
+     * @param value The desired status to be selected feild
+     */
+    async clickFilterStatusField(value: string): Promise<void> {
+      await this.filterStatusField.click();
+      await this.filterStatusDropdown.waitFor();
+      await this.page.getByRole('option', { name: value }).click();
+    }
+    /**
+     * Gets the difference of the months 
+     * @param targetMonth The desired month to the selected
+     * @param actualMonth The month displayed when the calendar is opened
+     * @returns A number whose value  is the difference between the months.
+     */
+    async getMonthDifference(targetMonth:string,actualMonth:string):Promise<number>{
+      const months:{[key:string]:number}={
+            January: 1,
+            February: 2,
+            March: 3,
+            April: 4,
+            May: 5,
+            June: 6,
+            July: 7,
+            August: 8,
+            September: 9,
+            October: 10,
+            November: 11,
+            December: 12
+          }
+          return months[actualMonth]-months[targetMonth]
+   }
+
+   /**
+    * Selects a specific date for the "Last LogIn" and "Created " filter.
+    * @param Month The month to select (e.g., "September").
+    * @param date The day of the month to select (e.g., "15"). 
+    * @param col The column index of the date picker to interact with (0, 1, 2 or 3).
+    */
+    async SelectDate(Month:string,date:string,col:number){
+      await this.selectDateField.nth(col).click();
+      await this.calendar.waitFor();
+      const actualMonth=(await this.page.locator(".css-ml5lne").first().innerText()).split(' ')[0].trim();
+      let monthDiffNumber= await this.getMonthDifference(Month,actualMonth);
+      let navbutton=  monthDiffNumber > 0? 'Previous month':'Next month';
+      const clicks=Math.abs(monthDiffNumber);
+      for(let i=0;i<clicks;i++){
+          await this.page.getByRole('button', {name: navbutton }).click();
+      }
+      await this.page.getByText(Month).waitFor();
+      await this.page.getByLabel(Month).getByRole('gridcell', { name: date , exact: true }).first().click();
+      
+  }
+
+    /**
+     * Applies "Role","Status" and "Created By" Filter
+     * @param value The desired status to be selected feild
+     */  
+    async applyThreeFilters(role:string,createdby:string,status:string): Promise<void> {
+      await this.clickFilterRole(role);
+      await this.enterCreateFeildValue(createdby);
+      await this.clickFilterStatusField(status);
+    }
+
 }

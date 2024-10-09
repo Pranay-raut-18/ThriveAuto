@@ -5,12 +5,10 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
 
-test('TCUP_25:UserPage| Verify that no filter chips are displayed when the filter form is submitted with all fields left blank.', async ({ page }) => {
+test('TCUP_36:UserPage|Verify that resetting the filters removes all applied filters from the user list', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
-    const role="Admin";
-    const datafield="role"
     
 
     //Login using email address and password
@@ -26,10 +24,25 @@ test('TCUP_25:UserPage| Verify that no filter chips are displayed when the filte
     //Click on filter icon 
     await test.step(`Click on filter icon`, async () => {
         await userPage.clickOnFilterButton();
+
     });
-    
-    //Click on filter reset button
-    await test.step(`Click on filter reset button`, async () => {
+
+    //Enter values in the Role,CreatedBy and Status Filters
+    await test.step(`Enter values in the Role,CreatedBy and Status Filters`, async () =>{
+        await userPage.applyThreeFilters('Admin','MK Admin 0.12','Active');
+    })
+
+    //Select the dates in the LogIn and Created Fields
+    await test.step(`Select the dates in the LogIn and Created Fields`, async () => {
+        await userPage.SelectDate("July","1",0);
+        await userPage.SelectDate("August","1",1);
+        await userPage.SelectDate("July","1",2);
+        await userPage.SelectDate("July","30",3);
+        
+    });
+   
+    //click on Filter Reset Button
+    await test.step(`click on Filter Reset Button`, async () => {
         await userPage.clickOnFilterResetButton();
     });
 
@@ -37,13 +50,18 @@ test('TCUP_25:UserPage| Verify that no filter chips are displayed when the filte
     await test.step(`Click on Apply Button`, async () => {
         await userPage.clickOnFilterApplyButton();
         
-    });    
-    
-    //Verify that no filter chips are visible
+    });
+
+    //Verify that no filter is applied
     await test.step(`Verify that no filter chips are visible`, async () => {
         expect (userPage.isAllFilterChipsRemoved).toBeTruthy();
     });
 
-    
-    
-});   
+
+
+
+
+     
+
+
+});    

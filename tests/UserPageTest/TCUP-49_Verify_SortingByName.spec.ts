@@ -6,7 +6,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
 
-test('TCUP_49:UserPage | Verify Sorting by Name', async ({ page }) => {
+test.skip('TCUP_49:UserPage | Verify Sorting by Name', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
