@@ -43,7 +43,7 @@ test("TCRP_18: RolesAndPermissions | No Duplicate roles can be created with simi
   });
   //Click on save button
   await test.step("Click on save button to add the custom role", async () => {
-    await rolesAndPermissions.saveChanges();
+    await rolesAndPermissions.saveChangesWithoutCheck();
     const result = await rolesAndPermissions.getErrTxtWhenDuplicateRoleName();
     expect(result).toBe("must be unique");
   });

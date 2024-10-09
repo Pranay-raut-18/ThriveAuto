@@ -4,7 +4,6 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
-import { time, timeStamp } from "console";
 
 test.beforeAll(
   "TCRP_15: RolesAndPermissions | Verify add functionality of custom roles",

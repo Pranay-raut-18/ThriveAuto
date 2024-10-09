@@ -48,7 +48,7 @@ test("TCRP_31: RolesAndPermissions | Verify Error text in create custom roles (n
     const expErrMsgString = JSON.stringify(expErrMsg);
     const actErrMsgString = JSON.stringify(actErrMsg);
     expect.soft(actErrMsgString).toBe(expErrMsgString);
-    // console.log(actErrMsgString);
-    // console.log(expErrMsgString);
+    console.log(actErrMsgString);
+    console.log(expErrMsgString);
   });
 });

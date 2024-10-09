@@ -311,6 +311,13 @@ export class RolesAndPermissionsPage {
     await this.CheckifSucessMessageisVisible();
   }
   /**
+   * Clicks on save button without checking for success message
+   */
+  async saveChangesWithoutCheck() {
+    await this.saveButtonLocator.isEnabled();
+    await this.saveButtonLocator.click();
+  }
+  /**
    * Clicks on add custom roles button in roles and permissions tab
    */
   async AddNewRoleBtnClick() {
@@ -332,6 +339,8 @@ export class RolesAndPermissionsPage {
    * @returns error text of name and description
    */
   async getAllErrorTexts(): Promise<Array<string | null>> {
+    await this.errortxtName.waitFor();
+    await this.errortxtDescription.waitFor();
     const errorName = await this.errortxtName.textContent();
     const errorDescript = await this.errortxtDescription.textContent();
     return [errorName, errorDescript];
@@ -370,7 +379,7 @@ export class RolesAndPermissionsPage {
    * @returns error message text for duplicate role name
    */
   async getErrTxtWhenDuplicateRoleName() {
-    await this.roleShouldbeUniqueErrTxt.waitFor({ state: "visible" });
+    await this.roleShouldbeUniqueErrTxt.waitFor();
 
     // Return the text content of the error message
     const errorMessage = await this.roleShouldbeUniqueErrTxt.textContent();
