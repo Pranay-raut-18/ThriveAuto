@@ -13,7 +13,7 @@ test('TCUP_04:UserPage|Verify unique email address is only accepted.',async({pag
     timestamp=getCompleteTimestamp();
     const Fname:string="Test";
     const Lname:string=`User${timestamp}`;
-    let existingemail: any;
+    let existingemail:string='qatesting+mk.12@thrivetrm.com'
     const reqrole:string='Admin';
     const expuniqueemailmsg:string="must be unique";
     
@@ -26,17 +26,17 @@ test('TCUP_04:UserPage|Verify unique email address is only accepted.',async({pag
       await test.step(`Go to Admin Potal Customer tab`, async () => {
         await homePage.clickOnGoToAdminPortal();
         
-      })
+      });
 
-    // Get an Existing email id
-    await test.step('Get an Existing email id',async()=>{
-        existingemail=await userPage.getExistingEmail();
-    })
+    // // Get an Existing email id
+    // await test.step('Get an Existing email id',async()=>{
+    //     existingemail=await userPage.getExistingEmail();
+    // });
 
     //Click on Adduser icon
     await test.step(`Click on Adduser icon`, async () => {
         await userPage.clickOnAddUserIcon();
-      })
+      });
 
    //Enter all the feilds of AddUser Table
     await test.step(`Enter all the feilds of AddUser Table`, async () => {

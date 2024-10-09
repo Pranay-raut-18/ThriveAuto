@@ -51,6 +51,13 @@ export class UserPage {
     private filterChips: Locator;
     private filterCreatedByField: Locator;
     private filterCreateByFieldDropdown: Locator;
+    private filterStatusField: Locator;
+    private filterStatusDropdown: Locator;
+    private calendar: Locator;
+    private selectDateField: Locator;
+    private disableConfirmationButton: Locator;
+    private enableCofirmationButton: Locator;
+    public  popUp: Locator;
 
 
     constructor(page: Page) {
@@ -76,7 +83,7 @@ export class UserPage {
         this.userFirstRow = page.locator('[data-rowindex="0"]');
         this.userFirstRowName = page.locator('[data-rowindex="0"] p').nth(0);
         this.userFirstRowCreatedDate = page.locator('[data-rowindex="0"] p').nth(1);
-        this.userFirstRowStatus = page.locator('[data-rowindex="0"] p').nth(2);
+        this.userFirstRowStatus = page.locator('[data-colindex="3"] p').first();
         this.userFirstRowEmail = page.locator('[data-rowindex="0"] a');
         this.userFirstRowRole = page.locator('[data-rowindex="0"] div [title="Admin"]');
         this.cancelButton = page.locator("text='Cancel'");
@@ -97,7 +104,16 @@ export class UserPage {
         this.filterRoleFeild = page.getByRole('combobox', { name: 'Role' });
         this.filterChips = page.locator('.css-7lzqhs');
         this.filterCreatedByField = page.locator("text='Created by'").first();
-        this.filterCreateByFieldDropdown=page.getByRole('listbox', { name: 'Created by' })
+        this.filterCreateByFieldDropdown=page.getByRole('listbox', { name: 'Created by' });
+        this.filterStatusField=page.getByPlaceholder('Select Status');
+        this.filterStatusDropdown=page.getByRole('listbox', { name: 'Status' });
+        this.calendar=page.locator('.css-1xhj18k');
+        this.selectDateField=page.locator('[placeholder="MM/DD/YYYY"]');
+        this.disableConfirmationButton=page.locator("text='Disable'");
+        this.enableCofirmationButton=page.locator("text='Enable'").nth(1);
+        this.popUp=this.page.locator(".css-1ktdlx3")
+        
+        
     }
 
   /**
@@ -455,6 +471,17 @@ export class UserPage {
     }
 
     /**
+     * Gets all the options from the edit menu box
+     */
+    async getOptionsFromEditMenu(): Promise<Array<string>> {
+      const menuItems = await this.editOptions.allTextContents();
+      const menuItemsArray: string[] = menuItems;
+      console.log(menuItemsArray);
+      return menuItemsArray;
+
+    }
+
+    /**
      * Waits for the text to be visible in the edit form before editing
      */   
     async waitForTextToBeVisible(): Promise<void> {
@@ -464,7 +491,6 @@ export class UserPage {
           },'[name="firstName"]');
     }
     
-
     /**
      * Edits all the values of the selected user
      * @param firstName The first name of the user to be entered into the form
@@ -589,11 +615,11 @@ export class UserPage {
             this.getFilterValues(feild,allRoles);
         }
         console.log([...allRoles]);
-    return [...allRoles]
+        return [...allRoles]
     }
 
     /**
-     * Clicks and fills value in the Filter createdBy feild 
+     * Clicks and only fill the value in the createdBy field
      * @param value The desired name to be enterd in the createdBy feild   
      */
     async fillFilterCreatedByField(value: string): Promise<void> {
@@ -608,7 +634,9 @@ export class UserPage {
     }
     
     /**
-     * Gets all  the value from the Filter createdBy feild dropdown  
+     * Gets all  the value from the Filter createdBy feild dropdown 
+     * @param value The desired name to be enterd in the createdBy feild
+     * @retruns actsuggestions An array containing all the suggestions displayed in the createdBy field 
      */
     async getFilterCreatedByValues(value:string): Promise<string[]> {
         await this.filterCreatedByField.fill(value);
@@ -623,10 +651,113 @@ export class UserPage {
      * @returns A boolean value indicating whether the value is an valid name or not
      */
     async enterCreateFeildValue(value: string): Promise<boolean | undefined> {
-        //await this.filterCreatedByFeild.fill(value);
+        await this.filterCreatedByField.fill(value);
         await this.fillFilterCreatedByField(value);
         const optVisible = await this.page.getByRole('option', { name: value }).waitFor({ timeout: 1000 }).catch(() => { return false });
         if (optVisible == false) { return false } else
             await this.page.getByRole('option', { name: value }).click();
     }
+
+    /**
+     * Clicks and selects the Filter status value
+     * @param value The desired status to be selected feild
+     */
+    async clickFilterStatusField(value: string): Promise<void> {
+      await this.filterStatusField.click();
+      await this.filterStatusDropdown.waitFor();
+      await this.page.getByRole('option', { name: value }).click();
+    }
+    /**
+     * Gets the difference of the months 
+     * @param targetMonth The desired month to the selected
+     * @param actualMonth The month displayed when the calendar is opened
+     * @returns A number whose value  is the difference between the months.
+     */
+    async getMonthDifference(targetMonth:string,actualMonth:string):Promise<number>{
+      const months:{[key:string]:number}={
+            January: 1,
+            February: 2,
+            March: 3,
+            April: 4,
+            May: 5,
+            June: 6,
+            July: 7,
+            August: 8,
+            September: 9,
+            October: 10,
+            November: 11,
+            December: 12
+          }
+          return months[actualMonth]-months[targetMonth]
+   }
+
+   /**
+    * Selects a specific date for the "Last LogIn" and "Created " filter.
+    * @param Month The month to select (e.g., "September").
+    * @param date The day of the month to select (e.g., "15"). 
+    * @param col The column index of the date picker to interact with (0, 1, 2 or 3).
+    */
+    async SelectDate(Month:string,date:string,col:number){
+      await this.selectDateField.nth(col).click();
+      await this.calendar.waitFor();
+      const actualMonth=(await this.page.locator(".css-ml5lne").first().innerText()).split(' ')[0].trim();
+      let monthDiffNumber= await this.getMonthDifference(Month,actualMonth);
+      let navbutton=  monthDiffNumber > 0? 'Previous month':'Next month';
+      const clicks=Math.abs(monthDiffNumber);
+      for(let i=0;i<clicks;i++){
+          await this.page.getByRole('button', {name: navbutton }).click();
+      }
+      await this.page.getByText(Month).waitFor();
+      await this.page.getByLabel(Month).getByRole('gridcell', { name: date , exact: true }).first().click();
+      
+  }
+
+    /**
+     * Applies "Role","Status" and "Created By" Filter
+     * @param value The desired status to be selected feild
+     */  
+    async applyThreeFilters(role:string,createdby:string,status:string): Promise<void> {
+      await this.clickFilterRole(role);
+      await this.enterCreateFeildValue(createdby);
+      await this.clickFilterStatusField(status);
+    }
+
+    /**
+     * Clicks on Disable Confirmation button 
+     */ 
+    async clickDisableConfirmation(): Promise<void> {
+      await this.disableConfirmationButton.waitFor();
+      await this.disableConfirmationButton.click();
+    }
+
+    /**
+     * Clicks on Enable Confirmation button 
+     */
+    async clickEnableConfirmation(): Promise<void> {
+      await this.popUp.waitFor({state:"visible"});
+      await this.enableCofirmationButton.click();
+    }
+
+    /**
+     * Gets the FirstRow user' Name
+     * @returns name The user name of the first row
+     */
+    async getFirstUserName(): Promise<string> {
+        await this.userFirstRowName.waitFor();
+        const firstColname = await this.userFirstRowName.allInnerTexts();
+        const name=firstColname.toString().trim();
+        return name;
+    }
+    /**
+     * Gets the FirstRow user' status
+     * @returns status The user status of the first row 
+     */
+    async getFirstUserStatus(): Promise<string> {
+      await this.userFirstRowStatus.waitFor();
+      const firstColstatus = await this.userFirstRowStatus.allInnerTexts();
+      const status=firstColstatus.toString().trim();
+      return status;
+    }
+
+
 }
