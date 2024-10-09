@@ -4,7 +4,7 @@ import { RolesAndPermissionsPage } from "../../Pages/RolesAndPermissionsPage";
 import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 
-test("TCRP_31: RolesAndPermissions | Verify save button is not visible", async ({
+test("TCRP_11: RolesAndPermissions | Verify Search by role name", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -25,13 +25,13 @@ test("TCRP_31: RolesAndPermissions | Verify save button is not visible", async (
   await test.step("Click on Roles and Permissions Tab", async () => {
     await rolesAndPermissions.clickOnRolesAndPermissionsTab();
   });
-  //Click on "+Role" button
-  await test.step("Click on add custom roles button", async () => {
-    await rolesAndPermissions.AddNewRoleBtnClick();
+  //Click on the action menu according to choice
+  await test.step("Click on action menu for 'Admin' role", async () => {
+    await rolesAndPermissions.clickOnRoleActionMenu("Candidate");
   });
-  //Checks weather save button is visible or not
-  await test.step("Check weather save button is visible or not", async () => {
-    const result = await rolesAndPermissions.saveButtonisNotVisible();
-    expect(result).toBe(true);
+  //Expect delete button to be not visible
+  await test.step("Check Delete button is not visible", async () => {
+    const isVisible = await rolesAndPermissions.isEditButtonAbsent();
+    expect(isVisible).toBe(true);
   });
 });

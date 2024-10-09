@@ -25,12 +25,12 @@ test("To Verify that the System role with view functionality is able to view peo
     await pheonixAppPage.enterTextToSearch(persontosearch);
     await pheonixAppPage.clickSearchResultByName(persontosearch);
     await page.waitForLoadState("networkidle");
-    await page.locator(".css-afwwpk button").click();
-    await page.locator(".css-xhilgd").hover();
-    await page
-      .locator(
-        ".MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall.css-1c6vowq"
-      )
-      .click();
+  });
+  await test.step("Click on edit person in view tab in person", async () => {
+    await pheonixAppPage.clickonPopupInEditPeople();
+    await pheonixAppPage.clickonEditPeopleinEditPeopleTab();
+    await pheonixAppPage.clickonSaveButtoninEditCompanyTab();
+    const actualtext = await pheonixAppPage.getSuccessAlertTextinPeopleEdit();
+    expect(actualtext.trim()).toBe("Contact info successfully updated.");
   });
 });

@@ -30,7 +30,7 @@ test("TCRP_05: RolesAndPermissions | Verify Search by partial role name", async 
   await test.step("Verify search by role in search bar", async () => {
     await rolesAndPermissions.clickOnSearchBar();
     await rolesAndPermissions.searchForRole("admi");
-    await page.waitForTimeout(2000);
+    await page.waitForLoadState("networkidle");
 
     // Fetch all roles after searching
     const rolesAfterSearch = await rolesAndPermissions.getAllRoles();

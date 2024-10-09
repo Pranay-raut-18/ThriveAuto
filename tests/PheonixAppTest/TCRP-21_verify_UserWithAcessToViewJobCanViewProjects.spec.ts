@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../Pages/LoginPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { PheonixAppPage } from "../../Pages/PheonixAppPage";
+import exp from "constants";
 
 test("To Verify that the System role with view functionality is able to view people in the Pheonix Appplication", async ({
   page,
@@ -32,6 +33,7 @@ test("To Verify that the System role with view functionality is able to view peo
   });
   //Verify if the job selected is visible
   await test.step("Verify after clicking on job user is able to view job", async () => {
-    expect(page.locator(".MuiStack-root.css-ak720g")).toBeVisible();
+    const result = await pheonixAppPage.companyViewbarisVisible();
+    expect(result).toBe(true);
   });
 });

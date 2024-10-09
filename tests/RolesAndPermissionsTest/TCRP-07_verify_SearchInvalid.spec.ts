@@ -30,12 +30,8 @@ test("TCRP_07: RolesAndPermissions | Verify Search by invalid name", async ({
   await test.step("Verify search by invalid role in search bar", async () => {
     await rolesAndPermissions.clickOnSearchBar();
     await rolesAndPermissions.searchForRole("Some Invalid_name");
-
-    // Wait for the "No results" message to be visible
-    expect(await rolesAndPermissions.isNoResultsMessageVisible());
-
-    // // Verify the text of the "No results" message
-    // const messageText = await rolesAndPermissions.getNoResultsMessageText();
-    // expect(messageText).toBe("No results");
+    await page.waitForLoadState("networkidle");
+    const result = await rolesAndPermissions.isNoResultsMessageVisible();
+    expect(result).toBe(true);
   });
 });

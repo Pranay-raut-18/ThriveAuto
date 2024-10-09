@@ -25,6 +25,9 @@ export class RolesAndPermissionsPage {
   private saveButtonLocator: Locator;
   private maxErrorTypeLast: Locator;
   private alertMessage: Locator;
+  private errorMessageWhenSelectingCustomers: Locator;
+  private roleShouldbeUniqueErrTxt: Locator;
+  private menuItems: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -54,15 +57,18 @@ export class RolesAndPermissionsPage {
       exact: true,
     });
     this.deletebuttonforcustomrole = page.locator('button:has-text("Delete")');
-    this.errortxtName = page.locator('p[id=":r14:-helper-text"]');
-    this.errortxtDescription = page.locator('p[id=":r15:-helper-text"]');
-    this.saveButtonLocator = page.locator(
-      'button[type="submit"][class*="MuiButton-root"]'
-    );
+    this.errortxtName = page.locator(".css-nce39c").first();
+    this.errortxtDescription = page.locator(".css-nce39c").last();
+    this.saveButtonLocator = page.locator('//button[text()="Save"]');
     this.maxErrorTypeLast = page.locator(
       "span.MuiTypography-root.MuiTypography-caption.css-iaqowd"
     );
     this.alertMessage = page.locator("div.MuiAlert-message.css-1xsto0d");
+    this.errorMessageWhenSelectingCustomers = page.locator(
+      "span.MuiTypography-root.MuiTypography-caption.css-iaqowd"
+    );
+    this.roleShouldbeUniqueErrTxt = page.locator(".css-nce39c");
+    this.menuItems = page.locator('ul[role="menu"] li');
   }
 
   /**
@@ -160,6 +166,7 @@ export class RolesAndPermissionsPage {
    * @returns true/false if no results message si visible or not
    */
   async isNoResultsMessageVisible(): Promise<boolean> {
+    await this.noResultsMessage.waitFor();
     return this.noResultsMessage.isVisible();
   }
   /**
@@ -187,14 +194,16 @@ export class RolesAndPermissionsPage {
    * Clicks on menu item in options of roles for eg:-(view, duplicate , delete ,edit)
    */
   async clickOnMenuItem(menuItemName: string) {
+    await this.page.getByRole("menuitem", { name: menuItemName }).waitFor();
     await this.page.getByRole("menuitem", { name: menuItemName }).click();
   }
   /**
    * Function to verify drawer is open or not
    * @returns true/false if the option tab is visible or not
    */
-  async closeButtonofDuplicateTab() {
-    const closeButton = this.page.getByLabel("Close Drawer");
+  async closeButtonofDuplicateTab(): Promise<boolean> {
+    await this.page.locator(".MuiDialogContent-root.css-cdpnct").waitFor();
+    const closeButton = this.page.locator(".MuiDialogContent-root.css-cdpnct");
     return closeButton.isVisible();
   }
 
@@ -202,7 +211,9 @@ export class RolesAndPermissionsPage {
    * Fills the role name and description
    */
   async fillRoleAndDescription(role: string, description: string) {
+    await this.roleNameInput.click();
     await this.roleNameInput.fill(role);
+    await this.roleDescriptionInput.click();
     await this.roleDescriptionInput.fill(description);
   }
 
@@ -261,8 +272,18 @@ export class RolesAndPermissionsPage {
    * @param check to select or deselect as per requirement (for eg:- manage user , delete , true ) true for check false for uncheck
    */
   async setPermission(
-    roleName: string,
-    permissionType: "create" | "edit" | "delete" | "view" | "update",
+    roleName:
+      | "user"
+      | "impersonate user"
+      | "role"
+      | "custom field"
+      | "person"
+      | "company"
+      | "job"
+      | "job status"
+      | "tag"
+      | "scorecard template",
+    permissionType: "create" | "delete" | "update" | "read",
     check: boolean
   ) {
     // Adjust the roleName to match the actual format used in the HTML (lowercase and underscores)
@@ -278,6 +299,7 @@ export class RolesAndPermissionsPage {
     }
   }
   async CheckifSucessMessageisVisible() {
+    await this.alertMessage.waitFor();
     return this.alertMessage.isVisible();
   }
   /**
@@ -287,6 +309,13 @@ export class RolesAndPermissionsPage {
     await this.saveButtonLocator.isEnabled();
     await this.saveButtonLocator.click();
     await this.CheckifSucessMessageisVisible();
+  }
+  /**
+   * Clicks on save button without checking for success message
+   */
+  async saveChangesWithoutCheck() {
+    await this.saveButtonLocator.isEnabled();
+    await this.saveButtonLocator.click();
   }
   /**
    * Clicks on add custom roles button in roles and permissions tab
@@ -310,16 +339,27 @@ export class RolesAndPermissionsPage {
    * @returns error text of name and description
    */
   async getAllErrorTexts(): Promise<Array<string | null>> {
+    await this.errortxtName.waitFor();
+    await this.errortxtDescription.waitFor();
     const errorName = await this.errortxtName.textContent();
     const errorDescript = await this.errortxtDescription.textContent();
     return [errorName, errorDescript];
   }
+  /**
+   * @returns true if the save button is disabled
+   */
   async saveButtonisNotVisible() {
     return this.saveButtonLocator.isDisabled();
   }
+  /**
+   * @returns Checks if save button in roles and permissions tab is enabled
+   */
   async saveButtonisVisible() {
     return this.saveButtonLocator.isEnabled();
   }
+  /**
+   * @returns true if the aleret message is visible
+   */
   async CheckifCorrectInputs() {
     if (await this.maxErrorTypeLast.isVisible()) {
       const maxErrorMsg = this.maxErrorTypeLast.textContent();
@@ -328,5 +368,73 @@ export class RolesAndPermissionsPage {
     } else {
       return this.alertMessage.isVisible();
     }
+  }
+  /**
+   * @returns error message when selecting to mage customers
+   */
+  async getErrorMessageTextinCreateRole(): Promise<string> {
+    return await this.errorMessageWhenSelectingCustomers.innerText();
+  }
+  /**
+   * @returns error message text for duplicate role name
+   */
+  async getErrTxtWhenDuplicateRoleName() {
+    await this.roleShouldbeUniqueErrTxt.waitFor();
+
+    // Return the text content of the error message
+    const errorMessage = await this.roleShouldbeUniqueErrTxt.textContent();
+    return errorMessage?.trim() || "";
+  }
+  /**
+   * Verifies that the Delete button is not present in the menu items
+   * @returns A boolean indicating if the Delete button is absent
+   */
+  async isDeleteButtonAbsent(): Promise<boolean> {
+    const itemsText = await this.menuItems.allTextContents();
+
+    // Check if "Delete" is not present in the menu items
+    return !itemsText.some((text) => text.includes("Delete"));
+  }
+  /**
+   * Verifies that the Delete button is not present in the menu items
+   * @returns A boolean indicating if the Delete button is absent
+   */
+  async isViewButtonAbsent(): Promise<boolean> {
+    const itemsText = await this.menuItems.allTextContents();
+
+    // Check if "Delete" is not present in the menu items
+    return !itemsText.some((text) => text.includes("View"));
+  }
+  /**
+   * Verifies that the Delete button is not present in the menu items
+   * @returns A boolean indicating if the Delete button is absent
+   */
+  async isEditButtonAbsent(): Promise<boolean> {
+    const itemsText = await this.menuItems.allTextContents();
+
+    // Check if "Delete" is not present in the menu items
+    return !itemsText.some((text) => text.includes("Edit Details"));
+  }
+  /**
+   *
+   * @param role role name passed as an argument to click on its options menu
+   * @returns clicks on options menu of role searched
+   */
+  async clickOptionsMenuofSearchedRole(role: string) {
+    const roleRow = this.page
+      .locator(`.MuiDataGrid-row:has-text("${role}")`)
+      .first();
+    return roleRow
+      .locator('button[aria-label="Open roles action menu"]')
+      .click();
+  }
+  /**
+   * @param role waits for role to appear passed as an argument
+   */
+  async waitForRoleToAppear(role: string) {
+    const roleRow = this.page
+      .locator(`.MuiDataGrid-row:has-text("${role}")`)
+      .first();
+    await roleRow.waitFor({ state: "visible", timeout: 10000 });
   }
 }
