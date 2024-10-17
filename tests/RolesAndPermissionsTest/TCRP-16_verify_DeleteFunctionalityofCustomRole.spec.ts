@@ -10,7 +10,7 @@ test("TCRP_16: RolesAndPermissions | Verify delete functionality of custom roles
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
-  const roletodelete: string = "AutoRolename";
+  const roletodelete: string = "random role1";
   const menuItemName = "Delete";
 
   // Step 1: Login using email address and password

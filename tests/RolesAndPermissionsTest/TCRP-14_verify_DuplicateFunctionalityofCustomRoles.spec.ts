@@ -52,6 +52,11 @@ test.skip("TCRP_14: RolesAndPermissions | Verify duplicate functionality of cust
     await rolesAndPermissions.setPermission("tag", "delete", false);
     await rolesAndPermissions.setPermission("tag", "create", true);
     await rolesAndPermissions.setPermission("tag", "update", true);
+    await rolesAndPermissions.setPermission(
+      "scorecard template",
+      "delete",
+      true
+    );
     await rolesAndPermissions.saveChanges();
     const result = await rolesAndPermissions.CheckifSucessMessageisVisible();
     expect(result).toBeTruthy();
