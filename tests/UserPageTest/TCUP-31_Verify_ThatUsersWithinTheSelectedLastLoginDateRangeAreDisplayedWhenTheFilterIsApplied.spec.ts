@@ -5,14 +5,13 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
 
-test('TCUP_27:UserPage|Verify  Filter functionality  by applying  "Created By" filter', async ({ page }) => {
+test('TCUP_31:UserPage|Verify that users within the selected Last Login date range are displayed when the filter is applied.', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
+    const fromDate = new Date("Jul 1, 2024");
+    const toDate = new Date("Aug 1, 2024");
     
-    const chip1="Created By: MK Admin 0.12"
-    const datafield="createdAt"
-    const value="MK Admin 0.12";
 
     //Login using email address and password
     await test.step(`Login using email address and password`, async () => {
@@ -24,36 +23,29 @@ test('TCUP_27:UserPage|Verify  Filter functionality  by applying  "Created By" f
         await homePage.clickOnGoToAdminPortal();
     });
 
-    //Clear preapplied filter
-    await test.step(`Clear preapplied filter`, async () => {
-    await userPage.clearFilter();
-    });
-
     //Click on filter icon 
     await test.step(`Click on filter icon`, async () => {
         await userPage.clickOnFilterButton();
+
     });
 
-    //Click on the CreatedBy Field and Enters a name
-    await test.step(`Click on  CreatedBy Field and Enters a name`,async() =>{
-        await userPage.enterCreateFeildValue(value);
+    //Select the dates in the Last Login date picker
+    await test.step(`Select the dates in the Last Login date picker`, async () => {
+        await userPage.SelectDate("July","1",0);
+        await userPage.SelectDate("August","1",1);
         
     });
 
     //Click on Apply Button
     await test.step(`Click on Apply Button`, async () => {
         await userPage.clickOnFilterApplyButton();
-        
-    });
-   
-    //Verify that  the createdBy chip is visible
-    await test.step(`Verify that  the createdBy chip is visible`, async () => {
-        expect.soft(await userPage.isFilterChipsVisible(chip1)).toBeTruthy()
     });
 
-    //Verify if the createdBy field has applied filter
-    await test.step(`Verify if the createdBy field has applied filter`, async () => {
-        expect.soft(await userPage.isAllStausActive(value,datafield)).toBeTruthy();
-    });    
+    //Verify that only users within the selected Last logIn dates are only visibile
+    await test.step(`Verify that only users within the selected Last logIn dates are only visibile`, async () => {
+      expect (await userPage.getAndCompareDates("status",fromDate, toDate)).toBe(true);
+    });
 
-});
+
+
+});    

@@ -32,7 +32,7 @@ test('TCUP_63:UserPage|Verify error message when user clicks on all the Mandator
     });
 
     //Click on all Mandatory feilds and move away without entering any value
-    await test.step(`Click on all Mnadatory feilds and movw away without entering`, async () => {
+    await test.step(`Click on all Mandatory feilds and movw away without entering`, async () => {
         await userPage.clickOnMandatoryFields();
     })
 

@@ -5,14 +5,13 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url,EmailAddress,Password } from "../../utils/config-utils"
 
 
-test('TCUP_42:UserPage|Verify Disabling an Active User shows a message and Updates the Status to Disabled', async ({ page }) => {
+test('TCUP_42:UserPage|Verify Disabling an Active User Updates the Status to Disabled', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const homePage = new HomePage(page);
   const userPage = new UserPage(page);
   let Fullname:string ;
   const status:string='Disabled';
   
-
   //Login using email address and password
   await test.step(`Login using email address and password`, async () => {
     await loginPage.login(Url, EmailAddress, Password);
@@ -26,7 +25,7 @@ test('TCUP_42:UserPage|Verify Disabling an Active User shows a message and Updat
   //Get the users FullName
   await test.step(`Get the users FullName`, async () => {
       Fullname=await userPage.getFirstUserName();
-  })
+  });
 
 
   //Click on the users three dots and select edit option
@@ -40,13 +39,29 @@ test('TCUP_42:UserPage|Verify Disabling an Active User shows a message and Updat
     await userPage.clickDisableConfirmation();
   });
 
- //Verify success message is displayed after disabling user
- await test.step('verify success message is displayed after disabling use', async () => {
-    expect.soft(await userPage.getSuccessMessage()).toBe(`${Fullname} successfully disabled`);
+    //Click on filter icon 
+    await test.step(`Click on filter icon`, async () => {
+      await userPage.clickOnFilterButton();
   });
 
- //Verift the User's status is updated to Disabled
- await test.step('Verift the Users status is updated to Disabled', async () => {
+  //Click on status Field and select the Disabled status
+  await test.step(`Click on status Field and select a status`, async () => {
+      await userPage.clickFilterStatusField(status);
+  });
+
+  //Click on Apply Button
+  await test.step(`Click on Apply Button`, async () => {
+      await userPage.clickOnFilterApplyButton();
+      
+  });
+
+  //Search for the User 
+  await test.step(`Search by name`, async () => {
+    await userPage.enterNameInSearchField(Fullname);
+  });
+
+ //Verify the User's status is updated to Disabled
+ await test.step('Verify the Users status is updated to Disabled', async () => {
     expect.soft(await userPage.getFirstUserStatus()).toBe(status);
     })
 

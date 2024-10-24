@@ -47,12 +47,12 @@ test('TCUP_19:UserPage|Verify that user can successfully edit all fields and suc
   //Edit all the feilds in the edit form
   await test.step(`Edit all the fields in the edit form`, async () => {
     await userPage.editUser("auto","user7034",email,"Hiring Manager");
-    await userPage.clickAddButton();
-  })
-
+    await userPage.clickonEditSaveButton();
+  });
+  
  //verify success message is shown after adding user
  await test.step('Verify sucess message is shown after adding user', async () => {
     expect.soft(await userPage.getSuccessMessage()).toBe(expsucessmessage);
   });
 
-});      
+}); 

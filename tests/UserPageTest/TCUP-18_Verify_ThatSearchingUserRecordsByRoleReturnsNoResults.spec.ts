@@ -25,8 +25,6 @@ test.skip('TCUP_18:UserPage| Verify that searching user records by Role returns 
     //Search by a valid role
     await test.step(`Search by a valid role`, async () => {
         await userPage.enterNameInSearchField(role);
-        //await page.waitForTimeout(1000);
-
     });
 
     //verify  no user is displayed in the user list

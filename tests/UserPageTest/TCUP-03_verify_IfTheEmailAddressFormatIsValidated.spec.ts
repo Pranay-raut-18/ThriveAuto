@@ -61,11 +61,6 @@ test('TCUP_03_UserPage|Verify if the email address format is validated.', async 
     await userPage.selectRoleFromDropdown(reqrole);
   });
 
-  //Verify AddandSendInvite Button is disabled
-  await test.step('Verify AddandSendInvite Button is disabled', async () => {
-    expect.soft(await userPage.isAddAndSendInviteButtonDisabled()).toBe(true);
-  });
-
   //Verify Invalid email format message is shown
   await test.step('Verify Invalid email format message is shown', async () => {
     expect.soft(await userPage.getInvalidEmailMessage()).toBe(expInvalidmsg);

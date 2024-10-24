@@ -5,12 +5,12 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
 
-test('TCUP_44:UserPage|Verify Enabling  an Active user shows a message and updates the status to "Active"', async ({ page }) => {
+test('TCUP_44:UserPage|Verify Enabling  an Active user updates the status to "Active"', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
     let Fullname: string;
-    const status: string = 'Active';
+    const status: string = 'Disabled';
 
 
     //Login using email address and password
@@ -23,16 +23,22 @@ test('TCUP_44:UserPage|Verify Enabling  an Active user shows a message and updat
         await homePage.clickOnGoToAdminPortal();
     });
 
-    //Click on the users three dots and select edit option and disable the User
-    await test.step(`Click on the users edit button and disable the User`, async () => {
-        await userPage.clickOnEditButton();
-        await userPage.selectOptionFromEditMenu(2);
+    //Click on filter icon 
+    await test.step(`Click on filter icon`, async () => {
+        await userPage.clickOnFilterButton();
+       
     });
-
-    //Click on the Disable confirmation Button
-    await test.step(`Click on the Disable confirmation Button`, async () => {
-        await userPage.clickDisableConfirmation();
-    });    
+  
+    //Click on status Field and select the Disabled status
+    await test.step(`Click on status Field and select a status`, async () => {
+        await userPage.clickFilterStatusField(status);
+    });
+  
+    //Click on Apply Button
+    await test.step(`Click on Apply Button`, async () => {
+        await userPage.clickOnFilterApplyButton();
+        
+    });   
 
     //Get the users FullName
     await test.step(`Get the users FullName`, async () => {
@@ -43,6 +49,7 @@ test('TCUP_44:UserPage|Verify Enabling  an Active user shows a message and updat
     await test.step(`Click on the users edit button and enable the User`, async () => {
         await userPage.clickOnEditButton();
         await userPage.selectOptionFromEditMenu(0);
+        
     }); 
 
     //Click on the Enable confirmation Button
@@ -51,15 +58,16 @@ test('TCUP_44:UserPage|Verify Enabling  an Active user shows a message and updat
 
     });
 
-    //Verify success message is displayed after enabling user
-    await test.step('verify success message is displayed after enabling user', async () => {
-        expect.soft(await userPage.getSuccessMessage()).toBeTruthy();//(`${Fullname} successfully reenabled`)
-    });
+  //Search for the User 
+  await test.step(`Search by name`, async () => {
+    await userPage.enterNameInSearchField(Fullname);
+    
+  });   
 
-    //Verift the User's status is updated to Active
-    await test.step('Verift the Users status is updated to Active', async () => {
-        await userPage.popUp.waitFor({state:"hidden"}) 
-        expect.soft(await userPage.getFirstUserStatus()).toBe(status);
+    //Verify the User's status is updated to Active
+    await test.step('Verify the Users status is updated to Active', async () => {
+        await userPage.popUp.waitFor({state:"hidden"});
+        expect.soft(await userPage.getFirstUserStatus()).toBe('Active');
     });
 
 

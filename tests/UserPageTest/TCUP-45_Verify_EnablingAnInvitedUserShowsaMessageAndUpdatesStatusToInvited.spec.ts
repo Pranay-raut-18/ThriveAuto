@@ -5,13 +5,13 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils"
 
 
-test('TCUP_43:UserPage|Verify Disabling an Invited User Updates the status to Disabled', async ({ page }) => {
+test('TCUP_45:UserPage|Verify Enabling an Invited User shows a message and updates Status to "Invited"', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const homePage = new HomePage(page);
     const userPage = new UserPage(page);
-    const value = 'Invited';
     let Fullname: string;
-    const status: string = 'Disabled';
+    const status: string = 'Invited';
+    const status1:string= 'Disabled';
 
 
     //Login using email address and password
@@ -31,23 +31,17 @@ test('TCUP_43:UserPage|Verify Disabling an Invited User Updates the status to Di
 
     //Click on status Field and select a status
     await test.step(`Click on status Field and select a status`, async () => {
-        await userPage.clickFilterStatusField(value);
+        await userPage.clickFilterStatusField(status);
     });
 
     //Click on Apply Button
     await test.step(`Click on Apply Button`, async () => {
         await userPage.clickOnFilterApplyButton();
-
+        
     });
 
-    //Get the users FullName
-    await test.step(`Get the users FullName`, async () => {
-        Fullname = await userPage.getFirstUserName();
-    })
-
-
-    //Click on the users three dots and select edit option
-    await test.step(`Click on the users edit button`, async () => {
+    //Click on the users three dots and select edit option and disable the User
+    await test.step(`Click on the users edit button and disable the User`, async () => {
         await userPage.clickOnEditButton();
         await userPage.selectOptionFromEditMenu(3);
     });
@@ -55,33 +49,47 @@ test('TCUP_43:UserPage|Verify Disabling an Invited User Updates the status to Di
     //Click on the Disable confirmation Button
     await test.step(`Click on the Disable confirmation Button`, async () => {
         await userPage.clickDisableConfirmation();
+    });    
+
+    //Get the users FullName
+    await test.step(`Get the users FullName`, async () => {
+        Fullname = await userPage.getFirstUserName();
     });
 
     //Click on filter icon 
     await test.step(`Click on filter icon`, async () => {
         await userPage.clickOnFilterButton();
     });
-  
-    //Click on status Field and select the Disabled status
+
+    //Click on status Field and select a status
     await test.step(`Click on status Field and select a status`, async () => {
-        await userPage.clickFilterStatusField(status);
+        await userPage.clickFilterStatusField(status1);
     });
-  
+
     //Click on Apply Button
     await test.step(`Click on Apply Button`, async () => {
         await userPage.clickOnFilterApplyButton();
         
     });
 
-  //Search for the User 
-  await test.step(`Search by name`, async () => {
-    await userPage.enterNameInSearchField(Fullname);
-  });
+    //Click on the users three dots and select edit option and enable the User
+    await test.step(`Click on the users edit button and enable the User`, async () => {
+        await userPage.clickOnEditButton();
+        await userPage.selectOptionFromEditMenu(0);
+    }); 
 
-    //Verify the User's status is updated to Disabled
-    await test.step('Verify the Users status is updated to Disabled', async () => {
+    //Click on the Enable confirmation Button
+    await test.step(`Click on the Enable confirmation Button`, async () => {
+        await userPage.clickEnableConfirmation();
+
+    });
+
+    //Verify the User's status is updated to Invited
+    await test.step('Verift the Users status is updated to Active', async () => {
+        await userPage.popUp.waitFor({state:"hidden"}) 
         expect.soft(await userPage.getFirstUserStatus()).toBe(status);
-    })
+    });
+
 
 
 });

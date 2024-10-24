@@ -28,7 +28,6 @@ test('TCUP_14:UserPage|Verify searching by Invalid email format', async ({ page 
   //Search by Invalid email format
   await test.step(`Search by invalid email format`, async () => {
     await userPage.enterNameInSearchField(partialemail);
-    //await page.waitForTimeout(1000);
   });
 
   //verify  no user is displayed in the user list

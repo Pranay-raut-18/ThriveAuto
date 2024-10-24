@@ -97,7 +97,7 @@ export class UserPage {
         this.enterLNameMessage = page.locator("text='Please enter a last name'");
         this.enterRoleMessage = page.locator("text='Please select a role for this user'");
         this.editFieldBoxes = page.locator("input.MuiInputBase-input ");
-        this.editFieldSaveButton = page.locator('//button[text()="Save"]');
+        this.editFieldSaveButton = page.getByRole('button', { name: 'Save' });
         this.editDots = page.locator('[data-colindex="4"]');
         this.editOptions = page.locator('[role="menuitem"]');
         this.filterIcon = page.getByLabel('Edit Filters');
@@ -110,7 +110,7 @@ export class UserPage {
         this.calendar=page.locator('.css-1xhj18k');
         this.selectDateField=page.locator('[placeholder="MM/DD/YYYY"]');
         this.disableConfirmationButton=page.locator("text='Disable'");
-        this.enableCofirmationButton=page.locator("text='Enable'").nth(1);
+        this.enableCofirmationButton=page.getByRole('button', { name: 'Enable' }); //page.locator("text='Enable'").nth(1);
         this.popUp=this.page.locator(".css-1ktdlx3")
         
         
@@ -501,16 +501,24 @@ export class UserPage {
     async editUser(firstname:string,lastname:string,email:string,role:string) {
         let values:Array<string>=[firstname,lastname,email,role];
         await this.waitForTextToBeVisible();
-        for(let i=1;i<=4;i++){
-            if(i===4){
+        for(let i=0;i<=3;i++){
+            if(i===3){
                 await this.editFieldBoxes.nth(i).click();
-                await this.selectRoleFromDropdown(values[i-1]);
+                await this.selectRoleFromDropdown(values[i]);
             }else{
             await this.editFieldBoxes.nth(i).clear();
-            await this.editFieldBoxes.nth(i).fill(values[i-1]);
+            await this.editFieldBoxes.nth(i).fill(values[i]);
             }
         }
-    } 
+    }
+    
+    
+  /**
+  * Clicks on Edit Field Save button Invite
+  */
+    async clickonEditSaveButton() {
+      await this.editFieldSaveButton.click();
+    }  
 
     /**
      * Edits any one of the fields in the Edit box of the users page
@@ -519,10 +527,10 @@ export class UserPage {
      */
     async editOneField(value:string,boxnum:number){
         await this.waitForTextToBeVisible();
-        if(boxnum==4){
+        if(boxnum==3){
             await this.editFieldBoxes.nth(boxnum).click();
             await this.selectRoleFromDropdown(value);
-        }else if(boxnum>=1 && boxnum<=3){
+        }else if(boxnum>=0 && boxnum<=2){
             await this.editFieldBoxes.nth(boxnum).clear();
             await this.editFieldBoxes.nth(boxnum).fill(value);
         }
@@ -534,7 +542,7 @@ export class UserPage {
      */
     async clickOnMandatoryEditFields(): Promise<void> {
         await this.waitForTextToBeVisible();
-        for (let i = 1; i <=5; i++) {
+        for (let i = 0; i <=4; i++) {
             await this.editFieldBoxes.nth(i).clear();
         }
     }
@@ -554,7 +562,6 @@ export class UserPage {
         await this.filterRoleFeild.waitFor();
         for (const role of roles) {
             await this.page.getByRole('option', { name: role, exact: true }).click();
-            await this.filterRoleFeild.click();
         }
         await this.filterRoleFeild.click();
     }
@@ -758,6 +765,49 @@ export class UserPage {
       const status=firstColstatus.toString().trim();
       return status;
     }
+
+/**
+ * Gets the values from a specific field, extracts the dates, and checks if they fall between the given range.
+ * @param field The field from which the values are to be returned (Status, CreatedBy).
+ * @param fromDate The start of the date range.
+ * @param toDate The end of the date range.
+ * @param allDates A set that stores the date values.
+ * @returns A boolean indicating if all extracted dates fall between the provided date range.
+ */
+  async getAndCompareDates(field:string,fromDate: Date | null = null,toDate: Date | null = null, allDates = new Set<Date>()): Promise<boolean> {
+  await this.page.waitForTimeout(1000);
+  const filterValues = await this.userListing.locator(`[data-field="${field}"]`).allInnerTexts();
+  console.log(filterValues)
+  filterValues.forEach(value => {
+      const dateMatch = value.match(/\b\w{3} \d{1,2}, \d{4}\b/);
+      if (dateMatch) {
+          const extractedDate = new Date(dateMatch[0]);
+          allDates.add(extractedDate);
+      }
+  });
+  const size = allDates.size;
+  const lastElement = this.userListing.locator(`[data-field="${field}"]`).last();
+  await lastElement.scrollIntoViewIfNeeded();
+  await this.page.waitForTimeout(1000);
+  if (allDates.size > size) {
+      await this.getAndCompareDates(field, fromDate, toDate, allDates);
+  }
+  console.log([...allDates]);
+  return [...allDates].every(date => {
+      if (fromDate && toDate) {
+          return date >= fromDate && date <= toDate;
+      } else if (fromDate) { 
+          return date >= fromDate;
+      } else if (toDate) {
+          return date <= toDate;
+      }
+      return true;
+  });
+}
+
+
+
+
 
 
 }
