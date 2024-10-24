@@ -28,6 +28,7 @@ export class RolesAndPermissionsPage {
   private errorMessageWhenSelectingCustomers: Locator;
   private roleShouldbeUniqueErrTxt: Locator;
   private menuItems: Locator;
+  private duplicatePermissionErrorTxt: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -308,7 +309,7 @@ export class RolesAndPermissionsPage {
   async saveChanges() {
     await this.saveButtonLocator.isEnabled();
     await this.saveButtonLocator.click();
-    await this.CheckifSucessMessageisVisible();
+    return this.CheckifSucessMessageisVisible();
   }
   /**
    * Clicks on save button without checking for success message
@@ -344,6 +345,14 @@ export class RolesAndPermissionsPage {
     const errorName = await this.errortxtName.textContent();
     const errorDescript = await this.errortxtDescription.textContent();
     return [errorName, errorDescript];
+  }
+  /**
+   * @returns text content of error message when duplicate permissions are set
+   */
+  async getDuplicatePermissionErrorTxt() {
+    await this.duplicatePermissionErrorTxt.waitFor();
+    const similarPermission = this.duplicatePermissionErrorTxt.textContent();
+    return similarPermission;
   }
   /**
    * @returns true if the save button is disabled

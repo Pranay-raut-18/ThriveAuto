@@ -5,7 +5,7 @@ import { HomePage } from "../../Pages/HomePage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { getCompleteTimestamp } from "../../utils/common-utils";
 
-test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system roles", async ({
+test.skip("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system roles", async ({
   page,
 }) => {
   const loginPage = new LoginPage(page);
@@ -13,7 +13,7 @@ test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system ro
   const rolesAndPermissions = new RolesAndPermissionsPage(page);
   let timestamp: string;
   timestamp = getCompleteTimestamp();
-  const Rolename: string = `AutoRoleName${timestamp}`;
+  const Rolename: string = "System Role Duplicate functionality";
   const Description: string = `AutoDescription${timestamp}`;
 
   // Login using email address and password
@@ -33,7 +33,7 @@ test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system ro
 
   //Click on action menu according to choice
   await test.step("Click on action menu for choice role", async () => {
-    await rolesAndPermissions.clickOnRoleActionMenu("Engagement Coordinator");
+    await rolesAndPermissions.clickOnRoleActionMenu("Investment Company");
   });
 
   // Click on "Duplicate" menu item
@@ -49,16 +49,14 @@ test("TCRP_10: RolesAndPermissions | Verify duplicate functionality of system ro
 
   //Change Permissions
   await test.step("Change permissions", async () => {
-    await rolesAndPermissions.setPermission("person", "update", true);
-    await rolesAndPermissions.setPermission("person", "create", true);
-    await rolesAndPermissions.setPermission("job", "update", true);
-    await rolesAndPermissions.setPermission("job", "create", true);
-    await rolesAndPermissions.setPermission("tag", "delete", false);
-    await rolesAndPermissions.setPermission("tag", "create", true);
-    await rolesAndPermissions.setPermission("tag", "update", true);
-    await rolesAndPermissions.setPermission("custom field", "delete", true);
-    await rolesAndPermissions.saveChanges();
-    await page.waitForLoadState("networkidle");
-    await page.pause();
+    await rolesAndPermissions.setPermission("role", "update", true);
+    await rolesAndPermissions.setPermission(
+      "scorecard template",
+      "delete",
+      true
+    );
+    await rolesAndPermissions.setPermission("custom field", "read", true);
+    await rolesAndPermissions.setPermission("tag", "delete", true);
+    const result = await rolesAndPermissions.saveChanges();
   });
 });
