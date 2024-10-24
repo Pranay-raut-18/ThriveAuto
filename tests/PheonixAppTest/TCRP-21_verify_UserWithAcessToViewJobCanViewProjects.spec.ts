@@ -2,7 +2,6 @@ import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../Pages/LoginPage";
 import { Url, EmailAddress, Password } from "../../utils/config-utils";
 import { PheonixAppPage } from "../../Pages/PheonixAppPage";
-import exp from "constants";
 
 test("To Verify that the System role with view functionality is able to view people in the Pheonix Appplication", async ({
   page,
